@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WF Inventory Voice Scanner</title>
+<meta name="description" content="Warframe inventory voice scanner — speak your items, get live platinum prices instantly. Free, no account needed.">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#c8a951;--gold-dim:#7a5e1a;--gold-bright:#ffe08a;
+  --bg:#07090c;--bg2:#0c0f14;--bg3:#111520;
+  --green:#7fca8a;--blue:#6aade0;--red:#d07070;--purple:#9a88dd;
+  --text:#d4b483;--text-dim:#7a8090;--text-bright:#e8d8b0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+#app{display:flex;flex-direction:column;min-height:100vh}
+header{background:rgba(200,169,81,.04);border-bottom:1px solid rgba(200,169,81,.15);padding:14px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:50;backdrop-filter:blur(12px)}
+.brand-sub{font-size:8px;letter-spacing:6px;color:var(--gold);opacity:.4;margin-bottom:3px;text-transform:uppercase}
+.brand-title{font-family:'Orbitron',monospace;font-size:16px;font-weight:900;color:#fff;letter-spacing:1px}
+.brand-title span{color:var(--gold)}
+.brand-meta{font-size:10px;color:var(--text-dim);letter-spacing:1px;margin-top:2px}
+#main{display:flex;flex:1;overflow:hidden;min-height:calc(100vh - 62px)}
+#left{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:16px}
+#right{width:265px;border-left:1px solid rgba(200,169,81,.12);background:rgba(200,169,81,.018);overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px;flex-shrink:0}
+.btn-primary{background:linear-gradient(135deg,var(--gold),var(--gold-dim));border:none;color:#060809;font-family:'Orbitron',monospace;font-weight:900;font-size:10px;letter-spacing:3px;text-transform:uppercase;padding:10px 24px;cursor:pointer;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:filter .2s,transform .1s;white-space:nowrap}
+.btn-primary:hover:not(:disabled){filter:brightness(1.2);transform:scale(1.02)}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed}
+.btn-secondary{background:none;border:1px solid rgba(200,169,81,.3);color:var(--gold);font-family:'Orbitron',monospace;font-size:8px;letter-spacing:2px;padding:7px 14px;cursor:pointer;transition:all .2s;text-transform:uppercase;white-space:nowrap}
+.btn-secondary:hover{background:rgba(200,169,81,.08);border-color:rgba(200,169,81,.6)}
+.btn-danger{border-color:rgba(200,80,80,.35)!important;color:#d07070!important}
+.btn-danger:hover{background:rgba(200,80,80,.08)!important}
+.btn-icon{background:none;border:none;cursor:pointer;font-size:12px;padding:2px 5px;opacity:.45;transition:opacity .15s;color:inherit;font-family:'Rajdhani',sans-serif}
+.btn-icon:hover{opacity:1}
+#voice-section{background:var(--bg3);border:1px solid rgba(200,169,81,.18);padding:20px;display:flex;flex-direction:column;gap:14px}
+.voice-title{font-family:'Orbitron',monospace;font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase}
+.voice-instructions{font-size:12px;color:var(--text-dim);line-height:1.7}
+.voice-instructions strong{color:var(--text-bright)}
+#voice-btn-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+#mic-btn{width:72px;height:72px;border-radius:50%;border:2px solid var(--gold);background:rgba(200,169,81,.08);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:28px;transition:all .2s;flex-shrink:0;position:relative;outline:none}
+#mic-btn:hover{background:rgba(200,169,81,.15);border-color:var(--gold-bright)}
+#mic-btn.recording{background:rgba(200,80,80,.15);border-color:#e06060;animation:mic-pulse 1s ease infinite}
+#mic-btn.recording::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(220,80,80,.4);animation:mic-ring 1s ease infinite}
+#mic-status{font-size:12px;letter-spacing:.5px;color:var(--text-dim)}
+#mic-status.active{color:var(--red)}
+#mic-timer{font-family:'Orbitron',monospace;font-size:12px;color:var(--gold);display:none}
+#transcript-box{background:rgba(0,0,0,.25);border:1px solid rgba(200,169,81,.15);min-height:64px;padding:10px 12px;font-size:13px;line-height:1.6}
+#parse-result{display:none;background:rgba(127,202,138,.06);border:1px solid rgba(127,202,138,.2);padding:12px 16px}
+.pr-title{font-size:9px;letter-spacing:3px;color:var(--green);text-transform:uppercase;margin-bottom:8px}
+#parsed-items{display:flex;flex-wrap:wrap;gap:6px}
+.parsed-chip{font-size:11px;padding:3px 10px;background:rgba(200,169,81,.1);border:1px solid rgba(200,169,81,.25);color:var(--text-bright);cursor:pointer;transition:all .15s;user-select:none}
+.parsed-chip:hover{background:rgba(200,80,80,.15);border-color:var(--red);text-decoration:line-through}
+#parse-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center}
+#parse-note{font-size:10px;color:var(--text-dim)}
+#manual-section{background:var(--bg3);border:1px solid rgba(200,169,81,.15);padding:16px;display:flex;flex-direction:column;gap:8px}
+.section-label{font-size:9px;letter-spacing:3px;color:var(--text-dim);text-transform:uppercase}
+#manual-row{display:flex;gap:8px;align-items:center}
+#manual-input{background:rgba(0,0,0,.2);border:1px solid rgba(200,169,81,.2);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:13px;padding:8px 12px;outline:none;flex:1;min-width:0;transition:border-color .2s}
+#manual-input:focus{border-color:rgba(200,169,81,.5)}
+#manual-input::placeholder{color:#4a5060}
+#suggest-wrap{position:relative;flex:1;min-width:0}
+#suggestion-list{position:absolute;top:100%;left:0;right:0;background:#0f1218;border:1px solid rgba(200,169,81,.3);z-index:200;max-height:200px;overflow-y:auto;display:none;box-shadow:0 8px 24px rgba(0,0,0,.6)}
+.suggestion-item{padding:8px 12px;font-size:12px;cursor:pointer;color:var(--text);transition:background .1s;display:flex;justify-content:space-between;align-items:center}
+.suggestion-item:hover,.suggestion-item.focused{background:rgba(200,169,81,.12);color:var(--gold-bright)}
+.suggestion-match{color:var(--gold);font-weight:700}
+.sug-type{font-size:9px;opacity:.4;letter-spacing:1px;text-transform:uppercase;flex-shrink:0;margin-left:8px}
+#stats-bar{display:flex;gap:8px;flex-wrap:wrap}
+.stat-card{background:rgba(255,255,255,.03);border:1px solid rgba(200,169,81,.1);padding:10px 14px;flex:1;min-width:90px}
+.stat-label{font-size:7px;letter-spacing:3px;color:var(--text-dim);text-transform:uppercase;margin-bottom:3px}
+.stat-value{font-family:'Orbitron',monospace;font-size:14px;font-weight:900}
+#controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.search-box{background:rgba(255,255,255,.04);border:1px solid rgba(200,169,81,.2);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:13px;padding:7px 12px;outline:none;min-width:160px;transition:border-color .2s}
+.search-box:focus{border-color:rgba(200,169,81,.5)}
+.search-box::placeholder{color:#4a5060}
+.tab{background:none;border:1px solid rgba(200,169,81,.18);color:var(--gold);font-family:'Orbitron',monospace;font-size:7px;letter-spacing:2px;padding:5px 10px;cursor:pointer;transition:all .2s;text-transform:uppercase}
+.tab:hover{background:rgba(200,169,81,.07)}
+.tab.active{background:rgba(200,169,81,.15);border-color:rgba(200,169,81,.5);color:var(--gold-bright)}
+#table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:560px}
+thead tr{border-bottom:1px solid rgba(200,169,81,.2)}
+th{padding:8px 6px;background:var(--bg);position:sticky;top:0;z-index:10}
+.th-btn{background:none;border:none;color:var(--gold);font-family:'Orbitron',monospace;font-size:8px;cursor:pointer;letter-spacing:2px;text-transform:uppercase}
+.th-btn:hover{color:#fff}
+.th-label{font-size:8px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase}
+tbody tr{border-bottom:1px solid rgba(255,255,255,.03)}
+tbody tr:nth-child(even) td{background:rgba(255,255,255,.01)}
+tbody tr:hover td{background:rgba(200,169,81,.05)!important}
+tbody tr.sold td{opacity:.35;text-decoration:line-through}
+tbody tr.ischecked td:first-child{border-left:2px solid var(--green)}
+td{padding:8px 6px;vertical-align:middle}
+.td-name{font-size:13px;font-family:'Rajdhani',monospace;font-weight:600}
+.td-name a{color:var(--text-bright);text-decoration:none}
+.td-name a:hover{color:var(--gold);text-decoration:underline}
+.td-price{font-family:'Orbitron',monospace;font-size:11px;text-align:right;font-weight:700}
+.td-actions{text-align:right;white-space:nowrap}
+.badge{font-size:8px;letter-spacing:1px;padding:2px 6px}
+.badge-bp{background:rgba(100,80,200,.12);color:var(--purple);border:1px solid rgba(100,80,200,.3)}
+.badge-frame{background:rgba(60,160,100,.1);color:#5ec090;border:1px solid rgba(60,160,100,.25)}
+.badge-weapon{background:rgba(200,169,81,.09);color:var(--gold);border:1px solid rgba(200,169,81,.2)}
+.badge-mod{background:rgba(100,160,220,.1);color:#7ab3d4;border:1px solid rgba(100,160,220,.25)}
+.badge-arcane{background:rgba(180,100,200,.1);color:#c070e0;border:1px solid rgba(180,100,200,.25)}
+.badge-other{background:rgba(120,140,180,.1);color:#8090b0;border:1px solid rgba(120,140,180,.2)}
+#progress-wrap{display:none;padding:8px 0}
+.progress-label{font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+.progress-bg{height:2px;background:rgba(255,255,255,.07);overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold),var(--gold-bright));transition:width .3s;box-shadow:0 0 8px var(--gold);width:0%}
+.progress-status{font-size:10px;color:var(--gold);opacity:.5;letter-spacing:1px;margin-top:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.side-title{font-size:8px;letter-spacing:3px;color:var(--text-dim);text-transform:uppercase;margin-bottom:8px;border-bottom:1px solid rgba(200,169,81,.1);padding-bottom:5px}
+.top-item{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.top-name{font-size:11px;color:#c0b080;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:155px}
+.top-name a{color:inherit;text-decoration:none}
+.top-name a:hover{color:var(--gold)}
+.top-price{font-family:'Orbitron',monospace;font-size:10px;color:var(--green);font-weight:700;flex-shrink:0;margin-left:6px}
+.log-entry{font-size:10px;padding:2px 0}
+.log-info{color:var(--blue)}.log-success{color:var(--green)}.log-error{color:var(--red)}.log-warn{color:var(--gold)}
+#empty-msg{text-align:center;padding:40px;opacity:.3;display:none;font-family:'Orbitron',monospace;font-size:11px;letter-spacing:4px}
+#browser-warn{display:none;background:rgba(200,120,50,.1);border:1px solid rgba(200,120,50,.3);padding:10px 14px;font-size:11px;color:#e09050}
+.divider{height:1px;background:rgba(200,169,81,.1)}
+@keyframes pulse{0%,100%{opacity:.6}50%{opacity:.2}}
+@keyframes mic-pulse{0%,100%{box-shadow:0 0 0 0 rgba(220,80,80,.4)}50%{box-shadow:0 0 0 12px rgba(220,80,80,0)}}
+@keyframes mic-ring{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.4);opacity:0}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.pulsing{animation:pulse 1.3s infinite}
+.fade-up{animation:fadeUp .25s ease forwards}
+</style>
+</head>
+<body>
+<div id="app">
+
+<header>
+  <div>
+    <div class="brand-sub">Tenno Intelligence System — Free for everyone</div>
+    <div class="brand-title">WF INVENTORY <span>VOICE SCANNER</span></div>
+    <div class="brand-meta">Speak your inventory · Live WFM prices · Chrome · Edge · Opera · 100% free</div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+    <span id="item-db-count" style="font-size:10px;color:var(--text-dim);letter-spacing:1px"></span>
+    <button class="btn-secondary" id="export-btn" onclick="exportCSV()" style="display:none">⬇ CSV</button>
+    <button class="btn-secondary btn-danger" id="clear-btn" onclick="clearAll()" style="display:none">✕ Clear</button>
+  </div>
+</header>
+
+<div id="main">
+<div id="left">
+
+  <div id="browser-warn"></div>
+
+  <!-- VOICE -->
+  <div id="voice-section">
+    <div class="voice-title">🎤 Voice Inventory Entry</div>
+    <div class="voice-instructions">
+      Press <strong>Start</strong>, read all your items out loud, press <strong>Stop</strong>. The app detects everything at once.<br>
+      Example: <strong>"Nova Prime Blueprint, Nova Prime Chassis, Rhino Prime Neuroptics, Condition Overload, Arcane Energize..."</strong>
+    </div>
+    <div id="voice-btn-row">
+      <button id="mic-btn" onclick="toggleMic()">🎤</button>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div id="mic-status">Ready — click mic to begin</div>
+        <div id="mic-timer">00:00</div>
+        <div id="browser-compat" style="font-size:10px;color:var(--text-dim)"></div>
+      </div>
+    </div>
+    <div>
+      <div class="section-label" style="margin-bottom:6px">Live Transcript</div>
+      <div id="transcript-box" style="color:#4a5060;font-style:italic">Spoken words appear here in real time...</div>
+    </div>
+    <div id="parse-result">
+      <div class="pr-title">✅ Items Detected — click any to remove before adding</div>
+      <div id="parsed-items"></div>
+      <div id="parse-actions">
+        <button class="btn-primary" onclick="addParsedItems()">＋ Add All to Inventory</button>
+        <button class="btn-secondary" onclick="clearParsed()">✕ Discard</button>
+        <span id="parse-note"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MANUAL -->
+  <div id="manual-section">
+    <div class="section-label">Manual Add — autocomplete (Prime parts · Mods · Arcanes)</div>
+    <div id="manual-row">
+      <div id="suggest-wrap">
+        <input id="manual-input" style="background:rgba(0,0,0,.2);border:1px solid rgba(200,169,81,.2);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:13px;padding:8px 12px;outline:none;width:100%;transition:border-color .2s" placeholder="Start typing an item name..." autocomplete="off"
+          oninput="onManualInput()" onkeydown="onManualKey(event)">
+        <div id="suggestion-list"></div>
+      </div>
+      <button class="btn-primary" onclick="addManualItem()" style="flex-shrink:0">＋ Add</button>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div id="progress-wrap">
+    <div class="progress-label" id="progress-label">Fetching prices...</div>
+    <div class="progress-bg"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="progress-status" id="progress-status"></div>
+  </div>
+
+  <!-- STATS -->
+  <div id="stats-bar" style="display:none"></div>
+
+  <!-- CONTROLS -->
+  <div id="controls" style="display:none">
+    <input class="search-box" type="text" placeholder="🔍 Search inventory..." id="search-box" oninput="renderTable()">
+    <button class="tab active" onclick="setFilter('all',this)">All</button>
+    <button class="tab" onclick="setFilter('weapon',this)">Weapons</button>
+    <button class="tab" onclick="setFilter('frame',this)">Frame</button>
+    <button class="tab" onclick="setFilter('blueprint',this)">BP</button>
+    <button class="tab" onclick="setFilter('mod',this)">Mods</button>
+    <button class="tab" onclick="setFilter('arcane',this)">Arcanes</button>
+    <button class="tab" onclick="setFilter('sold',this)">✓ Sold</button>
+    <span style="font-size:10px;color:var(--text-dim);margin-left:auto" id="count-badge"></span>
+  </div>
+
+  <!-- TABLE -->
+  <div id="table-wrap" style="display:none">
+    <table>
+      <thead><tr>
+        <th style="width:28px"></th>
+        <th style="text-align:left"><button class="th-btn" onclick="toggleSort('name')">Item <span id="arr-name"></span></button></th>
+        <th><span class="th-label">Type</span></th>
+        <th><button class="th-btn" onclick="toggleSort('qty')">Qty <span id="arr-qty"></span></button></th>
+        <th style="text-align:right"><button class="th-btn" onclick="toggleSort('sell')">Sell ◈ <span id="arr-sell">▼</span></button></th>
+        <th style="text-align:right"><button class="th-btn" onclick="toggleSort('buy')">Buy ◈ <span id="arr-buy"></span></button></th>
+        <th style="text-align:right"><span class="th-label">Actions</span></th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+  <div id="empty-msg">NO ITEMS MATCH</div>
+
+</div><!-- /left -->
+
+<!-- RIGHT PANEL -->
+<div id="right">
+  <div>
+    <div class="side-title">⭐ Top Sell Value</div>
+    <div id="top-earners"><div style="font-size:10px;opacity:.3">Add items to see top earners</div></div>
+  </div>
+  <div class="divider"></div>
+  <div>
+    <div class="side-title">◈ Portfolio Summary</div>
+    <div id="portfolio" style="font-size:11px;line-height:2.2;color:var(--text-dim)">—</div>
+  </div>
+  <div class="divider"></div>
+  <div>
+    <div class="side-title">📋 Activity Log</div>
+    <div id="log-box" style="max-height:200px;overflow-y:auto;display:flex;flex-direction:column;gap:1px">
+      <div class="log-entry log-info" style="opacity:.4">Ready — use voice or manual entry above</div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div style="font-size:10px;color:var(--text-dim);line-height:1.7;letter-spacing:.3px">
+    <strong style="color:var(--gold)">Tips:</strong><br>
+    • Speak clearly with short pauses between items<br>
+    • Use Chrome, Edge, or Opera for voice<br>
+    • Click ✓ to check off listed items<br>
+    • Click "sell" to track sold items<br>
+    • Prices from warframe.market (48h median)<br>
+    • Your inventory saves between sessions
+  </div>
+</div>
+
+</div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// DATABASE
+// ─────────────────────────────────────────────────────────────────────────────
+const PRIME_PARTS = [
+  "Akbolto Prime Barrel","Akbolto Prime Blueprint","Akbolto Prime Link","Akbolto Prime Receiver",
+  "Akbronco Prime Blueprint","Akbronco Prime Link","Akbronco Prime Receiver",
+  "Akjagara Prime Blueprint","Akjagara Prime Barrel","Akjagara Prime Receiver",
+  "Aklex Prime Blueprint","Aklex Prime Barrel","Aklex Prime Receiver",
+  "Aksomati Prime Blueprint","Aksomati Prime Barrel","Aksomati Prime Receiver",
+  "Akstiletto Prime Blueprint","Akstiletto Prime Link","Akstiletto Prime Receiver",
+  "Alternox Prime Blueprint","Alternox Prime Barrel","Alternox Prime Receiver","Alternox Prime Stock",
+  "Anku Prime Blueprint","Anku Prime Blade","Anku Prime Handle",
+  "Ankyros Prime Blueprint","Ankyros Prime Gauntlet","Ankyros Prime Band",
+  "Ash Prime Blueprint","Ash Prime Chassis","Ash Prime Neuroptics","Ash Prime Systems",
+  "Atlas Prime Blueprint","Atlas Prime Chassis Blueprint","Atlas Prime Neuroptics Blueprint","Atlas Prime Systems Blueprint",
+  "Ballistica Prime Blueprint","Ballistica Prime Lower Limb","Ballistica Prime Receiver","Ballistica Prime String","Ballistica Prime Upper Limb",
+  "Banshee Prime Blueprint","Banshee Prime Chassis","Banshee Prime Neuroptics","Banshee Prime Systems",
+  "Bo Prime Blueprint","Bo Prime Handle","Bo Prime Ornament","Bo Prime Strike",
+  "Boar Prime Blueprint","Boar Prime Barrel","Boar Prime Receiver","Boar Prime Stock",
+  "Boltor Prime Blueprint","Boltor Prime Barrel","Boltor Prime Receiver","Boltor Prime Stock",
+  "Braton Prime Blueprint","Braton Prime Barrel","Braton Prime Receiver","Braton Prime Stock",
+  "Bronco Prime Blueprint","Bronco Prime Barrel","Bronco Prime Receiver",
+  "Burston Prime Blueprint","Burston Prime Barrel","Burston Prime Receiver","Burston Prime Stock",
+  "Caliban Prime Blueprint","Caliban Prime Chassis Blueprint","Caliban Prime Neuroptics Blueprint","Caliban Prime Systems Blueprint",
+  "Carrier Prime Blueprint","Carrier Prime Carapace","Carrier Prime Cerebrum","Carrier Prime Systems",
+  "Cernos Prime Blueprint","Cernos Prime Grip","Cernos Prime Lower Limb","Cernos Prime String","Cernos Prime Upper Limb",
+  "Chroma Prime Blueprint","Chroma Prime Chassis Blueprint","Chroma Prime Neuroptics Blueprint","Chroma Prime Systems Blueprint",
+  "Corinth Prime Blueprint","Corinth Prime Barrel","Corinth Prime Receiver","Corinth Prime Stock",
+  "Daikyu Prime Blueprint","Daikyu Prime Grip","Daikyu Prime Lower Limb","Daikyu Prime String","Daikyu Prime Upper Limb",
+  "Dakra Prime Blueprint","Dakra Prime Blade","Dakra Prime Handle",
+  "Destreza Prime Blueprint","Destreza Prime Blade","Destreza Prime Handle",
+  "Dethcube Prime Blueprint","Dethcube Prime Carapace","Dethcube Prime Cerebrum","Dethcube Prime Systems",
+  "Ember Prime Blueprint","Ember Prime Chassis","Ember Prime Neuroptics","Ember Prime Systems",
+  "Epitaph Prime Blueprint","Epitaph Prime Barrel","Epitaph Prime Receiver","Epitaph Prime Stock",
+  "Equinox Prime Blueprint","Equinox Prime Chassis Blueprint","Equinox Prime Neuroptics Blueprint","Equinox Prime Systems Blueprint",
+  "Fang Prime Blueprint","Fang Prime Blade","Fang Prime Handle",
+  "Frost Prime Blueprint","Frost Prime Chassis","Frost Prime Neuroptics","Frost Prime Systems",
+  "Furis Prime Blueprint","Furis Prime Barrel","Furis Prime Receiver",
+  "Galatine Prime Blueprint","Galatine Prime Blade","Galatine Prime Handle","Galatine Prime Guard",
+  "Harrow Prime Blueprint","Harrow Prime Chassis Blueprint","Harrow Prime Neuroptics Blueprint","Harrow Prime Systems Blueprint",
+  "Helios Prime Blueprint","Helios Prime Carapace","Helios Prime Cerebrum","Helios Prime Systems",
+  "Hikou Prime Blueprint","Hikou Prime Pouch","Hikou Prime Stars",
+  "Hydroid Prime Blueprint","Hydroid Prime Chassis","Hydroid Prime Neuroptics Blueprint","Hydroid Prime Systems",
+  "Inaros Prime Blueprint","Inaros Prime Chassis Blueprint","Inaros Prime Neuroptics Blueprint","Inaros Prime Systems Blueprint",
+  "Ivara Prime Blueprint","Ivara Prime Chassis Blueprint","Ivara Prime Neuroptics Blueprint","Ivara Prime Systems Blueprint",
+  "Kavasa Prime Blueprint","Kavasa Prime Buckle","Kavasa Prime Band",
+  "Kogake Prime Blueprint","Kogake Prime Boot","Kogake Prime Gauntlet",
+  "Kronen Prime Blueprint","Kronen Prime Blade","Kronen Prime Handle",
+  "Latron Prime Blueprint","Latron Prime Barrel","Latron Prime Receiver","Latron Prime Stock",
+  "Lato Prime Blueprint","Lato Prime Barrel","Lato Prime Receiver",
+  "Limbo Prime Blueprint","Limbo Prime Chassis","Limbo Prime Neuroptics Blueprint","Limbo Prime Systems","Limbo Prime Systems Blueprint",
+  "Loki Prime Blueprint","Loki Prime Chassis","Loki Prime Neuroptics","Loki Prime Systems",
+  "Mag Prime Blueprint","Mag Prime Chassis","Mag Prime Neuroptics","Mag Prime Systems",
+  "Magnus Prime Blueprint","Magnus Prime Barrel","Magnus Prime Receiver",
+  "Mesa Prime Blueprint","Mesa Prime Chassis Blueprint","Mesa Prime Neuroptics Blueprint","Mesa Prime Systems Blueprint",
+  "Mirage Prime Blueprint","Mirage Prime Chassis","Mirage Prime Neuroptics","Mirage Prime Systems",
+  "Nami Skyla Prime Blueprint","Nami Skyla Prime Blade","Nami Skyla Prime Hilt",
+  "Nekros Prime Blueprint","Nekros Prime Chassis","Nekros Prime Neuroptics","Nekros Prime Systems",
+  "Nidus Prime Blueprint","Nidus Prime Chassis Blueprint","Nidus Prime Neuroptics Blueprint","Nidus Prime Systems Blueprint",
+  "Nikana Prime Blueprint","Nikana Prime Blade","Nikana Prime Hilt",
+  "Ninkondi Prime Blueprint","Ninkondi Prime Chain","Ninkondi Prime Handle",
+  "Nova Prime Blueprint","Nova Prime Chassis","Nova Prime Neuroptics","Nova Prime Systems",
+  "Nyx Prime Blueprint","Nyx Prime Chassis","Nyx Prime Neuroptics","Nyx Prime Systems",
+  "Oberon Prime Blueprint","Oberon Prime Chassis","Oberon Prime Neuroptics","Oberon Prime Systems",
+  "Orthos Prime Blueprint","Orthos Prime Blade","Orthos Prime Handle",
+  "Pangolin Prime Blueprint","Pangolin Prime Blade","Pangolin Prime Handle",
+  "Panthera Prime Blueprint","Panthera Prime Barrel","Panthera Prime Receiver","Panthera Prime Stock",
+  "Paris Prime Blueprint","Paris Prime Lower Limb","Paris Prime String","Paris Prime Upper Limb",
+  "Phantasma Prime Blueprint","Phantasma Prime Barrel","Phantasma Prime Receiver","Phantasma Prime Stock",
+  "Pyrana Prime Blueprint","Pyrana Prime Barrel","Pyrana Prime Receiver",
+  "Redeemer Prime Blueprint","Redeemer Prime Barrel","Redeemer Prime Blade","Redeemer Prime Receiver",
+  "Revenant Prime Blueprint","Revenant Prime Chassis Blueprint","Revenant Prime Neuroptics Blueprint","Revenant Prime Systems Blueprint",
+  "Rhino Prime Blueprint","Rhino Prime Chassis","Rhino Prime Neuroptics","Rhino Prime Systems Blueprint","Rhino Prime Systems",
+  "Rubico Prime Blueprint","Rubico Prime Barrel","Rubico Prime Receiver","Rubico Prime Stock",
+  "Saryn Prime Blueprint","Saryn Prime Chassis","Saryn Prime Neuroptics","Saryn Prime Systems",
+  "Scindo Prime Blueprint","Scindo Prime Blade","Scindo Prime Handle",
+  "Scourge Prime Blueprint","Scourge Prime Barrel","Scourge Prime Handle","Scourge Prime Receiver",
+  "Sevagoth Prime Blueprint","Sevagoth Prime Chassis Blueprint","Sevagoth Prime Neuroptics Blueprint","Sevagoth Prime Systems Blueprint",
+  "Shade Prime Blueprint","Shade Prime Carapace","Shade Prime Cerebrum","Shade Prime Systems",
+  "Silva and Aegis Prime Blueprint","Silva and Aegis Prime Blade","Silva and Aegis Prime Hilt",
+  "Soma Prime Blueprint","Soma Prime Barrel","Soma Prime Receiver","Soma Prime Stock",
+  "Spira Prime Blueprint","Spira Prime Pouch","Spira Prime Stars",
+  "Stradavar Prime Blueprint","Stradavar Prime Barrel","Stradavar Prime Receiver","Stradavar Prime Stock",
+  "Strun Prime Blueprint","Strun Prime Barrel","Strun Prime Receiver","Strun Prime Stock",
+  "Sybaris Prime Blueprint","Sybaris Prime Barrel","Sybaris Prime Receiver","Sybaris Prime Stock",
+  "Tekko Prime Blueprint","Tekko Prime Blade","Tekko Prime Gauntlet",
+  "Tiberon Prime Blueprint","Tiberon Prime Barrel","Tiberon Prime Receiver","Tiberon Prime Stock",
+  "Tigris Prime Blueprint","Tigris Prime Barrel","Tigris Prime Receiver","Tigris Prime Stock",
+  "Trinity Prime Blueprint","Trinity Prime Chassis","Trinity Prime Neuroptics","Trinity Prime Systems",
+  "Valkyr Prime Blueprint","Valkyr Prime Chassis","Valkyr Prime Neuroptics","Valkyr Prime Systems",
+  "Vasto Prime Blueprint","Vasto Prime Barrel","Vasto Prime Receiver",
+  "Vauban Prime Blueprint","Vauban Prime Chassis","Vauban Prime Neuroptics","Vauban Prime Systems",
+  "Vectis Prime Blueprint","Vectis Prime Barrel","Vectis Prime Receiver","Vectis Prime Stock",
+  "Velox Prime Blueprint","Velox Prime Barrel","Velox Prime Receiver","Velox Prime Stock",
+  "Venka Prime Blueprint","Venka Prime Blades","Venka Prime Gauntlet",
+  "Volt Prime Blueprint","Volt Prime Chassis","Volt Prime Chassis Blueprint","Volt Prime Neuroptics","Volt Prime Systems",
+  "Wukong Prime Blueprint","Wukong Prime Chassis","Wukong Prime Neuroptics","Wukong Prime Neuroptics Blueprint","Wukong Prime Systems",
+  "Wyrm Prime Blueprint","Wyrm Prime Carapace","Wyrm Prime Cerebrum","Wyrm Prime Systems",
+  "Zephyr Prime Blueprint","Zephyr Prime Chassis","Zephyr Prime Neuroptics","Zephyr Prime Systems",
+  "Zhuge Prime Blueprint","Zhuge Prime Barrel","Zhuge Prime Receiver","Zhuge Prime Stock",
+];
+
+const MODS = [
+  "Serration","Split Chamber","Heavy Caliber","Point Strike","Vital Sense",
+  "Vigilante Armaments","Vigilante Supplies","Vigilante Fervor","Vigilante Offense","Vigilante Pursuit",
+  "Hunter Munitions","Hunter Adrenaline","Hunter Command","Hunter Recovery","Hunter Synergy","Hunter Instinct",
+  "Primed Cryo Rounds","Primed Infected Clip","Primed Charged Shell",
+  "Primed Bane of Corpus","Primed Bane of Grineer","Primed Bane of Infested","Primed Bane of Corrupted",
+  "Primed Expel Corpus","Primed Expel Grineer","Primed Expel Infested","Primed Expel Corrupted",
+  "Primed Fast Hands","Primed Pistol Gambit","Primed Target Cracker","Primed Heated Charge",
+  "Primed Magazine Warp","Primed Slip Magazine","Primed Ravage","Primed Shred",
+  "Primed Continuity","Primed Flow","Primed Fury","Primed Reach","Primed Sure Footed","Primed Vigor",
+  "Primed Pressure Point","Primed Fever Strike",
+  "Primed Smite Corpus","Primed Smite Grineer","Primed Smite Infested","Primed Smite Corrupted",
+  "Galvanized Aptitude","Galvanized Chamber","Galvanized Crosshairs","Galvanized Diffusion",
+  "Galvanized Hell","Galvanized Savvy","Galvanized Scope","Galvanized Shot",
+  "Amalgam Serration","Amalgam Barrel Diffusion","Amalgam Organ Shatter","Amalgam Ripkas True Steel",
+  "Amalgam Furax Body Count","Amalgam Javlok Magazine Warp","Amalgam Daikyu Target Acquired",
+  "Narrow Minded","Overextended","Transient Fortitude","Blind Rage","Fleeting Expertise",
+  "Continuity","Streamline","Intensify","Stretch","Flow","Constitution",
+  "Augur Accord","Augur Reach","Augur Message","Augur Secrets","Augur Seeker",
+  "Condition Overload","Blood Rush","Weeping Wounds",
+  "Gladiator Might","Gladiator Vice","Gladiator Rush","Gladiator Resolve","Gladiator Aegis","Gladiator Finesse",
+  "True Steel","Organ Shatter","Pressure Point","Spoiled Strike","Fury","Reach",
+  "Body Count","Drifting Contact","Maiming Strike","Berserker Fury",
+  "Blaze","Hellfire","Stormbringer","Infected Clip","Cryo Rounds","Malignant Force","High Voltage",
+  "Rime Rounds","Thermite Rounds","Shocking Touch","Volcanic Edge",
+  "Point Blank","Chilling Grasp","Contagious Spread","Charged Shell","Incendiary Coat","Scattering Inferno",
+  "Hell's Chamber","Shotgun Spazz","Seeking Force","Ravage","Vicious Spread",
+];
+
+const ARCANES = [
+  "Arcane Energize","Arcane Guardian","Arcane Grace","Arcane Avenger","Arcane Aegis",
+  "Arcane Arachne","Arcane Barrier","Arcane Blessing","Arcane Cadence","Arcane Consequence",
+  "Arcane Deflection","Arcane Fury","Arcane Healing","Arcane Momentum","Arcane Nullifier",
+  "Arcane Phantom","Arcane Pistoleer","Arcane Precision","Arcane Pulse","Arcane Rage",
+  "Arcane Rise","Arcane Slam","Arcane Strike","Arcane Steadfast","Arcane Tempo",
+  "Arcane Trickery","Arcane Ultimatum","Arcane Velocity","Arcane Victory","Arcane Warmth",
+  "Arcane Acceleration","Arcane Agility","Arcane Bodyguard","Arcane Coil","Arcane Eruption",
+  "Arcane Expedition","Arcane Heroism","Arcane Invigoration","Arcane Luck","Arcane Meridian",
+  "Arcane Reaper","Arcane Resistance","Arcane Revive","Arcane Scholar","Arcane Serenity",
+  "Arcane Tanker","Arcane Visage","Arcane Volt",
+  "Magus Anomaly","Magus Cloud","Magus Destruct","Magus Drive","Magus Elevate",
+  "Magus Glitch","Magus Husk","Magus Lockdown","Magus Melt","Magus Nourish",
+  "Magus Overload","Magus Replenish","Magus Revert","Magus Vigor","Magus Virulence",
+  "Virtuos Forge","Virtuos Ghost","Virtuos Null","Virtuos Shadow","Virtuos Spike","Virtuos Strike","Virtuos Tempo",
+];
+
+// Build unified DB
+const ALL_ITEMS = [];
+PRIME_PARTS.forEach(n => ALL_ITEMS.push({ name: n, type: getPrimeType(n) }));
+MODS.forEach(n => ALL_ITEMS.push({ name: n, type: 'mod' }));
+ARCANES.forEach(n => ALL_ITEMS.push({ name: n, type: 'arcane' }));
+ALL_ITEMS.sort((a,b) => a.name.localeCompare(b.name));
+
+document.getElementById('item-db-count').textContent = ALL_ITEMS.length + ' items in database';
+
+function getPrimeType(name) {
+  const n = name.toLowerCase();
+  if (n.includes('blueprint')) return 'blueprint';
+  if (['neuroptics','chassis','systems','carapace','cerebrum','buckle','harness'].some(k=>n.includes(k))) return 'frame';
+  return 'weapon';
+}
+function getType(name) {
+  const nl = name.toLowerCase();
+  if (MODS.some(m=>m.toLowerCase()===nl)) return 'mod';
+  if (ARCANES.some(a=>a.toLowerCase()===nl)) return 'arcane';
+  return getPrimeType(name);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// URL NAME — warframe.market specific conversion
+// ─────────────────────────────────────────────────────────────────────────────
+function toUrlName(name) {
+  return name
+    .toLowerCase()
+    .replace(/&/g, 'and')          // & → and
+    .replace(/'/g, '')             // remove apostrophes
+    .replace(/[^a-z0-9]+/g, '_')  // non-alphanumeric → underscore
+    .replace(/^_+|_+$/g, '');     // trim underscores
+}
+
+function wfmLink(name) {
+  return 'https://warframe.market/items/' + toUrlName(name);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────────────────────
+let items    = JSON.parse(localStorage.getItem('wfv3_items')   || '[]');
+let sold     = new Set(JSON.parse(localStorage.getItem('wfv3_sold')    || '[]'));
+let checked  = new Set(JSON.parse(localStorage.getItem('wfv3_checked') || '[]'));
+let filterMode   = 'all';
+let sortState    = { col:'sell', dir:-1 };
+let recognition  = null;
+let isRecording  = false;
+let timerIv      = null;
+let timerSec     = 0;
+let accumText    = '';
+let interimText  = '';
+let parsedChips  = [];
+let suggestFocus = -1;
+let fetchingPrices = false;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────────────────────
+window.onload = () => {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const ua = navigator.userAgent.toLowerCase();
+  const compat = document.getElementById('browser-compat');
+  if (SR) {
+    if (ua.includes('opr') || ua.includes('opera')) compat.textContent = '✅ Opera — voice supported';
+    else if (ua.includes('edg')) compat.textContent = '✅ Edge — voice supported';
+    else if (ua.includes('chrome')) compat.textContent = '✅ Chrome — voice supported';
+    else compat.textContent = '⚠ Voice may not work here — use Chrome, Edge, or Opera';
+    compat.style.color = compat.textContent.startsWith('✅') ? 'var(--green)' : 'var(--gold)';
+  } else {
+    document.getElementById('mic-btn').textContent = '🚫';
+    document.getElementById('mic-btn').disabled = true;
+    document.getElementById('mic-status').textContent = 'Voice not supported — use Chrome, Edge, or Opera';
+    document.getElementById('mic-status').style.color = 'var(--red)';
+    if (ua.includes('firefox')) {
+      const w = document.getElementById('browser-warn');
+      w.style.display = 'block';
+      w.innerHTML = '⚠ <strong>Firefox does not support voice input.</strong> Please open this page in Chrome, Edge, or Opera. Manual entry below still works perfectly.';
+    }
+  }
+  refresh();
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// VOICE
+// ─────────────────────────────────────────────────────────────────────────────
+function toggleMic() {
+  isRecording ? stopMic() : startMic();
+}
+
+function startMic() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { alert('Please use Chrome, Edge, or Opera for voice input.'); return; }
+
+  accumText = ''; interimText = '';
+  document.getElementById('transcript-box').textContent = 'Listening... speak now';
+  document.getElementById('transcript-box').style.color = 'rgba(212,180,131,.4)';
+  document.getElementById('transcript-box').style.fontStyle = 'italic';
+  document.getElementById('parse-result').style.display = 'none';
+
+  recognition = new SR();
+  recognition.continuous     = true;
+  recognition.interimResults = true;
+  recognition.lang           = 'en-US';
+
+  recognition.onresult = (e) => {
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) { accumText += e.results[i][0].transcript + ' '; interimText = ''; }
+      else interimText = e.results[i][0].transcript;
+    }
+    const disp = (accumText + interimText).trim();
+    document.getElementById('transcript-box').textContent = disp || 'Listening...';
+    document.getElementById('transcript-box').style.color = 'var(--text-bright)';
+    document.getElementById('transcript-box').style.fontStyle = 'normal';
+  };
+
+  recognition.onerror = (e) => {
+    if (e.error === 'no-speech') return;
+    if (e.error !== 'aborted') log('Mic error: ' + e.error, 'error');
+  };
+
+  recognition.onend = () => { if (isRecording) try { recognition.start(); } catch(x) {} };
+
+  try { recognition.start(); } catch(e) { log('Could not start mic: ' + e.message, 'error'); return; }
+
+  isRecording = true;
+  document.getElementById('mic-btn').classList.add('recording');
+  document.getElementById('mic-btn').textContent = '⏹';
+  setMicStatus('🔴 Recording — speak your items now...', true);
+  document.getElementById('mic-timer').style.display = 'block';
+  timerSec = 0;
+  timerIv = setInterval(() => {
+    timerSec++;
+    document.getElementById('mic-timer').textContent =
+      String(Math.floor(timerSec/60)).padStart(2,'0') + ':' + String(timerSec%60).padStart(2,'0');
+  }, 1000);
+  log('🎤 Recording started', 'info');
+}
+
+function stopMic() {
+  isRecording = false;
+  clearInterval(timerIv);
+  if (recognition) { recognition.onend = null; try { recognition.stop(); } catch(x) {} recognition = null; }
+  document.getElementById('mic-btn').classList.remove('recording');
+  document.getElementById('mic-btn').textContent = '🎤';
+  document.getElementById('mic-timer').style.display = 'none';
+
+  const finalText = (accumText + interimText).trim();
+  document.getElementById('transcript-box').textContent = finalText || '(nothing recorded)';
+  document.getElementById('transcript-box').style.fontStyle = 'normal';
+
+  if (!finalText || finalText.length < 2) {
+    setMicStatus('Nothing detected — check mic permissions and try again', false);
+    log('⚠ No speech captured — check browser mic permissions', 'warn');
+    return;
+  }
+  setMicStatus('Parsing transcript...', false);
+  log('📝 Got ' + finalText.length + ' chars of speech', 'info');
+  parseTranscript(finalText);
+}
+
+function setMicStatus(msg, active) {
+  const el = document.getElementById('mic-status');
+  el.textContent = msg;
+  el.className = active ? 'active' : '';
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PARSE
+// ─────────────────────────────────────────────────────────────────────────────
+function parseTranscript(text) {
+  const norm = text.toLowerCase()
+    .replace(/&/g,'and').replace(/'/g,'').replace(/[,;.!?\-]/g,' ').replace(/\s+/g,' ').trim();
+
+  const found = [];
+  const usedRanges = [];
+  const sorted = [...ALL_ITEMS].sort((a,b)=>b.name.length-a.name.length);
+
+  for (const item of sorted) {
+    const pat = item.name.toLowerCase()
+      .replace(/&/g,'(?:and|&)').replace(/'/g,"'?").replace(/\./g,'\\.').replace(/\s+/g,'\\s+');
+    const rx = new RegExp('(?:^|\\s)' + pat + '(?=\\s|$)', 'gi');
+    let m;
+    while ((m = rx.exec(norm)) !== null) {
+      const s = m.index, e = s + m[0].length;
+      if (!usedRanges.some(([a,b])=>s<b&&e>a)) {
+        found.push(item.name);
+        usedRanges.push([s,e]);
+      }
+    }
+  }
+
+  const countMap = {};
+  found.forEach(n => countMap[n] = (countMap[n]||0)+1);
+  parsedChips = Object.entries(countMap).map(([name,qty])=>({name,qty,removed:false}));
+
+  if (!parsedChips.length) {
+    setMicStatus('No items matched — try manual entry or speak more clearly', false);
+    log('⚠ No items matched. Transcript: "' + text.slice(0,80) + '"', 'warn');
+    return;
+  }
+
+  setMicStatus('Found ' + parsedChips.length + ' item(s) — review below', false);
+  log('✅ Matched ' + parsedChips.length + ' items from voice', 'success');
+  renderChips();
+  document.getElementById('parse-result').style.display = 'block';
+}
+
+function renderChips() {
+  const active = parsedChips.filter(c=>!c.removed);
+  document.getElementById('parsed-items').innerHTML = active.map(c=>
+    `<span class="parsed-chip" onclick="removeChip(${JSON.stringify(c.name)})">${c.name}${c.qty>1?' ×'+c.qty:''}</span>`
+  ).join('');
+  document.getElementById('parse-note').textContent = active.length + ' item(s) — click any to remove';
+}
+
+function removeChip(name) {
+  const c = parsedChips.find(x=>x.name===name);
+  if (c) c.removed = true;
+  renderChips();
+}
+
+function clearParsed() {
+  parsedChips = [];
+  document.getElementById('parse-result').style.display = 'none';
+  setMicStatus('Ready — click mic to begin', false);
+}
+
+async function addParsedItems() {
+  const toAdd = parsedChips.filter(c=>!c.removed);
+  if (!toAdd.length) return;
+  document.getElementById('parse-result').style.display = 'none';
+  parsedChips = [];
+  setMicStatus('Ready — click mic to begin', false);
+  toAdd.forEach(c => { for (let q=0; q<c.qty; q++) addItemToList(c.name); });
+  saveState(); refresh();
+  await fetchPendingPrices();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MANUAL
+// ─────────────────────────────────────────────────────────────────────────────
+function onManualInput() {
+  const q = document.getElementById('manual-input').value.trim();
+  suggestFocus = -1;
+  if (q.length < 2) { hideSug(); return; }
+  const matches = ALL_ITEMS.filter(i=>i.name.toLowerCase().includes(q.toLowerCase())).slice(0,12);
+  const list = document.getElementById('suggestion-list');
+  if (!matches.length) { hideSug(); return; }
+  const esc = q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  list.innerHTML = matches.map(m=>{
+    const hi = m.name.replace(new RegExp(`(${esc})`, 'gi'), '<span class="suggestion-match">$1</span>');
+    return `<div class="suggestion-item" data-name="${m.name}" onmousedown="selectSug(${JSON.stringify(m.name)})">${hi}<span class="sug-type">${m.type}</span></div>`;
+  }).join('');
+  list.style.display = 'block';
+}
+
+function hideSug() { document.getElementById('suggestion-list').style.display='none'; }
+
+function selectSug(name) {
+  document.getElementById('manual-input').value = name;
+  hideSug();
+  addManualItem();
+}
+
+function onManualKey(e) {
+  const its = document.getElementById('suggestion-list').querySelectorAll('.suggestion-item');
+  if (e.key==='ArrowDown'){ e.preventDefault(); suggestFocus=Math.min(suggestFocus+1,its.length-1); hilite(its); }
+  else if (e.key==='ArrowUp'){ e.preventDefault(); suggestFocus=Math.max(suggestFocus-1,-1); hilite(its); }
+  else if (e.key==='Enter'){ e.preventDefault(); suggestFocus>=0&&its[suggestFocus]?selectSug(its[suggestFocus].dataset.name):addManualItem(); }
+  else if (e.key==='Escape') hideSug();
+}
+
+function hilite(its) {
+  its.forEach((el,i)=>el.classList.toggle('focused',i===suggestFocus));
+  if (suggestFocus>=0&&its[suggestFocus]) document.getElementById('manual-input').value=its[suggestFocus].dataset.name;
+}
+
+async function addManualItem() {
+  const val = document.getElementById('manual-input').value.trim();
+  if (!val) return;
+  hideSug();
+  document.getElementById('manual-input').value = '';
+  addItemToList(val);
+  saveState(); refresh();
+  await fetchPendingPrices();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ITEM CRUD
+// ─────────────────────────────────────────────────────────────────────────────
+function addItemToList(name) {
+  const url = toUrlName(name);
+  const ex  = items.find(i=>i.urlName===url);
+  if (ex) { ex.qty++; log('+1 ' + name + ' (×' + ex.qty + ')', 'success'); }
+  else { items.push({ id:uid(), name, urlName:url, type:getType(name), qty:1, price:null, priceStatus:'pending' }); log('Added: ' + name, 'success'); }
+}
+
+function uid(){ return Math.random().toString(36).slice(2)+Date.now().toString(36); }
+
+function saveState(){
+  localStorage.setItem('wfv3_items',   JSON.stringify(items));
+  localStorage.setItem('wfv3_sold',    JSON.stringify([...sold]));
+  localStorage.setItem('wfv3_checked', JSON.stringify([...checked]));
+}
+
+function toggleSold(id)  { sold.has(id)?sold.delete(id):sold.add(id); saveState(); refresh(); }
+function toggleCheck(id) { checked.has(id)?checked.delete(id):checked.add(id); saveState(); renderTable(); renderStats(); updateSide(); }
+function removeItem(id)  { items=items.filter(i=>i.id!==id); sold.delete(id); checked.delete(id); saveState(); refresh(); }
+function clearAll()      { if(!confirm('Clear all items? Cannot be undone.')) return; items=[]; sold=new Set(); checked=new Set(); saveState(); refresh(); log('Inventory cleared','warn'); }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PRICES — direct WFM API (works when opened locally or from Vercel)
+// ─────────────────────────────────────────────────────────────────────────────
+async function fetchPendingPrices() {
+  if (fetchingPrices) return;
+  const pending = items.filter(i=>i.priceStatus==='pending');
+  if (!pending.length) return;
+  fetchingPrices = true;
+  document.getElementById('progress-wrap').style.display = 'block';
+  for (let i=0; i<pending.length; i++) {
+    const item = pending[i];
+    document.getElementById('progress-label').textContent = `◈ Fetching prices ${i+1}/${pending.length}`;
+    document.getElementById('progress-fill').style.width = Math.round((i+1)/pending.length*100)+'%';
+    document.getElementById('progress-status').textContent = item.name;
+    item.price = await fetchPrice(item.urlName);
+    item.priceStatus = item.price.err ? 'error' : 'done';
+    saveState(); renderTable(); updateSide();
+    await sleep(250);
+  }
+  document.getElementById('progress-wrap').style.display = 'none';
+  fetchingPrices = false;
+  log('◈ Prices fetched for ' + pending.length + ' items', 'success');
+  refresh();
+}
+
+async function fetchPrice(urlName) {
+  try {
+    const r = await fetch('https://api.warframe.market/v1/items/'+urlName+'/statistics',
+      { headers:{ Platform:'pc', Language:'en' } });
+    if (!r.ok) return { sell:null, buy:null, err:true };
+    const d = await r.json();
+    const s = (d?.payload?.statistics_closed?.['48hours'] ?? []);
+    const sells = s.filter(x=>x.order_type==='sell').map(x=>x.median);
+    const buys  = s.filter(x=>x.order_type==='buy').map(x=>x.median);
+    return { sell:sells.length?Math.round(sells[sells.length-1]):null, buy:buys.length?Math.round(buys[buys.length-1]):null };
+  } catch { return { sell:null, buy:null, err:true }; }
+}
+
+async function refreshOnePrice(id) {
+  const item = items.find(i=>i.id===id);
+  if (!item) return;
+  item.priceStatus = 'pending'; renderTable();
+  item.price = await fetchPrice(item.urlName);
+  item.priceStatus = item.price.err?'error':'done';
+  saveState(); renderTable(); updateSide();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SORT / FILTER / RENDER
+// ─────────────────────────────────────────────────────────────────────────────
+function toggleSort(col) {
+  sortState.col===col ? sortState.dir*=-1 : (sortState.col=col, sortState.dir=-1);
+  ['name','qty','sell','buy'].forEach(c=>{ const e=document.getElementById('arr-'+c); if(e) e.textContent=sortState.col===c?(sortState.dir===1?' ▲':' ▼'):''; });
+  renderTable();
+}
+
+function setFilter(mode, btn) {
+  filterMode = mode;
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTable();
+}
+
+function getVisible() {
+  const q = (document.getElementById('search-box')?.value||'').toLowerCase();
+  return items.filter(i=>{
+    if (filterMode==='sold'&&!sold.has(i.id)) return false;
+    if (filterMode==='checked'&&!checked.has(i.id)) return false;
+    if (['weapon','frame','blueprint','mod','arcane'].includes(filterMode)&&i.type!==filterMode) return false;
+    if (q&&!i.name.toLowerCase().includes(q)) return false;
+    return true;
+  }).sort((a,b)=>{
+    const pa=a.price||{},pb=b.price||{};
+    if(sortState.col==='name') return sortState.dir*a.name.localeCompare(b.name);
+    if(sortState.col==='qty')  return sortState.dir*(a.qty-b.qty);
+    if(sortState.col==='sell') return sortState.dir*((pa.sell??-Infinity)-(pb.sell??-Infinity));
+    if(sortState.col==='buy')  return sortState.dir*((pa.buy??-Infinity)-(pb.buy??-Infinity));
+    return 0;
+  });
+}
+
+function refresh() {
+  const has = items.length>0;
+  ['stats-bar','controls','table-wrap'].forEach(id=>document.getElementById(id).style.display=has?(id==='stats-bar'?'flex':'block'):'none');
+  document.getElementById('export-btn').style.display = has?'inline-block':'none';
+  document.getElementById('clear-btn').style.display  = has?'inline-block':'none';
+  renderStats(); renderTable(); updateSide();
+}
+
+function renderStats() {
+  const tq=items.reduce((s,i)=>s+i.qty,0);
+  const es=items.filter(i=>!sold.has(i.id)).reduce((s,i)=>s+(i.price?.sell||0)*i.qty,0);
+  const sv=items.filter(i=>sold.has(i.id)).reduce((s,i)=>s+(i.price?.sell||0)*i.qty,0);
+  document.getElementById('stats-bar').innerHTML=[
+    {l:'Total Qty',v:tq,c:'var(--text)'},{l:'Unique Items',v:items.length,c:'var(--text)'},
+    {l:'Est. Value',v:'◈ '+es.toLocaleString()+'p',c:'var(--green)'},{l:'Sold Value',v:'◈ '+sv.toLocaleString()+'p',c:'var(--gold)'},
+    {l:'Checked Off',v:checked.size,c:'#5ec090'},
+  ].map(s=>`<div class="stat-card"><div class="stat-label">${s.l}</div><div class="stat-value" style="color:${s.c};font-size:${s.l.includes('Value')?12:15}px">${s.v}</div></div>`).join('');
+}
+
+function badgeHtml(t) {
+  return ({blueprint:'<span class="badge badge-bp">BP</span>',frame:'<span class="badge badge-frame">FRAME</span>',
+    weapon:'<span class="badge badge-weapon">WEAPON</span>',mod:'<span class="badge badge-mod">MOD</span>',
+    arcane:'<span class="badge badge-arcane">ARCANE</span>'})[t]||'<span class="badge badge-other">ITEM</span>';
+}
+
+function renderTable() {
+  const vis = getVisible();
+  document.getElementById('empty-msg').style.display = items.length>0&&vis.length===0?'block':'none';
+  document.getElementById('count-badge').textContent = vis.length+' items';
+  document.getElementById('tbody').innerHTML = vis.map((item,idx)=>{
+    const isSold=sold.has(item.id), isChk=checked.has(item.id), p=item.price;
+    const ready = item.priceStatus==='done'||item.priceStatus==='error';
+    const sp = !ready?`<span class="pulsing" style="color:var(--text-dim);font-size:10px">···</span>`
+      :p?.err?`<span style="color:#604040;font-size:9px">N/A</span>`
+      :p?.sell!=null?`<span style="color:var(--green)">◈ ${(p.sell*item.qty).toLocaleString()}</span>`
+      :`<span style="opacity:.25">—</span>`;
+    const bp = !ready?`<span class="pulsing" style="color:var(--text-dim);font-size:10px">···</span>`
+      :p?.err?`<span style="color:#604040;font-size:9px">N/A</span>`
+      :p?.buy!=null?`<span style="color:var(--blue)">◈ ${(p.buy*item.qty).toLocaleString()}</span>`
+      :`<span style="opacity:.25">—</span>`;
+    return `<tr class="${isSold?'sold':''} ${isChk&&!isSold?'ischecked':''} fade-up" style="animation-delay:${Math.min(idx,20)*15}ms">
+      <td style="text-align:center;padding:8px 4px;cursor:pointer;font-size:14px;color:${isChk?'var(--green)':'#333'}" onclick="toggleCheck('${item.id}')">${isChk?'✓':'○'}</td>
+      <td class="td-name"><a href="${wfmLink(item.name)}" target="_blank" rel="noopener">${item.name}</a></td>
+      <td style="text-align:center">${badgeHtml(item.type)}</td>
+      <td style="text-align:center;font-family:'Orbitron',monospace;font-size:11px;color:${item.qty>1?'var(--gold)':'var(--text-dim)'}">${item.qty>1?'×'+item.qty:'1'}</td>
+      <td class="td-price">${sp}</td>
+      <td class="td-price">${bp}</td>
+      <td class="td-actions">
+        <button class="btn-icon" title="Refresh price" onclick="refreshOnePrice('${item.id}')" style="color:var(--gold)">↺</button>
+        <button class="btn-icon" onclick="toggleSold('${item.id}')" style="color:${isSold?'var(--green)':'var(--text-dim)'}">${isSold?'✓sold':'sell'}</button>
+        <button class="btn-icon" onclick="removeItem('${item.id}')" style="color:#904040">✕</button>
+      </td></tr>`;
+  }).join('');
+}
+
+function updateSide() {
+  const top = [...items].filter(i=>i.price?.sell&&!sold.has(i.id))
+    .sort((a,b)=>(b.price.sell*b.qty)-(a.price.sell*a.qty)).slice(0,10);
+  document.getElementById('top-earners').innerHTML = top.length
+    ? top.map(i=>`<div class="top-item"><span class="top-name"><a href="${wfmLink(i.name)}" target="_blank" rel="noopener">${i.name}</a></span><span class="top-price">◈${(i.price.sell*i.qty).toLocaleString()}</span></div>`).join('')
+    : '<div style="font-size:10px;opacity:.3">Add items to see top earners</div>';
+  const pr=items.filter(i=>i.price?.sell), un=pr.filter(i=>!sold.has(i.id)), sl=pr.filter(i=>sold.has(i.id));
+  document.getElementById('portfolio').innerHTML=`
+    <div style="display:flex;justify-content:space-between"><span>Items:</span><span style="color:var(--text-bright);font-family:'Orbitron',monospace;font-size:11px">${items.reduce((s,i)=>s+i.qty,0)}</span></div>
+    <div style="display:flex;justify-content:space-between"><span>Priced:</span><span style="color:var(--text-bright);font-family:'Orbitron',monospace;font-size:11px">${pr.length}/${items.length}</span></div>
+    <div style="display:flex;justify-content:space-between"><span>Est sell:</span><span style="color:var(--green);font-family:'Orbitron',monospace;font-size:11px">◈${un.reduce((s,i)=>s+(i.price.sell*i.qty),0).toLocaleString()}</span></div>
+    <div style="display:flex;justify-content:space-between"><span>Sold:</span><span style="color:var(--gold);font-family:'Orbitron',monospace;font-size:11px">◈${sl.reduce((s,i)=>s+(i.price.sell*i.qty),0).toLocaleString()}</span></div>
+    <div style="display:flex;justify-content:space-between"><span>Remaining:</span><span style="color:var(--blue);font-family:'Orbitron',monospace;font-size:11px">${un.length}</span></div>`;
+}
+
+function log(msg,type='info') {
+  const box=document.getElementById('log-box');
+  const d=document.createElement('div'); d.className='log-entry log-'+type; d.textContent=msg;
+  box.prepend(d); while(box.children.length>50) box.removeChild(box.lastChild);
+}
+
+function exportCSV() {
+  const rows=[['Item','Type','Qty','Sell (p)','Buy (p)','Status','WFM Link']];
+  items.forEach(i=>rows.push([i.name,i.type,i.qty,i.price?.sell??'',i.price?.buy??'',
+    sold.has(i.id)?'sold':checked.has(i.id)?'checked':'',wfmLink(i.name)]));
+  const csv=rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download='warframe_inventory.csv'; a.click();
+}
+
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+</script>
+</body>
+</html>
