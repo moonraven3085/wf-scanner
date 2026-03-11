@@ -177,6 +177,21 @@ td{padding:8px 6px;vertical-align:middle}
     </div>
   </div>
 
+  <!-- PASTE FALLBACK -->
+  <div id="paste-section" style="background:var(--bg3);border:1px solid rgba(200,169,81,.15);padding:16px;display:flex;flex-direction:column;gap:8px">
+    <div class="section-label">📋 Paste / Type Transcript — alternative to voice</div>
+    <div style="font-size:11px;color:var(--text-dim);line-height:1.6">
+      Use your OS dictation (<strong style="color:var(--text-bright)">Win+H</strong> on Windows · <strong style="color:var(--text-bright)">Fn+D</strong> or <strong style="color:var(--text-bright)">🎤</strong> on Mac) into the box below, or just type item names separated by commas.
+    </div>
+    <textarea id="paste-box" placeholder="Nova Prime Chassis, Mesa Prime Blueprint, Condition Overload, Arcane Energize..." 
+      style="background:rgba(0,0,0,.2);border:1px solid rgba(200,169,81,.2);color:var(--text-bright);font-family:'Rajdhani',sans-serif;font-size:13px;padding:10px 12px;outline:none;width:100%;min-height:80px;resize:vertical;transition:border-color .2s;letter-spacing:.3px"
+      onfocus="this.style.borderColor='rgba(200,169,81,.5)'" onblur="this.style.borderColor='rgba(200,169,81,.2)'"></textarea>
+    <div style="display:flex;gap:8px">
+      <button class="btn-primary" onclick="parsePasteBox()">＋ Detect &amp; Add Items</button>
+      <button class="btn-secondary" onclick="document.getElementById('paste-box').value=''">✕ Clear</button>
+    </div>
+  </div>
+
   <!-- MANUAL -->
   <div id="manual-section">
     <div class="section-label">Manual Add — autocomplete (Prime parts · Mods · Arcanes)</div>
@@ -554,47 +569,55 @@ function _doStartRecognition(SR) {
   document.getElementById('transcript-box').style.fontStyle = 'italic';
   document.getElementById('parse-result').style.display = 'none';
 
-  recognition = new SR();
-  recognition.continuous     = true;
-  recognition.interimResults = true;
-  recognition.lang           = 'en-US';
-  recognition.maxAlternatives = 1;
+  const isOpera = navigator.userAgent.toLowerCase().includes('opr');
 
-  recognition.onstart = () => {
-    log('🎤 Mic active', 'info');
-  };
+  function makeRecognition() {
+    const r = new SR();
+    // Opera does NOT support continuous mode reliably — use single-shot bursts instead
+    r.continuous     = isOpera ? false : true;
+    r.interimResults = isOpera ? false : true;
+    r.lang           = 'en-US';
+    r.maxAlternatives = 1;
 
-  recognition.onresult = (e) => {
-    for (let i = e.resultIndex; i < e.results.length; i++) {
-      if (e.results[i].isFinal) { accumText += e.results[i][0].transcript + ' '; interimText = ''; }
-      else interimText = e.results[i][0].transcript;
-    }
-    const disp = (accumText + interimText).trim();
-    document.getElementById('transcript-box').textContent = disp || 'Listening...';
-    document.getElementById('transcript-box').style.color = 'var(--text-bright)';
-    document.getElementById('transcript-box').style.fontStyle = 'normal';
-  };
+    r.onstart = () => { log('🎤 Listening...', 'info'); };
 
-  recognition.onerror = (e) => {
-    log('SR event: ' + e.error, e.error === 'no-speech' ? 'info' : 'error');
-    if (e.error === 'no-speech' || e.error === 'audio-capture') return;
-    if (e.error === 'not-allowed') {
-      setMicStatus('Mic blocked — check browser permissions', false);
-      _cleanupMic();
-      return;
-    }
-  };
+    r.onresult = (e) => {
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const t = e.results[i][0].transcript;
+        if (e.results[i].isFinal) { accumText += t + ' '; interimText = ''; }
+        else interimText = t;
+      }
+      const disp = (accumText + interimText).trim();
+      document.getElementById('transcript-box').textContent = disp || 'Listening...';
+      document.getElementById('transcript-box').style.color = 'var(--text-bright)';
+      document.getElementById('transcript-box').style.fontStyle = 'normal';
+    };
 
-  recognition.onend = () => {
-    // Auto-restart while user has not pressed stop
-    if (isRecording) {
+    r.onerror = (e) => {
+      if (e.error === 'no-speech') { log('(no speech, retrying...)', 'info'); return; }
+      if (e.error === 'audio-capture') return;
+      if (e.error === 'not-allowed') {
+        setMicStatus('Mic blocked — check browser permissions', false);
+        _cleanupMic(); return;
+      }
+      log('SR error: ' + e.error, 'warn');
+    };
+
+    r.onend = () => {
+      if (!isRecording) return;
+      // Restart immediately for next burst
       setTimeout(() => {
         if (!isRecording) return;
+        recognition = makeRecognition();
         try { recognition.start(); }
-        catch(x) { log('Restart failed: ' + x.message, 'warn'); }
-      }, 150);
-    }
-  };
+        catch(x) { log('Restart err: ' + x.message, 'warn'); }
+      }, isOpera ? 300 : 100);
+    };
+
+    return r;
+  }
+
+  recognition = makeRecognition();
 
   try {
     recognition.start();
@@ -608,6 +631,7 @@ function _doStartRecognition(SR) {
   document.getElementById('mic-btn').classList.add('recording');
   document.getElementById('mic-btn').textContent = '⏹';
   setMicStatus('🔴 Recording — speak your items now...', true);
+  if (isOpera) setMicStatus('🔴 Recording — pause briefly between items (Opera mode)', true);
   document.getElementById('mic-timer').style.display = 'block';
   timerSec = 0;
   timerIv = setInterval(() => {
@@ -648,6 +672,14 @@ function stopMic() {
   setMicStatus('Parsing transcript...', false);
   log('📝 Got ' + finalText.length + ' chars of speech', 'info');
   parseTranscript(finalText);
+}
+
+function parsePasteBox() {
+  const text = document.getElementById('paste-box').value.trim();
+  if (!text) return;
+  parseTranscript(text);
+  // Scroll down to show results
+  document.getElementById('parse-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 function setMicStatus(msg, active) {
