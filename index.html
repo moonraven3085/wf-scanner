@@ -529,7 +529,21 @@ function toggleMic() {
 function startMic() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) { alert('Please use Chrome, Edge, or Opera for voice input.'); return; }
+  // Request mic permission explicitly first — Opera requires this before
+  // webkitSpeechRecognition will work, and it gives a proper error on denial
+  setMicStatus('Requesting microphone access...', false);
+  navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(stream => {
+      stream.getTracks().forEach(t => t.stop()); // stop raw stream, SR manages its own
+      _doStartRecognition(SR);
+    })
+    .catch(err => {
+      setMicStatus('Mic permission denied — allow microphone in browser and try again', false);
+      log('Mic permission denied: ' + err.message, 'error');
+    });
+}
 
+function _doStartRecognition(SR) {
   accumText = ''; interimText = '';
   document.getElementById('transcript-box').textContent = 'Listening... speak now';
   document.getElementById('transcript-box').style.color = 'rgba(212,180,131,.4)';
@@ -554,10 +568,22 @@ function startMic() {
 
   recognition.onerror = (e) => {
     if (e.error === 'no-speech') return;
+    if (e.error === 'not-allowed') {
+      setMicStatus('Mic blocked — check browser permissions and try again', false);
+      isRecording = false;
+      clearInterval(timerIv);
+      document.getElementById('mic-btn').classList.remove('recording');
+      document.getElementById('mic-btn').textContent = '🎤';
+      document.getElementById('mic-timer').style.display = 'none';
+      return;
+    }
     if (e.error !== 'aborted') log('Mic error: ' + e.error, 'error');
   };
 
-  recognition.onend = () => { if (isRecording) try { recognition.start(); } catch(x) {} };
+  // Small delay on restart — Opera needs a brief gap or it silently fails
+  recognition.onend = () => {
+    if (isRecording) setTimeout(() => { try { recognition.start(); } catch(x) {} }, 80);
+  };
 
   try { recognition.start(); } catch(e) { log('Could not start mic: ' + e.message, 'error'); return; }
 
