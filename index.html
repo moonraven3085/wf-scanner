@@ -526,20 +526,24 @@ function toggleMic() {
   isRecording ? stopMic() : startMic();
 }
 
+let micStream = null; // keep stream alive for Opera
+
 function startMic() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) { alert('Please use Chrome, Edge, or Opera for voice input.'); return; }
-  // Request mic permission explicitly first — Opera requires this before
-  // webkitSpeechRecognition will work, and it gives a proper error on denial
-  setMicStatus('Requesting microphone access...', false);
-  navigator.mediaDevices.getUserMedia({ audio: true })
+
+  setMicStatus('Requesting microphone...', false);
+
+  // Get mic stream and KEEP IT ALIVE the entire recording session.
+  // Opera releases the hardware if you stop the stream, making SR fail silently.
+  navigator.mediaDevices.getUserMedia({ audio: true, video: false })
     .then(stream => {
-      stream.getTracks().forEach(t => t.stop()); // stop raw stream, SR manages its own
+      micStream = stream;
       _doStartRecognition(SR);
     })
     .catch(err => {
-      setMicStatus('Mic permission denied — allow microphone in browser and try again', false);
-      log('Mic permission denied: ' + err.message, 'error');
+      setMicStatus('Mic permission denied — allow microphone in browser settings', false);
+      log('Mic denied: ' + err.message, 'error');
     });
 }
 
@@ -554,6 +558,11 @@ function _doStartRecognition(SR) {
   recognition.continuous     = true;
   recognition.interimResults = true;
   recognition.lang           = 'en-US';
+  recognition.maxAlternatives = 1;
+
+  recognition.onstart = () => {
+    log('🎤 Mic active', 'info');
+  };
 
   recognition.onresult = (e) => {
     for (let i = e.resultIndex; i < e.results.length; i++) {
@@ -567,25 +576,33 @@ function _doStartRecognition(SR) {
   };
 
   recognition.onerror = (e) => {
-    if (e.error === 'no-speech') return;
+    log('SR event: ' + e.error, e.error === 'no-speech' ? 'info' : 'error');
+    if (e.error === 'no-speech' || e.error === 'audio-capture') return;
     if (e.error === 'not-allowed') {
-      setMicStatus('Mic blocked — check browser permissions and try again', false);
-      isRecording = false;
-      clearInterval(timerIv);
-      document.getElementById('mic-btn').classList.remove('recording');
-      document.getElementById('mic-btn').textContent = '🎤';
-      document.getElementById('mic-timer').style.display = 'none';
+      setMicStatus('Mic blocked — check browser permissions', false);
+      _cleanupMic();
       return;
     }
-    if (e.error !== 'aborted') log('Mic error: ' + e.error, 'error');
   };
 
-  // Small delay on restart — Opera needs a brief gap or it silently fails
   recognition.onend = () => {
-    if (isRecording) setTimeout(() => { try { recognition.start(); } catch(x) {} }, 80);
+    // Auto-restart while user has not pressed stop
+    if (isRecording) {
+      setTimeout(() => {
+        if (!isRecording) return;
+        try { recognition.start(); }
+        catch(x) { log('Restart failed: ' + x.message, 'warn'); }
+      }, 150);
+    }
   };
 
-  try { recognition.start(); } catch(e) { log('Could not start mic: ' + e.message, 'error'); return; }
+  try {
+    recognition.start();
+  } catch(e) {
+    log('SR start failed: ' + e.message, 'error');
+    _cleanupMic();
+    return;
+  }
 
   isRecording = true;
   document.getElementById('mic-btn').classList.add('recording');
@@ -598,13 +615,23 @@ function _doStartRecognition(SR) {
     document.getElementById('mic-timer').textContent =
       String(Math.floor(timerSec/60)).padStart(2,'0') + ':' + String(timerSec%60).padStart(2,'0');
   }, 1000);
-  log('🎤 Recording started', 'info');
+}
+
+function _cleanupMic() {
+  isRecording = false;
+  clearInterval(timerIv);
+  if (micStream) { micStream.getTracks().forEach(t => t.stop()); micStream = null; }
+  document.getElementById('mic-btn').classList.remove('recording');
+  document.getElementById('mic-btn').textContent = '🎤';
+  document.getElementById('mic-timer').style.display = 'none';
 }
 
 function stopMic() {
   isRecording = false;
   clearInterval(timerIv);
   if (recognition) { recognition.onend = null; try { recognition.stop(); } catch(x) {} recognition = null; }
+  // Release the mic stream we kept alive for Opera
+  if (micStream) { micStream.getTracks().forEach(t => t.stop()); micStream = null; }
   document.getElementById('mic-btn').classList.remove('recording');
   document.getElementById('mic-btn').textContent = '🎤';
   document.getElementById('mic-timer').style.display = 'none';
