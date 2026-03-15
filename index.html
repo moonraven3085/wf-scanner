@@ -384,7 +384,7 @@ td{padding:8px 6px;vertical-align:middle}
 </div>
 
 </div><!-- /main -->
-<div id="checklist-panel" style="padding:20px 24px;flex:1;overflow-y:auto">
+<div id="checklist-panel" style="display:none;padding:20px 24px;flex:1;overflow-y:auto;flex-direction:column">
   <div class="cl-reset-bar">
     <button class="btn-icon" onclick="resetChecklist('daily')" title="Reset daily tasks">↺ Reset Daily</button>
     <button class="btn-icon" onclick="resetChecklist('weekly')" title="Reset weekly tasks">↺ Reset Weekly</button>
@@ -394,7 +394,7 @@ td{padding:8px 6px;vertical-align:middle}
   <div class="cl-progress-bar"><div class="cl-progress-fill" id="cl-progress-fill" style="width:0%"></div></div>
   <div id="cl-sections"></div>
 
-<div id="res-panel" class="res-panel">
+<div id="res-panel" class="res-panel" style="display:none">
   <div class="res-search-bar">
     <input class="res-search" type="text" id="res-search" placeholder="🔍 Search resources, locations, methods..." oninput="renderResources()">
     <button class="res-filter-btn active" onclick="setResFilter('all',this)">All</button>
@@ -2398,15 +2398,15 @@ function switchPage(page) {
   });
 
   if (page === 'checklist') {
-    if (cl) cl.style.display = 'block';
+    if (cl) cl.style.display = 'flex';
     if (tabCl) { tabCl.style.background = 'rgba(200,169,81,.9)'; tabCl.style.color = '#060809'; }
     renderChecklist();
   } else if (page === 'resources') {
-    if (res) res.style.display = 'flex';
+    if (res) { res.style.display = 'block'; res.style.flexDirection = ''; }
     if (tabRes) { tabRes.style.background = 'rgba(200,169,81,.9)'; tabRes.style.color = '#060809'; }
-    renderResources();
+    setTimeout(renderResources, 10);
   } else {
-    if (inv) inv.style.display = '';
+    if (inv) inv.style.display = 'flex';
     if (tabInv) { tabInv.style.background = 'rgba(200,169,81,.9)'; tabInv.style.color = '#060809'; }
   }
 }
