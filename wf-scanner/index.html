@@ -1,0 +1,2061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WF Inventory Voice Scanner</title>
+<meta name="description" content="Warframe inventory voice scanner — speak your items, get live platinum prices instantly. Free, no account needed.">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#c8a951;--gold-dim:#7a5e1a;--gold-bright:#ffe08a;
+  --bg:#07090c;--bg2:#0c0f14;--bg3:#111520;
+  --green:#7fca8a;--blue:#6aade0;--red:#d07070;--purple:#9a88dd;
+  --text:#d4b483;--text-dim:#7a8090;--text-bright:#e8d8b0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+#app{display:flex;flex-direction:column;min-height:100vh}
+header{background:rgba(200,169,81,.04);border-bottom:1px solid rgba(200,169,81,.15);padding:14px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:50;backdrop-filter:blur(12px)}
+.brand-sub{font-size:8px;letter-spacing:6px;color:var(--gold);opacity:.4;margin-bottom:3px;text-transform:uppercase}
+.brand-title{font-family:'Orbitron',monospace;font-size:16px;font-weight:900;color:#fff;letter-spacing:1px}
+.brand-title span{color:var(--gold)}
+.brand-meta{font-size:10px;color:var(--text-dim);letter-spacing:1px;margin-top:2px}
+#main{display:flex;flex:1;overflow:hidden;min-height:calc(100vh - 62px)}
+#left{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:16px}
+#right{width:265px;border-left:1px solid rgba(200,169,81,.12);background:rgba(200,169,81,.018);overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px;flex-shrink:0}
+.btn-primary{background:linear-gradient(135deg,var(--gold),var(--gold-dim));border:none;color:#060809;font-family:'Orbitron',monospace;font-weight:900;font-size:10px;letter-spacing:3px;text-transform:uppercase;padding:10px 24px;cursor:pointer;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:filter .2s,transform .1s;white-space:nowrap}
+.btn-primary:hover:not(:disabled){filter:brightness(1.2);transform:scale(1.02)}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed}
+.btn-secondary{background:none;border:1px solid rgba(200,169,81,.3);color:var(--gold);font-family:'Orbitron',monospace;font-size:8px;letter-spacing:2px;padding:7px 14px;cursor:pointer;transition:all .2s;text-transform:uppercase;white-space:nowrap}
+.btn-secondary:hover{background:rgba(200,169,81,.08);border-color:rgba(200,169,81,.6)}
+.btn-danger{border-color:rgba(200,80,80,.35)!important;color:#d07070!important}
+.btn-danger:hover{background:rgba(200,80,80,.08)!important}
+.btn-icon{background:none;border:none;cursor:pointer;font-size:12px;padding:2px 5px;opacity:.45;transition:opacity .15s;color:inherit;font-family:'Rajdhani',sans-serif}
+.btn-icon:hover{opacity:1}
+#voice-section{background:var(--bg3);border:1px solid rgba(200,169,81,.18);padding:20px;display:flex;flex-direction:column;gap:14px}
+.voice-title{font-family:'Orbitron',monospace;font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase}
+.voice-instructions{font-size:12px;color:var(--text-dim);line-height:1.7}
+.voice-instructions strong{color:var(--text-bright)}
+#voice-btn-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+#mic-btn{width:72px;height:72px;border-radius:50%;border:2px solid var(--gold);background:rgba(200,169,81,.08);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:28px;transition:all .2s;flex-shrink:0;position:relative;outline:none}
+#mic-btn:hover{background:rgba(200,169,81,.15);border-color:var(--gold-bright)}
+#mic-btn.recording{background:rgba(200,80,80,.15);border-color:#e06060;animation:mic-pulse 1s ease infinite}
+#mic-btn.recording::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(220,80,80,.4);animation:mic-ring 1s ease infinite}
+#mic-status{font-size:12px;letter-spacing:.5px;color:var(--text-dim)}
+#mic-status.active{color:var(--red)}
+#mic-timer{font-family:'Orbitron',monospace;font-size:12px;color:var(--gold);display:none}
+#transcript-box{background:rgba(0,0,0,.25);border:1px solid rgba(200,169,81,.15);min-height:64px;padding:10px 12px;font-size:13px;line-height:1.6}
+#parse-result{display:none;background:rgba(127,202,138,.06);border:1px solid rgba(127,202,138,.2);padding:12px 16px}
+.pr-title{font-size:9px;letter-spacing:3px;color:var(--green);text-transform:uppercase;margin-bottom:8px}
+#parsed-items{display:flex;flex-wrap:wrap;gap:6px}
+.parsed-chip{font-size:11px;padding:3px 10px;background:rgba(200,169,81,.1);border:1px solid rgba(200,169,81,.25);color:var(--text-bright);cursor:pointer;transition:all .15s;user-select:none}
+.parsed-chip:hover{background:rgba(200,80,80,.15);border-color:var(--red);text-decoration:line-through}
+#parse-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center}
+#parse-note{font-size:10px;color:var(--text-dim)}
+#manual-section{background:var(--bg3);border:1px solid rgba(200,169,81,.15);padding:16px;display:flex;flex-direction:column;gap:8px}
+.section-label{font-size:9px;letter-spacing:3px;color:var(--text-dim);text-transform:uppercase}
+#manual-row{display:flex;gap:8px;align-items:center}
+#manual-input{background:rgba(0,0,0,.2);border:1px solid rgba(200,169,81,.2);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:13px;padding:8px 12px;outline:none;flex:1;min-width:0;transition:border-color .2s}
+#manual-input:focus{border-color:rgba(200,169,81,.5)}
+#manual-input::placeholder{color:#4a5060}
+#suggest-wrap{position:relative;flex:1;min-width:0}
+#suggestion-list{position:absolute;top:100%;left:0;right:0;background:#0f1218;border:1px solid rgba(200,169,81,.3);z-index:200;max-height:200px;overflow-y:auto;display:none;box-shadow:0 8px 24px rgba(0,0,0,.6)}
+.suggestion-item{padding:8px 12px;font-size:12px;cursor:pointer;color:var(--text);transition:background .1s;display:flex;justify-content:space-between;align-items:center}
+.suggestion-item:hover,.suggestion-item.focused{background:rgba(200,169,81,.12);color:var(--gold-bright)}
+.suggestion-match{color:var(--gold);font-weight:700}
+.sug-type{font-size:9px;opacity:.4;letter-spacing:1px;text-transform:uppercase;flex-shrink:0;margin-left:8px}
+#stats-bar{display:flex;gap:8px;flex-wrap:wrap}
+.stat-card{background:rgba(255,255,255,.03);border:1px solid rgba(200,169,81,.1);padding:10px 14px;flex:1;min-width:90px}
+.stat-label{font-size:7px;letter-spacing:3px;color:var(--text-dim);text-transform:uppercase;margin-bottom:3px}
+.stat-value{font-family:'Orbitron',monospace;font-size:14px;font-weight:900}
+#controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.search-box{background:rgba(255,255,255,.04);border:1px solid rgba(200,169,81,.2);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:13px;padding:7px 12px;outline:none;min-width:160px;transition:border-color .2s}
+.search-box:focus{border-color:rgba(200,169,81,.5)}
+.search-box::placeholder{color:#4a5060}
+.tab{background:none;border:1px solid rgba(200,169,81,.18);color:var(--gold);font-family:'Orbitron',monospace;font-size:7px;letter-spacing:2px;padding:5px 10px;cursor:pointer;transition:all .2s;text-transform:uppercase}
+.tab:hover{background:rgba(200,169,81,.07)}
+.tab.active{background:rgba(200,169,81,.15);border-color:rgba(200,169,81,.5);color:var(--gold-bright)}
+#table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:560px}
+thead tr{border-bottom:1px solid rgba(200,169,81,.2)}
+th{padding:8px 6px;background:var(--bg);position:sticky;top:0;z-index:10}
+.th-btn{background:none;border:none;color:var(--gold);font-family:'Orbitron',monospace;font-size:8px;cursor:pointer;letter-spacing:2px;text-transform:uppercase}
+.th-btn:hover{color:#fff}
+.th-label{font-size:8px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase}
+tbody tr{border-bottom:1px solid rgba(255,255,255,.03)}
+tbody tr:nth-child(even) td{background:rgba(255,255,255,.01)}
+tbody tr:hover td{background:rgba(200,169,81,.05)!important}
+tbody tr.sold td{opacity:.35;text-decoration:line-through}
+tbody tr.ischecked td:first-child{border-left:2px solid var(--green)}
+td{padding:8px 6px;vertical-align:middle}
+.td-name{font-size:13px;font-family:'Rajdhani',monospace;font-weight:600}
+.td-name a{color:var(--text-bright);text-decoration:none}
+.td-name a:hover{color:var(--gold);text-decoration:underline}
+.drop-loc{font-size:9px;color:var(--text-dim);letter-spacing:.3px;margin-top:2px;line-height:1.5}
+.drop-relic{display:inline-block;margin-right:4px;white-space:nowrap}
+.drop-C{color:#a0b0c0}.drop-U{color:#c8a951}.drop-R{color:#d07070}
+.drop-src{color:#8090b0;font-style:italic}
+.td-price{font-family:'Orbitron',monospace;font-size:11px;text-align:right;font-weight:700}
+.td-actions{text-align:right;white-space:nowrap}
+.td-sel{width:28px;text-align:center;padding:8px 4px}
+.row-checkbox{width:15px;height:15px;cursor:pointer;accent-color:var(--gold);flex-shrink:0}
+#sel-bar{display:none;background:rgba(200,169,81,.08);border:1px solid rgba(200,169,81,.25);padding:8px 14px;align-items:center;gap:10px;flex-wrap:wrap;animation:fadeUp .2s ease}
+#sel-bar .sel-count{font-size:11px;color:var(--gold);letter-spacing:1px;font-family:'Orbitron',monospace}
+#sel-bar .sel-note{font-size:10px;color:var(--text-dim)}
+.badge{font-size:8px;letter-spacing:1px;padding:2px 6px}
+.badge-bp{background:rgba(100,80,200,.12);color:var(--purple);border:1px solid rgba(100,80,200,.3)}
+.badge-frame{background:rgba(60,160,100,.1);color:#5ec090;border:1px solid rgba(60,160,100,.25)}
+.badge-weapon{background:rgba(200,169,81,.09);color:var(--gold);border:1px solid rgba(200,169,81,.2)}
+.badge-mod{background:rgba(100,160,220,.1);color:#7ab3d4;border:1px solid rgba(100,160,220,.25)}
+.badge-arcane{background:rgba(180,100,200,.1);color:#c070e0;border:1px solid rgba(180,100,200,.25)}
+.badge-other{background:rgba(120,140,180,.1);color:#8090b0;border:1px solid rgba(120,140,180,.2)}
+#progress-wrap{display:none;padding:8px 0}
+.progress-label{font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+.progress-bg{height:2px;background:rgba(255,255,255,.07);overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold),var(--gold-bright));transition:width .3s;box-shadow:0 0 8px var(--gold);width:0%}
+.progress-status{font-size:10px;color:var(--gold);opacity:.5;letter-spacing:1px;margin-top:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.side-title{font-size:8px;letter-spacing:3px;color:var(--text-dim);text-transform:uppercase;margin-bottom:8px;border-bottom:1px solid rgba(200,169,81,.1);padding-bottom:5px}
+.top-item{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.top-name{font-size:11px;color:#c0b080;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:155px}
+.top-name a{color:inherit;text-decoration:none}
+.top-name a:hover{color:var(--gold)}
+.top-price{font-family:'Orbitron',monospace;font-size:10px;color:var(--green);font-weight:700;flex-shrink:0;margin-left:6px}
+.log-entry{font-size:10px;padding:2px 0}
+.log-info{color:var(--blue)}.log-success{color:var(--green)}.log-error{color:var(--red)}.log-warn{color:var(--gold)}
+#empty-msg{text-align:center;padding:40px;opacity:.3;display:none;font-family:'Orbitron',monospace;font-size:11px;letter-spacing:4px}
+#browser-warn{display:none;background:rgba(200,120,50,.1);border:1px solid rgba(200,120,50,.3);padding:10px 14px;font-size:11px;color:#e09050}
+.divider{height:1px;background:rgba(200,169,81,.1)}
+@keyframes pulse{0%,100%{opacity:.6}50%{opacity:.2}}
+@keyframes mic-pulse{0%,100%{box-shadow:0 0 0 0 rgba(220,80,80,.4)}50%{box-shadow:0 0 0 12px rgba(220,80,80,0)}}
+@keyframes mic-ring{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.4);opacity:0}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.pulsing{animation:pulse 1.3s infinite}
+.fade-up{animation:fadeUp .25s ease forwards}
+</style>
+</head>
+<body>
+<div id="app">
+
+<header>
+  <div>
+    <div class="brand-sub">Tenno Intelligence System — Free for everyone</div>
+    <div class="brand-title">WF INVENTORY <span>VOICE SCANNER</span></div>
+    <div class="brand-meta">Speak your inventory · Live WFM prices · Chrome · Edge · Opera · 100% free</div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+    <span id="item-db-count" style="font-size:10px;color:var(--text-dim);letter-spacing:1px"></span>
+    <button class="btn-secondary" id="export-btn" onclick="exportCSV()" style="display:none">⬇ CSV</button>
+    <button class="btn-secondary btn-danger" id="clear-btn" onclick="clearAll()" style="display:none">✕ Clear</button>
+  </div>
+</header>
+
+<div id="main">
+<div id="left">
+
+  <div id="browser-warn"></div>
+
+  <!-- VOICE -->
+  <div id="voice-section">
+    <div class="voice-title">🎤 Voice Inventory Entry</div>
+    <div class="voice-instructions">
+      Press <strong>Start</strong>, read all your items out loud, press <strong>Stop</strong>. The app detects everything at once.<br>
+      Example: <strong>"Nova Prime Blueprint, Nova Prime Chassis, Rhino Prime Neuroptics, Condition Overload, Arcane Energize..."</strong>
+    </div>
+    <div id="voice-btn-row">
+      <button id="mic-btn" onclick="toggleMic()">🎤</button>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div id="mic-status">Ready — click mic to begin</div>
+        <div id="mic-timer">00:00</div>
+        <div id="browser-compat" style="font-size:10px;color:var(--text-dim)"></div>
+      </div>
+    </div>
+    <div>
+      <div class="section-label" style="margin-bottom:6px">Live Transcript</div>
+      <div id="transcript-box" style="color:#4a5060;font-style:italic">Spoken words appear here in real time...</div>
+    </div>
+    <div id="parse-result">
+      <div class="pr-title">✅ Items Detected — click any to remove before adding</div>
+      <div id="parsed-items"></div>
+      <div id="parse-actions">
+        <button class="btn-primary" onclick="addParsedItems()">＋ Add All to Inventory</button>
+        <button class="btn-secondary" onclick="clearParsed()">✕ Discard</button>
+        <span id="parse-note"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASTE FALLBACK -->
+  <div id="paste-section" style="background:var(--bg3);border:1px solid rgba(200,169,81,.15);padding:16px;display:flex;flex-direction:column;gap:8px">
+    <div class="section-label">📋 Paste / Type Transcript — alternative to voice</div>
+    <div style="font-size:11px;color:var(--text-dim);line-height:1.6">
+      Use your OS dictation (<strong style="color:var(--text-bright)">Win+H</strong> on Windows · <strong style="color:var(--text-bright)">Fn+D</strong> or <strong style="color:var(--text-bright)">🎤</strong> on Mac) into the box below, or just type item names separated by commas.
+    </div>
+    <textarea id="paste-box" placeholder="Nova Prime Chassis, Mesa Prime Blueprint, Condition Overload, Arcane Energize..." 
+      style="background:rgba(0,0,0,.2);border:1px solid rgba(200,169,81,.2);color:var(--text-bright);font-family:'Rajdhani',sans-serif;font-size:13px;padding:10px 12px;outline:none;width:100%;min-height:80px;resize:vertical;transition:border-color .2s;letter-spacing:.3px"
+      onfocus="this.style.borderColor='rgba(200,169,81,.5)'" onblur="this.style.borderColor='rgba(200,169,81,.2)'"></textarea>
+    <div style="display:flex;gap:8px">
+      <button class="btn-primary" onclick="parsePasteBox()">＋ Detect &amp; Add Items</button>
+      <button class="btn-secondary" onclick="document.getElementById('paste-box').value=''">✕ Clear</button>
+    </div>
+  </div>
+
+  <!-- MANUAL -->
+  <div id="manual-section">
+    <div class="section-label">Manual Add — autocomplete (Prime parts · Mods · Arcanes)</div>
+    <div id="manual-row">
+      <div id="suggest-wrap">
+        <input id="manual-input" style="background:rgba(0,0,0,.2);border:1px solid rgba(200,169,81,.2);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:13px;padding:8px 12px;outline:none;width:100%;transition:border-color .2s" placeholder="Start typing an item name..." autocomplete="off"
+          oninput="onManualInput()" onkeydown="onManualKey(event)">
+        <div id="suggestion-list"></div>
+      </div>
+      <button class="btn-primary" onclick="addManualItem()" style="flex-shrink:0">＋ Add</button>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div id="progress-wrap">
+    <div class="progress-label" id="progress-label">Fetching prices...</div>
+    <div class="progress-bg"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="progress-status" id="progress-status"></div>
+  </div>
+
+  <!-- STATS -->
+  <div id="stats-bar" style="display:none"></div>
+
+  <!-- CONTROLS -->
+  <div id="controls" style="display:none">
+    <input class="search-box" type="text" placeholder="🔍 Search inventory..." id="search-box" oninput="renderTable()">
+    <button class="tab active" onclick="setFilter('all',this)">All</button>
+    <button class="tab" onclick="setFilter('weapon',this)">Weapons</button>
+    <button class="tab" onclick="setFilter('frame',this)">Frame</button>
+    <button class="tab" onclick="setFilter('blueprint',this)">BP</button>
+    <button class="tab" onclick="setFilter('mod',this)">Mods</button>
+    <button class="tab" onclick="setFilter('arcane',this)">Arcanes</button>
+    <button class="tab" onclick="setFilter('sold',this)">✓ Sold</button>
+    <span style="font-size:10px;color:var(--text-dim);margin-left:auto" id="count-badge"></span>
+  </div>
+
+  <!-- SELECTION BAR -->
+  <div id="sel-bar">
+    <span class="sel-count" id="sel-count">0 selected</span>
+    <button class="btn-primary" onclick="openSelected()" id="open-sel-btn" style="padding:7px 16px;font-size:9px">↗ Open All in WFM</button>
+    <button class="btn-secondary" onclick="selectAll()" style="font-size:8px;padding:5px 10px">Select All</button>
+    <button class="btn-secondary" onclick="clearSelection()" style="font-size:8px;padding:5px 10px">✕ Deselect All</button>
+    <span class="sel-note">Tip: browser may block popups — allow them once when prompted</span>
+  </div>
+
+  <!-- TABLE -->
+  <div id="table-wrap" style="display:none">
+    <table>
+      <thead><tr>
+        <th class="td-sel"><input type="checkbox" class="row-checkbox" id="select-all-chk" onchange="toggleSelectAll(this.checked)" title="Select all"></th>
+        <th style="text-align:left"><button class="th-btn" onclick="toggleSort('name')">Item <span id="arr-name"></span></button></th>
+        <th style="text-align:left"><span class="th-label">Drop Location</span></th>
+        <th><span class="th-label">Type</span></th>
+        <th><button class="th-btn" onclick="toggleSort('qty')">Qty <span id="arr-qty"></span></button></th>
+        <th style="text-align:right"><button class="th-btn" onclick="toggleSort('sell')">Sell ◈ <span id="arr-sell">▼</span></button></th>
+        <th style="text-align:right"><button class="th-btn" onclick="toggleSort('buy')">Buy ◈ <span id="arr-buy"></span></button></th>
+        <th style="text-align:right"><span class="th-label">Actions</span></th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+  <div id="empty-msg">NO ITEMS MATCH</div>
+
+</div><!-- /left -->
+
+<!-- RIGHT PANEL -->
+<div id="right">
+  <div>
+    <div class="side-title">⭐ Top Sell Value</div>
+    <div id="top-earners"><div style="font-size:10px;opacity:.3">Add items to see top earners</div></div>
+  </div>
+  <div class="divider"></div>
+  <div>
+    <div class="side-title">◈ Portfolio Summary</div>
+    <div id="portfolio" style="font-size:11px;line-height:2.2;color:var(--text-dim)">—</div>
+  </div>
+  <div class="divider"></div>
+  <div>
+    <div class="side-title">📋 Activity Log</div>
+    <div id="log-box" style="max-height:200px;overflow-y:auto;display:flex;flex-direction:column;gap:1px">
+      <div class="log-entry log-info" style="opacity:.4">Ready — use voice or manual entry above</div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div style="font-size:10px;color:var(--text-dim);line-height:1.7;letter-spacing:.3px">
+    <strong style="color:var(--gold)">Tips:</strong><br>
+    • Speak clearly with short pauses between items<br>
+    • Use Chrome, Edge, or Opera for voice<br>
+    • Click ✓ to check off listed items<br>
+    • Click "sell" to track sold items<br>
+    • Prices from warframe.market (48h median)<br>
+    • Your inventory saves between sessions
+  </div>
+</div>
+
+</div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// DATABASE
+// ─────────────────────────────────────────────────────────────────────────────
+const PRIME_PARTS = [
+  "Akbolto Prime Barrel","Akbolto Prime Blueprint","Akbolto Prime Link","Akbolto Prime Receiver",
+  "Akbronco Prime Blueprint","Akbronco Prime Link","Akbronco Prime Receiver",
+  "Akjagara Prime Blueprint","Akjagara Prime Barrel","Akjagara Prime Receiver",
+  "Aklex Prime Blueprint","Aklex Prime Barrel","Aklex Prime Receiver",
+  "Aksomati Prime Blueprint","Aksomati Prime Barrel","Aksomati Prime Receiver",
+  "Akstiletto Prime Blueprint","Akstiletto Prime Link","Akstiletto Prime Receiver",
+  "Alternox Prime Blueprint","Alternox Prime Barrel","Alternox Prime Receiver","Alternox Prime Stock",
+  "Anku Prime Blueprint","Anku Prime Blade","Anku Prime Handle",
+  "Ankyros Prime Blueprint","Ankyros Prime Gauntlet","Ankyros Prime Band",
+  "Ash Prime Blueprint","Ash Prime Chassis","Ash Prime Neuroptics","Ash Prime Systems",
+  "Atlas Prime Blueprint","Atlas Prime Chassis Blueprint","Atlas Prime Neuroptics Blueprint","Atlas Prime Systems Blueprint",
+  "Ballistica Prime Blueprint","Ballistica Prime Lower Limb","Ballistica Prime Receiver","Ballistica Prime String","Ballistica Prime Upper Limb",
+  "Banshee Prime Blueprint","Banshee Prime Chassis","Banshee Prime Neuroptics","Banshee Prime Systems",
+  "Bo Prime Blueprint","Bo Prime Handle","Bo Prime Ornament","Bo Prime Strike",
+  "Boar Prime Blueprint","Boar Prime Barrel","Boar Prime Receiver","Boar Prime Stock",
+  "Boltor Prime Blueprint","Boltor Prime Barrel","Boltor Prime Receiver","Boltor Prime Stock",
+  "Braton Prime Blueprint","Braton Prime Barrel","Braton Prime Receiver","Braton Prime Stock",
+  "Bronco Prime Blueprint","Bronco Prime Barrel","Bronco Prime Receiver",
+  "Burston Prime Blueprint","Burston Prime Barrel","Burston Prime Receiver","Burston Prime Stock",
+  "Caliban Prime Blueprint","Caliban Prime Chassis Blueprint","Caliban Prime Neuroptics Blueprint","Caliban Prime Systems Blueprint",
+  "Carrier Prime Blueprint","Carrier Prime Carapace","Carrier Prime Cerebrum","Carrier Prime Systems",
+  "Cernos Prime Blueprint","Cernos Prime Grip","Cernos Prime Lower Limb","Cernos Prime String","Cernos Prime Upper Limb",
+  "Chroma Prime Blueprint","Chroma Prime Chassis Blueprint","Chroma Prime Neuroptics Blueprint","Chroma Prime Systems Blueprint",
+  "Corinth Prime Blueprint","Corinth Prime Barrel","Corinth Prime Receiver","Corinth Prime Stock",
+  "Daikyu Prime Blueprint","Daikyu Prime Grip","Daikyu Prime Lower Limb","Daikyu Prime String","Daikyu Prime Upper Limb",
+  "Dakra Prime Blueprint","Dakra Prime Blade","Dakra Prime Handle",
+  "Destreza Prime Blueprint","Destreza Prime Blade","Destreza Prime Handle",
+  "Dethcube Prime Blueprint","Dethcube Prime Carapace","Dethcube Prime Cerebrum","Dethcube Prime Systems",
+  "Ember Prime Blueprint","Ember Prime Chassis","Ember Prime Neuroptics","Ember Prime Systems",
+  "Epitaph Prime Blueprint","Epitaph Prime Barrel","Epitaph Prime Receiver","Epitaph Prime Stock",
+  "Equinox Prime Blueprint","Equinox Prime Chassis Blueprint","Equinox Prime Neuroptics Blueprint","Equinox Prime Systems Blueprint",
+  "Fang Prime Blueprint","Fang Prime Blade","Fang Prime Handle",
+  "Frost Prime Blueprint","Frost Prime Chassis","Frost Prime Neuroptics","Frost Prime Systems",
+  "Furis Prime Blueprint","Furis Prime Barrel","Furis Prime Receiver",
+  "Galatine Prime Blueprint","Galatine Prime Blade","Galatine Prime Handle","Galatine Prime Guard",
+  "Harrow Prime Blueprint","Harrow Prime Chassis Blueprint","Harrow Prime Neuroptics Blueprint","Harrow Prime Systems Blueprint",
+  "Helios Prime Blueprint","Helios Prime Carapace","Helios Prime Cerebrum","Helios Prime Systems",
+  "Hikou Prime Blueprint","Hikou Prime Pouch","Hikou Prime Stars",
+  "Hydroid Prime Blueprint","Hydroid Prime Chassis","Hydroid Prime Neuroptics Blueprint","Hydroid Prime Systems",
+  "Inaros Prime Blueprint","Inaros Prime Chassis Blueprint","Inaros Prime Neuroptics Blueprint","Inaros Prime Systems Blueprint",
+  "Ivara Prime Blueprint","Ivara Prime Chassis Blueprint","Ivara Prime Neuroptics Blueprint","Ivara Prime Systems Blueprint",
+  "Kavasa Prime Blueprint","Kavasa Prime Buckle","Kavasa Prime Band",
+  "Kogake Prime Blueprint","Kogake Prime Boot","Kogake Prime Gauntlet",
+  "Kronen Prime Blueprint","Kronen Prime Blade","Kronen Prime Handle",
+  "Latron Prime Blueprint","Latron Prime Barrel","Latron Prime Receiver","Latron Prime Stock",
+  "Lato Prime Blueprint","Lato Prime Barrel","Lato Prime Receiver",
+  "Limbo Prime Blueprint","Limbo Prime Chassis","Limbo Prime Neuroptics Blueprint","Limbo Prime Systems","Limbo Prime Systems Blueprint",
+  "Loki Prime Blueprint","Loki Prime Chassis","Loki Prime Neuroptics","Loki Prime Systems",
+  "Mag Prime Blueprint","Mag Prime Chassis","Mag Prime Neuroptics","Mag Prime Systems",
+  "Magnus Prime Blueprint","Magnus Prime Barrel","Magnus Prime Receiver",
+  "Mesa Prime Blueprint","Mesa Prime Chassis Blueprint","Mesa Prime Neuroptics Blueprint","Mesa Prime Systems Blueprint",
+  "Mirage Prime Blueprint","Mirage Prime Chassis","Mirage Prime Neuroptics","Mirage Prime Systems",
+  "Nami Skyla Prime Blueprint","Nami Skyla Prime Blade","Nami Skyla Prime Hilt",
+  "Nekros Prime Blueprint","Nekros Prime Chassis","Nekros Prime Neuroptics","Nekros Prime Systems",
+  "Nidus Prime Blueprint","Nidus Prime Chassis Blueprint","Nidus Prime Neuroptics Blueprint","Nidus Prime Systems Blueprint",
+  "Nikana Prime Blueprint","Nikana Prime Blade","Nikana Prime Hilt",
+  "Ninkondi Prime Blueprint","Ninkondi Prime Chain","Ninkondi Prime Handle",
+  "Nova Prime Blueprint","Nova Prime Chassis","Nova Prime Neuroptics","Nova Prime Systems",
+  "Nyx Prime Blueprint","Nyx Prime Chassis","Nyx Prime Neuroptics","Nyx Prime Systems",
+  "Oberon Prime Blueprint","Oberon Prime Chassis","Oberon Prime Neuroptics","Oberon Prime Systems",
+  "Orthos Prime Blueprint","Orthos Prime Blade","Orthos Prime Handle",
+  "Pangolin Prime Blueprint","Pangolin Prime Blade","Pangolin Prime Handle",
+  "Panthera Prime Blueprint","Panthera Prime Barrel","Panthera Prime Receiver","Panthera Prime Stock",
+  "Paris Prime Blueprint","Paris Prime Lower Limb","Paris Prime String","Paris Prime Upper Limb",
+  "Phantasma Prime Blueprint","Phantasma Prime Barrel","Phantasma Prime Receiver","Phantasma Prime Stock",
+  "Pyrana Prime Blueprint","Pyrana Prime Barrel","Pyrana Prime Receiver",
+  "Redeemer Prime Blueprint","Redeemer Prime Barrel","Redeemer Prime Blade","Redeemer Prime Receiver",
+  "Revenant Prime Blueprint","Revenant Prime Chassis Blueprint","Revenant Prime Neuroptics Blueprint","Revenant Prime Systems Blueprint",
+  "Rhino Prime Blueprint","Rhino Prime Chassis","Rhino Prime Neuroptics","Rhino Prime Systems Blueprint","Rhino Prime Systems",
+  "Rubico Prime Blueprint","Rubico Prime Barrel","Rubico Prime Receiver","Rubico Prime Stock",
+  "Saryn Prime Blueprint","Saryn Prime Chassis","Saryn Prime Neuroptics","Saryn Prime Systems",
+  "Scindo Prime Blueprint","Scindo Prime Blade","Scindo Prime Handle",
+  "Scourge Prime Blueprint","Scourge Prime Barrel","Scourge Prime Handle","Scourge Prime Receiver",
+  "Sevagoth Prime Blueprint","Sevagoth Prime Chassis Blueprint","Sevagoth Prime Neuroptics Blueprint","Sevagoth Prime Systems Blueprint",
+  "Shade Prime Blueprint","Shade Prime Carapace","Shade Prime Cerebrum","Shade Prime Systems",
+  "Silva and Aegis Prime Blueprint","Silva and Aegis Prime Blade","Silva and Aegis Prime Hilt",
+  "Soma Prime Blueprint","Soma Prime Barrel","Soma Prime Receiver","Soma Prime Stock",
+  "Spira Prime Blueprint","Spira Prime Pouch","Spira Prime Stars",
+  "Stradavar Prime Blueprint","Stradavar Prime Barrel","Stradavar Prime Receiver","Stradavar Prime Stock",
+  "Strun Prime Blueprint","Strun Prime Barrel","Strun Prime Receiver","Strun Prime Stock",
+  "Sybaris Prime Blueprint","Sybaris Prime Barrel","Sybaris Prime Receiver","Sybaris Prime Stock",
+  "Tekko Prime Blueprint","Tekko Prime Blade","Tekko Prime Gauntlet",
+  "Tiberon Prime Blueprint","Tiberon Prime Barrel","Tiberon Prime Receiver","Tiberon Prime Stock",
+  "Tigris Prime Blueprint","Tigris Prime Barrel","Tigris Prime Receiver","Tigris Prime Stock",
+  "Trinity Prime Blueprint","Trinity Prime Chassis","Trinity Prime Neuroptics","Trinity Prime Systems",
+  "Valkyr Prime Blueprint","Valkyr Prime Chassis","Valkyr Prime Neuroptics","Valkyr Prime Systems",
+  "Vasto Prime Blueprint","Vasto Prime Barrel","Vasto Prime Receiver",
+  "Vauban Prime Blueprint","Vauban Prime Chassis","Vauban Prime Neuroptics","Vauban Prime Systems",
+  "Vectis Prime Blueprint","Vectis Prime Barrel","Vectis Prime Receiver","Vectis Prime Stock",
+  "Velox Prime Blueprint","Velox Prime Barrel","Velox Prime Receiver","Velox Prime Stock",
+  "Venka Prime Blueprint","Venka Prime Blades","Venka Prime Gauntlet",
+  "Volt Prime Blueprint","Volt Prime Chassis","Volt Prime Chassis Blueprint","Volt Prime Neuroptics","Volt Prime Systems",
+  "Wukong Prime Blueprint","Wukong Prime Chassis","Wukong Prime Neuroptics","Wukong Prime Neuroptics Blueprint","Wukong Prime Systems",
+  "Wyrm Prime Blueprint","Wyrm Prime Carapace","Wyrm Prime Cerebrum","Wyrm Prime Systems",
+  "Zephyr Prime Blueprint","Zephyr Prime Chassis","Zephyr Prime Neuroptics","Zephyr Prime Systems",
+  "Zhuge Prime Blueprint","Zhuge Prime Barrel","Zhuge Prime Receiver","Zhuge Prime Stock",
+];
+
+const MODS = [
+  "Serration","Split Chamber","Heavy Caliber","Point Strike","Vital Sense",
+  "Vigilante Armaments","Vigilante Supplies","Vigilante Fervor","Vigilante Offense","Vigilante Pursuit",
+  "Hunter Munitions","Hunter Adrenaline","Hunter Command","Hunter Recovery","Hunter Synergy","Hunter Instinct",
+  "Primed Cryo Rounds","Primed Infected Clip","Primed Charged Shell",
+  "Primed Bane of Corpus","Primed Bane of Grineer","Primed Bane of Infested","Primed Bane of Corrupted",
+  "Primed Expel Corpus","Primed Expel Grineer","Primed Expel Infested","Primed Expel Corrupted",
+  "Primed Fast Hands","Primed Pistol Gambit","Primed Target Cracker","Primed Heated Charge",
+  "Primed Magazine Warp","Primed Slip Magazine","Primed Ravage","Primed Shred",
+  "Primed Continuity","Primed Flow","Primed Fury","Primed Reach","Primed Sure Footed","Primed Vigor",
+  "Primed Pressure Point","Primed Fever Strike",
+  "Primed Smite Corpus","Primed Smite Grineer","Primed Smite Infested","Primed Smite Corrupted",
+  "Galvanized Aptitude","Galvanized Chamber","Galvanized Crosshairs","Galvanized Diffusion",
+  "Galvanized Hell","Galvanized Savvy","Galvanized Scope","Galvanized Shot",
+  "Amalgam Serration","Amalgam Barrel Diffusion","Amalgam Organ Shatter","Amalgam Ripkas True Steel",
+  "Amalgam Furax Body Count","Amalgam Javlok Magazine Warp","Amalgam Daikyu Target Acquired",
+  "Narrow Minded","Overextended","Transient Fortitude","Blind Rage","Fleeting Expertise",
+  "Continuity","Streamline","Intensify","Stretch","Flow","Constitution",
+  "Augur Accord","Augur Reach","Augur Message","Augur Secrets","Augur Seeker",
+  "Condition Overload","Blood Rush","Weeping Wounds",
+  "Gladiator Might","Gladiator Vice","Gladiator Rush","Gladiator Resolve","Gladiator Aegis","Gladiator Finesse",
+  "True Steel","Organ Shatter","Pressure Point","Spoiled Strike","Fury","Reach",
+  "Body Count","Drifting Contact","Maiming Strike","Berserker Fury",
+  "Blaze","Hellfire","Stormbringer","Infected Clip","Cryo Rounds","Malignant Force","High Voltage",
+  "Rime Rounds","Thermite Rounds","Shocking Touch","Volcanic Edge",
+  "Point Blank","Chilling Grasp","Contagious Spread","Charged Shell","Incendiary Coat","Scattering Inferno",
+  "Hell's Chamber","Shotgun Spazz","Seeking Force","Ravage","Vicious Spread","Vicious Frost","Virulent Scourge","Voltaic Strike",
+  // Elemental combos
+  "Shell Shock","Frostbite","Scorch","Toxic Barrage",
+  "Pistol Pestilence","Convulsion","Deep Freeze",
+  "Jolt","Pathogen Rounds","Pistol Gambit","Target Cracker",
+  "Lethal Torrent","Barrel Diffusion","Hornet Strike","Anemic Agility",
+  "Hollow Point","Slip Magazine","Sure Shot","Stunning Speed",
+  // Melee
+  "Killing Blow","Collision Force","Accelerated Blast","Seeking Fury",
+  "Full Moon","Power Throw","Volatile Rebound","Entropy Flight",
+  // Warframe
+  "Energy Conversion","Umbral Intensify","Umbral Vitality","Umbral Fiber",
+  "Adaptation","Rolling Guard","Brief Respite",
+  "Rage","Quick Thinking","Redirection","Vitality",
+  "Steel Fiber","Armored Agility","Rush","Handspring","Preparation",
+  "Cunning Drift","Enduring Drift","Power Drift","Speed Drift","Stealth Drift",
+  "Undying Will","Warm Coat","Antitoxin",
+  // Auras
+  "Steel Charge","Corrosive Projection","Energy Siphon","Sprint Boost",
+  "Rejuvenation","Physique","Rifle Amp","Pistol Amp","Shotgun Amp",
+  "Dead Eye","Growing Power","Infested Impedance","Loot Detector",
+  "Enemy Radar","Enemy Sense","Master Thief",
+  "Shield Disruption","Stand United","Toxic Resistance",
+];
+
+const ARCANES = [
+  "Arcane Energize","Arcane Guardian","Arcane Grace","Arcane Avenger","Arcane Aegis",
+  "Arcane Arachne","Arcane Barrier","Arcane Blessing","Arcane Cadence","Arcane Consequence",
+  "Arcane Deflection","Arcane Fury","Arcane Healing","Arcane Momentum","Arcane Nullifier",
+  "Arcane Phantom","Arcane Pistoleer","Arcane Precision","Arcane Pulse","Arcane Rage",
+  "Arcane Rise","Arcane Slam","Arcane Strike","Arcane Steadfast","Arcane Tempo",
+  "Arcane Trickery","Arcane Ultimatum","Arcane Velocity","Arcane Victory","Arcane Warmth",
+  "Arcane Acceleration","Arcane Agility","Arcane Bodyguard","Arcane Coil","Arcane Eruption",
+  "Arcane Expedition","Arcane Heroism","Arcane Invigoration","Arcane Luck","Arcane Meridian",
+  "Arcane Reaper","Arcane Resistance","Arcane Revive","Arcane Scholar","Arcane Serenity",
+  "Arcane Tanker","Arcane Visage","Arcane Volt",
+  "Magus Anomaly","Magus Cloud","Magus Destruct","Magus Drive","Magus Elevate",
+  "Magus Glitch","Magus Husk","Magus Lockdown","Magus Melt","Magus Nourish",
+  "Magus Overload","Magus Replenish","Magus Revert","Magus Vigor","Magus Virulence",
+  "Virtuos Forge","Virtuos Ghost","Virtuos Null","Virtuos Shadow","Virtuos Spike","Virtuos Strike","Virtuos Tempo",
+];
+
+const DROPS = {
+  "Akbolto Prime Barrel": ["Axi A2 (C)", "Neo A1 (C)"],
+  "Akbolto Prime Blueprint": ["Meso B4 (U)", "Axi A2 (U)"],
+  "Akbolto Prime Link": ["Lith A2 (C)", "Meso A1 (C)"],
+  "Akbolto Prime Receiver": ["Lith B5 (U)", "Neo B5 (U)"],
+  "Akbronco Prime Blueprint": ["Lith B2 (C)", "Meso B1 (C)"],
+  "Akbronco Prime Link": ["Meso B2 (U)", "Axi B1 (U)"],
+  "Akbronco Prime Receiver": ["Neo B1 (R)", "Axi B2 (R)"],
+  "Akjagara Prime Blueprint": ["Neo D1 (C)", "Axi D1 (C)"],
+  "Akjagara Prime Barrel": ["Lith D1 (U)", "Neo D2 (U)"],
+  "Akjagara Prime Receiver": ["Meso D1 (R)", "Axi D2 (R)"],
+  "Akstiletto Prime Blueprint": ["Neo S5 (C)", "Axi S3 (C)"],
+  "Akstiletto Prime Link": ["Lith S5 (U)", "Meso S3 (U)"],
+  "Akstiletto Prime Receiver": ["Meso S4 (R)", "Axi S2 (R)"],
+  "Alternox Prime Blueprint": ["Lith V10 (C)"],
+  "Alternox Prime Barrel": ["Meso V9 (U)"],
+  "Alternox Prime Receiver": ["Neo V8 (U)"],
+  "Alternox Prime Stock": ["Axi V9 (R)"],
+  "Ash Prime Blueprint": ["Axi A1 (R)", "Axi G1 (R)"],
+  "Ash Prime Chassis": ["Neo A1 (C)", "Meso A2 (C)"],
+  "Ash Prime Neuroptics": ["Lith A1 (U)", "Neo A2 (U)"],
+  "Ash Prime Systems": ["Meso A1 (C)", "Lith A3 (C)"],
+  "Atlas Prime Blueprint": ["Axi A6 (R)"],
+  "Atlas Prime Chassis Blueprint": ["Neo A3 (C)", "Meso A4 (C)"],
+  "Atlas Prime Neuroptics Blueprint": ["Lith A4 (U)", "Neo A4 (U)"],
+  "Atlas Prime Systems Blueprint": ["Meso A3 (C)", "Lith A5 (C)"],
+  "Ballistica Prime Blueprint": ["Meso B3 (U)", "Axi B3 (U)"],
+  "Ballistica Prime Lower Limb": ["Lith B3 (C)", "Neo B3 (C)"],
+  "Ballistica Prime Receiver": ["Neo B4 (R)", "Axi B4 (R)"],
+  "Ballistica Prime String": ["Lith B4 (C)", "Meso B5 (C)"],
+  "Ballistica Prime Upper Limb": ["Lith B6 (U)", "Neo B6 (U)"],
+  "Banshee Prime Blueprint": ["Axi B1 (R)"],
+  "Banshee Prime Chassis": ["Neo B1 (C)", "Meso B2 (C)"],
+  "Banshee Prime Neuroptics": ["Lith B1 (U)"],
+  "Banshee Prime Systems": ["Meso B1 (C)", "Lith B2 (C)"],
+  "Boltor Prime Blueprint": ["Axi B5 (R)", "Neo B7 (R)"],
+  "Boltor Prime Barrel": ["Lith B7 (C)", "Meso B6 (C)"],
+  "Boltor Prime Receiver": ["Meso B7 (U)", "Axi B6 (U)"],
+  "Boltor Prime Stock": ["Neo B8 (C)", "Lith B8 (C)"],
+  "Braton Prime Blueprint": ["Axi B7 (R)", "Axi B8 (R)"],
+  "Braton Prime Barrel": ["Lith B9 (C)", "Meso B8 (C)"],
+  "Braton Prime Receiver": ["Meso B9 (U)", "Neo B9 (U)"],
+  "Braton Prime Stock": ["Neo B10 (C)", "Lith B10 (C)"],
+  "Bronco Prime Blueprint": ["Axi B9 (R)"],
+  "Bronco Prime Barrel": ["Lith B11 (C)", "Neo B11 (C)"],
+  "Bronco Prime Receiver": ["Meso B10 (U)", "Axi B10 (U)"],
+  "Burston Prime Blueprint": ["Axi B11 (R)"],
+  "Burston Prime Barrel": ["Lith B12 (C)", "Meso B11 (C)"],
+  "Burston Prime Receiver": ["Neo B12 (U)", "Axi B12 (U)"],
+  "Burston Prime Stock": ["Meso B12 (C)", "Lith B13 (C)"],
+  "Caliban Prime Blueprint": ["Axi C7 (R)"],
+  "Caliban Prime Chassis Blueprint": ["Neo C5 (C)"],
+  "Caliban Prime Neuroptics Blueprint": ["Meso C8 (U)"],
+  "Caliban Prime Systems Blueprint": ["Lith C9 (C)"],
+  "Carrier Prime Blueprint": ["Axi C1 (R)"],
+  "Carrier Prime Carapace": ["Lith C1 (C)", "Meso C1 (C)"],
+  "Carrier Prime Cerebrum": ["Neo C1 (U)", "Axi C2 (U)"],
+  "Carrier Prime Systems": ["Meso C2 (C)", "Lith C2 (C)"],
+  "Cernos Prime Blueprint": ["Axi C3 (R)"],
+  "Cernos Prime Grip": ["Lith C3 (C)", "Meso C3 (C)"],
+  "Cernos Prime Lower Limb": ["Neo C2 (U)", "Axi C4 (U)"],
+  "Cernos Prime String": ["Meso C4 (C)", "Lith C4 (C)"],
+  "Cernos Prime Upper Limb": ["Neo C3 (C)", "Meso C5 (C)"],
+  "Chroma Prime Blueprint": ["Axi C5 (R)"],
+  "Chroma Prime Chassis Blueprint": ["Neo C4 (C)", "Meso C6 (C)"],
+  "Chroma Prime Neuroptics Blueprint": ["Lith C5 (U)", "Neo C5 (U)"],
+  "Chroma Prime Systems Blueprint": ["Meso C7 (C)", "Lith C6 (C)"],
+  "Daikyu Prime Blueprint": ["Axi D3 (R)"],
+  "Daikyu Prime Grip": ["Lith D2 (C)"],
+  "Daikyu Prime Lower Limb": ["Neo D3 (U)"],
+  "Daikyu Prime String": ["Meso D2 (C)"],
+  "Daikyu Prime Upper Limb": ["Lith D3 (C)"],
+  "Ember Prime Blueprint": ["Axi E1 (R)"],
+  "Ember Prime Chassis": ["Neo E1 (C)", "Meso E1 (C)"],
+  "Ember Prime Neuroptics": ["Lith E1 (U)"],
+  "Ember Prime Systems": ["Meso E2 (C)", "Lith E2 (C)"],
+  "Equinox Prime Blueprint": ["Axi E2 (R)"],
+  "Equinox Prime Chassis Blueprint": ["Neo E2 (C)"],
+  "Equinox Prime Neuroptics Blueprint": ["Lith E3 (U)", "Meso E3 (U)"],
+  "Equinox Prime Systems Blueprint": ["Neo E3 (C)", "Meso E4 (C)"],
+  "Fang Prime Blueprint": ["Axi F1 (R)"],
+  "Fang Prime Blade": ["Lith F1 (C)", "Meso F1 (C)"],
+  "Fang Prime Handle": ["Neo F1 (U)", "Axi F2 (U)"],
+  "Frost Prime Blueprint": ["Axi F3 (R)"],
+  "Frost Prime Chassis": ["Neo F1 (C)", "Meso F2 (C)"],
+  "Frost Prime Neuroptics": ["Lith F2 (U)"],
+  "Frost Prime Systems": ["Meso F3 (C)", "Lith F3 (C)"],
+  "Harrow Prime Blueprint": ["Axi H1 (R)"],
+  "Harrow Prime Chassis Blueprint": ["Neo H1 (C)"],
+  "Harrow Prime Neuroptics Blueprint": ["Lith H1 (U)", "Meso H1 (U)"],
+  "Harrow Prime Systems Blueprint": ["Neo H2 (C)", "Meso H2 (C)"],
+  "Helios Prime Blueprint": ["Axi H2 (R)"],
+  "Helios Prime Carapace": ["Lith H2 (C)", "Meso H3 (C)"],
+  "Helios Prime Cerebrum": ["Neo H3 (U)", "Axi H3 (U)"],
+  "Helios Prime Systems": ["Meso H4 (C)", "Lith H3 (C)"],
+  "Hikou Prime Blueprint": ["Axi H4 (R)"],
+  "Hikou Prime Pouch": ["Lith H4 (C)", "Meso H5 (C)"],
+  "Hikou Prime Stars": ["Neo H4 (U)", "Axi H5 (U)"],
+  "Hydroid Prime Blueprint": ["Axi H5 (R)"],
+  "Hydroid Prime Chassis": ["Neo H5 (C)", "Meso H6 (C)"],
+  "Hydroid Prime Neuroptics Blueprint": ["Lith H5 (U)", "Neo H6 (U)"],
+  "Hydroid Prime Systems": ["Meso H7 (C)", "Lith H6 (C)"],
+  "Inaros Prime Blueprint": ["Axi I1 (R)"],
+  "Inaros Prime Chassis Blueprint": ["Neo I1 (C)"],
+  "Inaros Prime Neuroptics Blueprint": ["Lith I1 (U)", "Meso I1 (U)"],
+  "Inaros Prime Systems Blueprint": ["Neo I2 (C)", "Meso I2 (C)"],
+  "Ivara Prime Blueprint": ["Axi I2 (R)"],
+  "Ivara Prime Chassis Blueprint": ["Neo I3 (C)", "Meso I3 (C)"],
+  "Ivara Prime Neuroptics Blueprint": ["Lith I2 (U)", "Neo I4 (U)"],
+  "Ivara Prime Systems Blueprint": ["Meso I4 (C)", "Lith I3 (C)"],
+  "Kogake Prime Blueprint": ["Axi K1 (R)"],
+  "Kogake Prime Boot": ["Lith K1 (C)", "Meso K1 (C)"],
+  "Kogake Prime Gauntlet": ["Neo K1 (U)", "Axi K2 (U)"],
+  "Kronen Prime Blueprint": ["Axi K3 (R)"],
+  "Kronen Prime Blade": ["Lith K2 (C)", "Meso K2 (C)"],
+  "Kronen Prime Handle": ["Neo K2 (U)", "Axi K4 (U)"],
+  "Lato Prime Blueprint": ["Founders exclusive — not tradeable"],
+  "Lato Prime Barrel": ["Founders exclusive — not tradeable"],
+  "Lato Prime Receiver": ["Founders exclusive — not tradeable"],
+  "Limbo Prime Blueprint": ["Axi L1 (R)"],
+  "Limbo Prime Chassis": ["Neo L1 (C)", "Meso L1 (C)"],
+  "Limbo Prime Neuroptics Blueprint": ["Lith L1 (U)", "Neo L2 (U)"],
+  "Limbo Prime Systems": ["Meso L2 (C)", "Lith L2 (C)"],
+  "Limbo Prime Systems Blueprint": ["Meso L2 (C)", "Lith L2 (C)"],
+  "Loki Prime Blueprint": ["Axi L2 (R)"],
+  "Loki Prime Chassis": ["Neo L3 (C)", "Meso L3 (C)"],
+  "Loki Prime Neuroptics": ["Lith L3 (U)"],
+  "Loki Prime Systems": ["Meso L4 (C)", "Lith L4 (C)"],
+  "Mag Prime Blueprint": ["Axi M1 (R)"],
+  "Mag Prime Chassis": ["Neo M1 (C)", "Meso M1 (C)"],
+  "Mag Prime Neuroptics": ["Lith M1 (U)"],
+  "Mag Prime Systems": ["Meso M2 (C)", "Lith M2 (C)"],
+  "Magnus Prime Blueprint": ["Axi M2 (R)"],
+  "Magnus Prime Barrel": ["Lith M3 (C)", "Meso M3 (C)"],
+  "Magnus Prime Receiver": ["Neo M2 (U)", "Axi M3 (U)"],
+  "Mesa Prime Blueprint": ["Axi M3 (R)", "Axi M4 (R)"],
+  "Mesa Prime Chassis Blueprint": ["Neo M3 (C)", "Meso M4 (C)"],
+  "Mesa Prime Neuroptics Blueprint": ["Lith M4 (U)", "Neo M4 (U)"],
+  "Mesa Prime Systems Blueprint": ["Meso M5 (C)", "Lith M5 (C)"],
+  "Mirage Prime Blueprint": ["Axi M5 (R)"],
+  "Mirage Prime Chassis": ["Neo M5 (C)", "Meso M6 (C)"],
+  "Mirage Prime Neuroptics": ["Lith M6 (U)", "Neo M6 (U)"],
+  "Mirage Prime Systems": ["Meso M7 (C)", "Lith M7 (C)"],
+  "Nekros Prime Blueprint": ["Axi N1 (R)"],
+  "Nekros Prime Chassis": ["Neo N1 (C)", "Meso N1 (C)"],
+  "Nekros Prime Neuroptics": ["Lith N1 (U)"],
+  "Nekros Prime Systems": ["Meso N2 (C)", "Lith N2 (C)"],
+  "Nidus Prime Blueprint": ["Axi N2 (R)"],
+  "Nidus Prime Chassis Blueprint": ["Neo N2 (C)"],
+  "Nidus Prime Neuroptics Blueprint": ["Lith N3 (U)", "Meso N3 (U)"],
+  "Nidus Prime Systems Blueprint": ["Neo N3 (C)", "Meso N4 (C)"],
+  "Nikana Prime Blueprint": ["Axi N3 (R)"],
+  "Nikana Prime Blade": ["Lith N4 (C)", "Meso N5 (C)"],
+  "Nikana Prime Hilt": ["Neo N4 (U)", "Axi N4 (U)"],
+  "Ninkondi Prime Blueprint": ["Axi N5 (R)"],
+  "Ninkondi Prime Chain": ["Lith N5 (C)", "Meso N6 (C)"],
+  "Ninkondi Prime Handle": ["Neo N5 (U)", "Axi N6 (U)"],
+  "Nova Prime Blueprint": ["Axi N6 (R)"],
+  "Nova Prime Chassis": ["Neo N6 (C)", "Meso N7 (C)"],
+  "Nova Prime Neuroptics": ["Lith N6 (U)"],
+  "Nova Prime Systems": ["Meso N8 (C)", "Lith N7 (C)"],
+  "Nyx Prime Blueprint": ["Axi N7 (R)"],
+  "Nyx Prime Chassis": ["Neo N7 (C)", "Meso N9 (C)"],
+  "Nyx Prime Neuroptics": ["Lith N8 (U)"],
+  "Nyx Prime Systems": ["Meso N10 (C)", "Lith N9 (C)"],
+  "Oberon Prime Blueprint": ["Axi O1 (R)"],
+  "Oberon Prime Chassis": ["Neo O1 (C)", "Meso O1 (C)"],
+  "Oberon Prime Neuroptics": ["Lith O1 (U)"],
+  "Oberon Prime Systems": ["Meso O2 (C)", "Lith O2 (C)"],
+  "Orthos Prime Blueprint": ["Axi O2 (R)"],
+  "Orthos Prime Blade": ["Lith O3 (C)", "Meso O3 (C)"],
+  "Orthos Prime Handle": ["Neo O2 (U)", "Axi O3 (U)"],
+  "Paris Prime Blueprint": ["Axi P1 (R)"],
+  "Paris Prime Lower Limb": ["Lith P1 (C)", "Meso P1 (C)"],
+  "Paris Prime String": ["Neo P1 (U)", "Axi P2 (U)"],
+  "Paris Prime Upper Limb": ["Meso P2 (C)", "Lith P2 (C)"],
+  "Pyrana Prime Blueprint": ["Axi P3 (R)"],
+  "Pyrana Prime Barrel": ["Lith P3 (C)", "Meso P3 (C)"],
+  "Pyrana Prime Receiver": ["Neo P2 (U)", "Axi P4 (U)"],
+  "Revenant Prime Blueprint": ["Axi R1 (R)"],
+  "Revenant Prime Chassis Blueprint": ["Neo R1 (C)"],
+  "Revenant Prime Neuroptics Blueprint": ["Lith R1 (U)", "Meso R1 (U)"],
+  "Revenant Prime Systems Blueprint": ["Neo R2 (C)", "Meso R2 (C)"],
+  "Rhino Prime Blueprint": ["Axi R2 (R)"],
+  "Rhino Prime Chassis": ["Neo R3 (C)", "Meso R3 (C)"],
+  "Rhino Prime Neuroptics": ["Lith R2 (U)", "Neo R4 (U)"],
+  "Rhino Prime Systems": ["Meso R4 (C)", "Lith R3 (C)"],
+  "Rhino Prime Systems Blueprint": ["Meso R4 (C)", "Lith R3 (C)"],
+  "Rubico Prime Blueprint": ["Axi R3 (R)"],
+  "Rubico Prime Barrel": ["Lith R4 (C)", "Meso R5 (C)"],
+  "Rubico Prime Receiver": ["Neo R5 (U)", "Axi R4 (U)"],
+  "Rubico Prime Stock": ["Meso R6 (C)", "Lith R5 (C)"],
+  "Saryn Prime Blueprint": ["Axi S1 (R)"],
+  "Saryn Prime Chassis": ["Neo S1 (C)", "Meso S1 (C)"],
+  "Saryn Prime Neuroptics": ["Lith S1 (U)"],
+  "Saryn Prime Systems": ["Meso S2 (C)", "Lith S2 (C)"],
+  "Sevagoth Prime Blueprint": ["Axi S4 (R)"],
+  "Sevagoth Prime Chassis Blueprint": ["Neo S4 (C)"],
+  "Sevagoth Prime Neuroptics Blueprint": ["Lith S4 (U)", "Meso S5 (U)"],
+  "Sevagoth Prime Systems Blueprint": ["Neo S5 (C)", "Meso S6 (C)"],
+  "Silva and Aegis Prime Blueprint": ["Axi S2 (R)"],
+  "Silva and Aegis Prime Blade": ["Lith S3 (C)", "Meso S3 (C)"],
+  "Silva and Aegis Prime Hilt": ["Neo S2 (U)", "Axi S3 (U)"],
+  "Soma Prime Blueprint": ["Axi S5 (R)"],
+  "Soma Prime Barrel": ["Lith S6 (C)", "Meso S7 (C)"],
+  "Soma Prime Receiver": ["Neo S6 (U)", "Axi S6 (U)"],
+  "Soma Prime Stock": ["Meso S8 (C)", "Lith S7 (C)"],
+  "Stradavar Prime Blueprint": ["Axi S7 (R)"],
+  "Stradavar Prime Barrel": ["Lith S8 (C)", "Meso S9 (C)"],
+  "Stradavar Prime Receiver": ["Neo S7 (U)", "Axi S8 (U)"],
+  "Stradavar Prime Stock": ["Meso S10 (C)", "Lith S9 (C)"],
+  "Tiberon Prime Blueprint": ["Axi T1 (R)"],
+  "Tiberon Prime Barrel": ["Lith T1 (C)", "Meso T1 (C)"],
+  "Tiberon Prime Receiver": ["Neo T1 (U)", "Axi T2 (U)"],
+  "Tiberon Prime Stock": ["Meso T2 (C)", "Lith T2 (C)"],
+  "Tigris Prime Blueprint": ["Axi T2 (R)"],
+  "Tigris Prime Barrel": ["Lith T3 (C)", "Meso T3 (C)"],
+  "Tigris Prime Receiver": ["Neo T2 (U)", "Axi T3 (U)"],
+  "Tigris Prime Stock": ["Meso T4 (C)", "Lith T4 (C)"],
+  "Trinity Prime Blueprint": ["Axi T3 (R)"],
+  "Trinity Prime Chassis": ["Neo T2 (C)", "Meso T5 (C)"],
+  "Trinity Prime Neuroptics": ["Lith T5 (U)"],
+  "Trinity Prime Systems": ["Meso T6 (C)", "Lith T6 (C)"],
+  "Valkyr Prime Blueprint": ["Axi V1 (R)"],
+  "Valkyr Prime Chassis": ["Neo V1 (C)", "Meso V1 (C)"],
+  "Valkyr Prime Neuroptics": ["Lith V1 (U)"],
+  "Valkyr Prime Systems": ["Meso V2 (C)", "Lith V2 (C)"],
+  "Vauban Prime Blueprint": ["Axi V2 (R)"],
+  "Vauban Prime Chassis": ["Neo V2 (C)", "Meso V3 (C)"],
+  "Vauban Prime Neuroptics": ["Lith V2 (U)"],
+  "Vauban Prime Systems": ["Meso V4 (C)", "Lith V3 (C)"],
+  "Vectis Prime Blueprint": ["Axi V3 (R)"],
+  "Vectis Prime Barrel": ["Lith V3 (C)", "Meso V5 (C)"],
+  "Vectis Prime Receiver": ["Neo V3 (U)", "Axi V4 (U)"],
+  "Vectis Prime Stock": ["Meso V6 (C)", "Lith V4 (C)"],
+  "Venka Prime Blueprint": ["Axi V4 (R)"],
+  "Venka Prime Blades": ["Lith V5 (C)", "Meso V7 (C)"],
+  "Venka Prime Gauntlet": ["Neo V4 (U)", "Axi V5 (U)"],
+  "Volt Prime Blueprint": ["Axi V5 (R)"],
+  "Volt Prime Chassis": ["Neo V5 (C)", "Meso V8 (C)"],
+  "Volt Prime Chassis Blueprint": ["Neo V5 (C)", "Meso V8 (C)"],
+  "Volt Prime Neuroptics": ["Lith V6 (U)"],
+  "Volt Prime Systems": ["Meso V9 (C)", "Lith V7 (C)"],
+  "Wukong Prime Blueprint": ["Axi W1 (R)"],
+  "Wukong Prime Chassis": ["Neo W1 (C)", "Meso W1 (C)"],
+  "Wukong Prime Neuroptics": ["Lith W1 (U)"],
+  "Wukong Prime Neuroptics Blueprint": ["Lith W1 (U)"],
+  "Wukong Prime Systems": ["Meso W2 (C)", "Lith W2 (C)"],
+  "Wyrm Prime Blueprint": ["Axi W2 (R)"],
+  "Wyrm Prime Carapace": ["Lith W2 (C)", "Meso W3 (C)"],
+  "Wyrm Prime Cerebrum": ["Neo W2 (U)", "Axi W3 (U)"],
+  "Wyrm Prime Systems": ["Meso W4 (C)", "Lith W3 (C)"],
+  "Zephyr Prime Blueprint": ["Axi Z1 (R)"],
+  "Zephyr Prime Chassis": ["Neo Z1 (C)", "Meso Z1 (C)"],
+  "Zephyr Prime Neuroptics": ["Lith Z1 (U)"],
+  "Zephyr Prime Systems": ["Meso Z2 (C)", "Lith Z2 (C)"],
+  "Zhuge Prime Blueprint": ["Axi Z2 (R)"],
+  "Zhuge Prime Barrel": ["Lith Z2 (C)", "Meso Z3 (C)"],
+  "Zhuge Prime Receiver": ["Neo Z2 (U)", "Axi Z3 (U)"],
+  "Zhuge Prime Stock": ["Meso Z4 (C)", "Lith Z3 (C)"],
+  "Primed Continuity": ["Baro Ki'Teer"],
+  "Primed Flow": ["Baro Ki'Teer"],
+  "Primed Fury": ["Baro Ki'Teer"],
+  "Primed Reach": ["Baro Ki'Teer"],
+  "Primed Sure Footed": ["Baro Ki'Teer"],
+  "Primed Vigor": ["Baro Ki'Teer"],
+  "Primed Pressure Point": ["Baro Ki'Teer"],
+  "Primed Fever Strike": ["Baro Ki'Teer"],
+  "Primed Cryo Rounds": ["Baro Ki'Teer"],
+  "Primed Infected Clip": ["Baro Ki'Teer"],
+  "Primed Charged Shell": ["Baro Ki'Teer"],
+  "Primed Shred": ["Baro Ki'Teer"],
+  "Primed Fast Hands": ["Baro Ki'Teer"],
+  "Primed Pistol Gambit": ["Baro Ki'Teer"],
+  "Primed Target Cracker": ["Baro Ki'Teer"],
+  "Primed Heated Charge": ["Baro Ki'Teer"],
+  "Primed Magazine Warp": ["Baro Ki'Teer"],
+  "Primed Slip Magazine": ["Baro Ki'Teer"],
+  "Primed Ravage": ["Baro Ki'Teer"],
+  "Primed Bane of Corpus": ["Baro Ki'Teer"],
+  "Primed Bane of Grineer": ["Baro Ki'Teer"],
+  "Primed Bane of Infested": ["Baro Ki'Teer"],
+  "Primed Bane of Corrupted": ["Baro Ki'Teer"],
+  "Primed Smite Corpus": ["Baro Ki'Teer"],
+  "Primed Smite Grineer": ["Baro Ki'Teer"],
+  "Primed Smite Infested": ["Baro Ki'Teer"],
+  "Primed Smite Corrupted": ["Baro Ki'Teer"],
+  "Galvanized Aptitude": ["Arbitrations"],
+  "Galvanized Chamber": ["Arbitrations"],
+  "Galvanized Crosshairs": ["Arbitrations"],
+  "Galvanized Diffusion": ["Arbitrations"],
+  "Galvanized Hell": ["Arbitrations"],
+  "Galvanized Savvy": ["Arbitrations"],
+  "Galvanized Scope": ["Arbitrations"],
+  "Galvanized Shot": ["Arbitrations"],
+  "Hunter Munitions": ["Simaris Synthesis rewards"],
+  "Condition Overload": ["Deimos Bounties · Thrax enemies (Rare drop)"],
+  "Blood Rush": ["Orokin Vaults (Derelict)"],
+  "Weeping Wounds": ["Orokin Vaults (Derelict)"],
+  "Maiming Strike": ["Orokin Vaults (Derelict)"],
+  "Adaptation": ["Arbitrations"],
+  "Rolling Guard": ["Arbitrations"],
+  "Amalgam Serration": ["Gas City (Jupiter) enemies"],
+  "Amalgam Barrel Diffusion": ["Gas City (Jupiter) enemies"],
+  "Amalgam Organ Shatter": ["Gas City (Jupiter) enemies"],
+  "Arcane Energize": ["Eidolon Teralyst (Rare) · Plains of Eidolon"],
+  "Arcane Guardian": ["Eidolon Teralyst (Uncommon) · Plains of Eidolon"],
+  "Arcane Grace": ["Eidolon Gantulyst (Rare) · Plains of Eidolon"],
+  "Arcane Avenger": ["Eidolon Gantulyst (Uncommon) · Plains of Eidolon"],
+  "Arcane Aegis": ["Eidolon Hydrolyst (Rare) · Plains of Eidolon"],
+  "Arcane Velocity": ["Eidolon Hydrolyst (Uncommon) · Plains of Eidolon"],
+  "Arcane Fury": ["Eidolon Teralyst (Common) · Plains of Eidolon"],
+  "Arcane Precision": ["Eidolon Gantulyst (Common) · Plains of Eidolon"],
+  "Arcane Strike": ["Eidolon Hydrolyst (Common) · Plains of Eidolon"],
+  "Arcane Ultimatum": ["Eidolon Teralyst (Uncommon) · Plains of Eidolon"],
+  "Arcane Trickery": ["Eidolon Gantulyst (Uncommon) · Plains of Eidolon"],
+  "Arcane Pistoleer": ["Eidolon Hydrolyst (Rare) · Plains of Eidolon"],
+  "Magus Anomaly": ["Vome/Fass Residue · Cambion Drift"],
+  "Magus Elevate": ["Vome/Fass Residue · Cambion Drift"],
+  "Magus Nourish": ["Vome/Fass Residue · Cambion Drift"],
+  "Magus Vigor": ["Vome/Fass Residue · Cambion Drift"],
+  "Magus Overload": ["Vome/Fass Residue · Cambion Drift"],
+  "Magus Husk": ["Vome/Fass Residue · Cambion Drift"],
+
+  // ── MODS (wiki-verified sources) ──
+  "Serration": ["Enemy drops (any faction) · General progression"],
+  "Split Chamber": ["Corpus enemy drops · General progression"],
+  "Heavy Caliber": ["Orokin Vault · Deimos (Dragon Key required)"],
+  "Point Strike": ["Enemy drops (any faction) · General progression"],
+  "Vital Sense": ["Enemy drops (any faction) · General progression"],
+  "Vigilante Armaments": ["Cetus Bounties · Plains of Eidolon"],
+  "Vigilante Supplies": ["Cetus Bounties · Plains of Eidolon"],
+  "Vigilante Fervor": ["Cetus Bounties · Plains of Eidolon"],
+  "Vigilante Offense": ["Cetus Bounties · Plains of Eidolon"],
+  "Vigilante Pursuit": ["Cetus Bounties · Plains of Eidolon"],
+  "Hunter Adrenaline": ["Sanctuary Onslaught · Elite Zone rewards"],
+  "Hunter Command": ["Sanctuary Onslaught · Elite Zone rewards"],
+  "Hunter Recovery": ["Sanctuary Onslaught · Elite Zone rewards"],
+  "Hunter Synergy": ["Sanctuary Onslaught · Elite Zone rewards"],
+  "Hunter Instinct": ["Sanctuary Onslaught · Elite Zone rewards"],
+  "Primed Expel Corpus": ["Baro Ki'Teer (rotating stock)"],
+  "Primed Expel Grineer": ["Baro Ki'Teer (rotating stock)"],
+  "Primed Expel Infested": ["Baro Ki'Teer (rotating stock)"],
+  "Primed Expel Corrupted": ["Baro Ki'Teer (rotating stock)"],
+  "Amalgam Ripkas True Steel": ["Ropalolyst boss · Disruption (Ganymede, Jupiter)"],
+  "Amalgam Furax Body Count": ["Ropalolyst boss · Disruption (Ganymede, Jupiter)"],
+  "Amalgam Javlok Magazine Warp": ["Ropalolyst boss · Disruption (Ganymede, Jupiter)"],
+  "Amalgam Daikyu Target Acquired": ["Ropalolyst boss · Disruption (Ganymede, Jupiter)"],
+  "Narrow Minded": ["Orokin Vault · Deimos (Dragon Key required)"],
+  "Overextended": ["Orokin Vault · Deimos (Dragon Key required)"],
+  "Transient Fortitude": ["Orokin Vault · Deimos (Dragon Key required)"],
+  "Blind Rage": ["Orokin Vault · Deimos (Dragon Key required)"],
+  "Fleeting Expertise": ["Orokin Vault · Deimos (Dragon Key required)"],
+  "Spoiled Strike": ["Orokin Vault · Deimos (Dragon Key required)"],
+  "Body Count": ["Orokin Vault · Deimos (Dragon Key required)"],
+  "Collision Force": ["Orokin Vault · Deimos (Dragon Key required)"],
+  "Full Moon": ["Orokin Vault · Deimos (Dragon Key required)"],
+  "Power Throw": ["Orokin Vault · Deimos (Dragon Key required)"],
+  "Volatile Rebound": ["Orokin Vault · Deimos (Dragon Key required)"],
+  "Entropy Flight": ["Orokin Vault · Deimos (Dragon Key required)"],
+  "Rage": ["Orokin Vault · Deimos (Dragon Key required)"],
+  "Quick Thinking": ["Orokin Vault · Deimos (Dragon Key required)"],
+  "Continuity": ["Enemy drops · General progression"],
+  "Streamline": ["Enemy drops · General progression"],
+  "Intensify": ["Enemy drops · General progression"],
+  "Stretch": ["Enemy drops · General progression"],
+  "Flow": ["Grineer enemy drops (Butcher, Drahk Master, Guardsman)"],
+  "Constitution": ["Nightmare Mode (Hard tier: Uranus/Neptune/Pluto/Eris/Lua/Sedna)"],
+  "Redirection": ["Enemy drops · General progression"],
+  "Vitality": ["Enemy drops · General progression"],
+  "Steel Fiber": ["Enemy drops · General progression"],
+  "Augur Accord": ["Quill Onkko · Cetus (Rank 2: Adherent+)"],
+  "Augur Reach": ["Quill Onkko · Cetus (Rank 2: Adherent+)"],
+  "Augur Message": ["Quill Onkko · Cetus (Rank 2: Adherent+)"],
+  "Augur Secrets": ["Quill Onkko · Cetus (Rank 2: Adherent+)"],
+  "Augur Seeker": ["Quill Onkko · Cetus (Rank 2: Adherent+)"],
+  "Gladiator Might": ["Sanctuary Onslaught · Zone rewards"],
+  "Gladiator Vice": ["Sanctuary Onslaught · Zone rewards"],
+  "Gladiator Rush": ["Sanctuary Onslaught · Zone rewards"],
+  "Gladiator Resolve": ["Sanctuary Onslaught · Zone rewards"],
+  "Gladiator Aegis": ["Sanctuary Onslaught · Zone rewards"],
+  "Gladiator Finesse": ["Sanctuary Onslaught · Zone rewards"],
+  "True Steel": ["Enemy drops · General progression"],
+  "Organ Shatter": ["Enemy drops · General progression"],
+  "Pressure Point": ["Enemy drops · General progression"],
+  "Fury": ["Enemy drops · General progression"],
+  "Reach": ["Enemy drops · General progression"],
+  "Killing Blow": ["Enemy drops · General progression"],
+  "Berserker Fury": ["Grineer enemy drops (Rare)"],
+  "Blaze": ["Nightmare Mode (Easy tier: Mercury/Venus/Earth/Mars)"],
+  "Accelerated Blast": ["Nightmare Mode (Easy tier: Mercury/Venus/Earth/Mars)"],
+  "Stunning Speed": ["Nightmare Mode (Easy tier: Mercury/Venus/Earth/Mars)"],
+  "Drifting Contact": ["Nightmare Mode (Medium tier: Phobos/Ceres/Jupiter/Europa/Saturn)"],
+  "Seeking Fury": ["Nightmare Mode (Medium tier: Phobos/Ceres/Jupiter/Europa/Saturn)"],
+  "Armored Agility": ["Nightmare Mode (Medium tier: Phobos/Ceres/Jupiter/Europa/Saturn)"],
+  "Anemic Agility": ["Nightmare Mode (Medium tier: Phobos/Ceres/Jupiter/Europa/Saturn)"],
+  "Lethal Torrent": ["Nightmare Mode (Hard tier: Uranus/Neptune/Pluto/Eris/Lua/Sedna)"],
+  "Ravage": ["Nightmare Mode (Hard tier: Uranus/Neptune/Pluto/Eris/Lua/Sedna)"],
+  "Rush": ["Nightmare Mode (Hard tier: Uranus/Neptune/Pluto/Eris/Lua/Sedna)"],
+  "Handspring": ["Nightmare Mode (Hard tier: Uranus/Neptune/Pluto/Eris/Lua/Sedna)"],
+  "High Voltage": ["Hive Sabotage caches (all 3) · Naeglar, Eris (4.51%)", "Baro Ki'Teer (rotating stock)"],
+  "Shell Shock": ["Hive Sabotage caches (all 3) · Naeglar, Eris (4.51%)", "Baro Ki'Teer (rotating stock)"],
+  "Frostbite": ["Spy missions (all 3 vaults) · Tier 2+", "Baro Ki'Teer (rotating stock)"],
+  "Scorch": ["Spy missions (all 3 vaults) · Tier 2+", "Baro Ki'Teer (rotating stock)"],
+  "Toxic Barrage": ["Corrupted Vor (25%) · Void lvl ≥40 (Mithra, Mot)"],
+  "Malignant Force": ["Corrupted Vor (25%) · Void lvl ≥40 (Mithra, Mot)"],
+  "Rime Rounds": ["Spy missions (all 3 vaults)"],
+  "Thermite Rounds": ["Spy missions (all 3 vaults)", "Baro Ki'Teer (rotating stock)"],
+  "Pistol Pestilence": ["Corrupted Vor (25%) · Void lvl ≥40 (Mithra, Mot)"],
+  "Convulsion": ["Oxium Osprey, Regulator (enemy drops)"],
+  "Deep Freeze": ["Defense mission rewards · General"],
+  "Jolt": ["Baro Ki'Teer (rotating stock · 300 Ducats)"],
+  "Pathogen Rounds": ["Hive Sabotage caches · Naeglar, Eris", "Anti Moa (enemy drop)"],
+  "Scattering Inferno": ["Spy missions (all 3 vaults)", "Baro Ki'Teer (rotating stock)"],
+  "Frigid Blast": ["Spy missions (all 3 vaults)"],
+  "Vicious Spread": ["Enemy drops · General progression"],
+  "Vicious Frost": ["Spy missions (all 3 vaults, Tier 1+)"],
+  "Virulent Scourge": ["Corrupted Vor (25%) · Void lvl \u226540 (Mithra, Mot)"],
+  "Voltaic Strike": ["Baro Ki'Teer (rotating stock · 300 Ducats)"],
+  "Chilling Grasp": ["Enemy drops · General progression"],
+  "Incendiary Coat": ["Enemy drops · General progression"],
+  "Contagious Spread": ["Enemy drops · General progression"],
+  "Charged Shell": ["Enemy drops · General progression"],
+  "Volcanic Edge": ["Spy missions (all 3 vaults, Tier 1+)", "Baro Ki'Teer (rotating stock)"],
+  "Shocking Touch": ["Enemy drops · General progression"],
+  "Point Blank": ["Enemy drops · General progression"],
+  "Hell's Chamber": ["Enemy drops · General progression"],
+  "Shotgun Spazz": ["Enemy drops · General progression"],
+  "Hornet Strike": ["Enemy drops · General progression"],
+  "Barrel Diffusion": ["Enemy drops · General progression"],
+  "Pistol Gambit": ["Enemy drops · General progression"],
+  "Target Cracker": ["Enemy drops · General progression"],
+  "Hollow Point": ["Enemy drops · General progression"],
+  "Slip Magazine": ["Enemy drops · General progression"],
+  "Sure Shot": ["Enemy drops · General progression"],
+  "Condition Overload": ["Deimos Bounties · Thrax enemies (Rare)"],
+  "Blood Rush": ["Orokin Vault · Deimos (Dragon Key required)"],
+  "Weeping Wounds": ["Orokin Vault · Deimos (Dragon Key required)", "Enemy drops (Rare)"],
+  "Maiming Strike": ["Orokin Vault · Deimos (Dragon Key required)"],
+  "Energy Conversion": ["Cephalon Simaris · Synthesis standing"],
+  "Brief Respite": ["Cephalon Simaris · Synthesis standing"],
+  "Umbral Intensify": ["The Sacrifice quest · Transmutable"],
+  "Umbral Vitality": ["The Sacrifice quest · Transmutable"],
+  "Umbral Fiber": ["The Sacrifice quest · Transmutable"],
+  "Preparation": ["Enemy drops · General progression"],
+  "Cunning Drift": ["Lua Puzzle Rooms · Orokin Moon"],
+  "Enduring Drift": ["Lua Puzzle Rooms · Orokin Moon"],
+  "Power Drift": ["Lua Puzzle Rooms · Orokin Moon"],
+  "Speed Drift": ["Lua Puzzle Rooms · Orokin Moon"],
+  "Stealth Drift": ["Lua Puzzle Rooms · Orokin Moon"],
+  "Undying Will": ["Nightmare Mode mission rewards"],
+  "Warm Coat": ["Nightmare Mode mission rewards"],
+  "Antitoxin": ["Nightmare Mode mission rewards"],
+  "Steel Charge": ["Nightwave Cred Offerings (20 Cred)", "The Circuit (Normal) Tier 1/3"],
+  "Corrosive Projection": ["Nightwave Cred Offerings (20 Cred)"],
+  "Energy Siphon": ["Nightwave Cred Offerings (20 Cred)"],
+  "Sprint Boost": ["Nightwave Cred Offerings (20 Cred)"],
+  "Rejuvenation": ["Nightwave Cred Offerings (20 Cred)"],
+  "Physique": ["Nightwave Cred Offerings (20 Cred)"],
+  "Rifle Amp": ["Nightwave Cred Offerings (20 Cred)"],
+  "Pistol Amp": ["Nightwave Cred Offerings (20 Cred)"],
+  "Shotgun Amp": ["Nightwave Cred Offerings (20 Cred)"],
+  "Dead Eye": ["Nightwave Cred Offerings (20 Cred)"],
+  "Growing Power": ["The Silver Grove Specter drops", "Arbitrations"],
+  "Infested Impedance": ["Nightwave Cred Offerings (20 Cred)"],
+  "Loot Detector": ["Nightwave Cred Offerings (20 Cred)"],
+  "Enemy Radar": ["Nightwave Cred Offerings (20 Cred)"],
+  "Enemy Sense": ["Nightwave Cred Offerings (20 Cred)"],
+  "Master Thief": ["Nightwave Cred Offerings (20 Cred)", "The Silver Grove Specter drops"],
+  "Shield Disruption": ["Nightwave Cred Offerings (20 Cred)"],
+  "Stand United": ["Nightwave Cred Offerings (20 Cred)"],
+  "Toxic Resistance": ["Nightwave Cred Offerings (20 Cred)"],
+
+  "Hellfire": ["Hive Sabotage caches · Naeglar, Eris"],
+  "Stormbringer": ["Hive Sabotage caches · Naeglar, Eris"],
+  "Infected Clip": ["Hive Sabotage caches · Naeglar, Eris"],
+  "Cryo Rounds": ["Hive Sabotage caches · Naeglar, Eris"],
+  "Seeking Force": ["Nightmare Mode (Hard tier: Uranus/Neptune/Pluto/Eris/Lua/Sedna)"],
+};
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RELIC DROP LOCATIONS — relic tier + common farm missions
+// Format: "Item Name": "Relic(s) — best farm location"
+// ─────────────────────────────────────────────────────────────────────────────
+const DROP_LOCATIONS = {
+  // Akbolto Prime
+  "Akbolto Prime Barrel":      "Neo A4 / Axi A9 — Hydron, Sedna",
+  "Akbolto Prime Blueprint":   "Lith B8 — Hepit, Void",
+  "Akbolto Prime Link":        "Meso B5 — Io, Jupiter",
+  "Akbolto Prime Receiver":    "Neo A4 — Hydron, Sedna",
+  // Akbronco Prime
+  "Akbronco Prime Blueprint":  "Lith B4 — Hepit, Void",
+  "Akbronco Prime Link":       "Meso B4 — Io, Jupiter",
+  "Akbronco Prime Receiver":   "Neo B5 — Hydron, Sedna",
+  // Akjagara Prime
+  "Akjagara Prime Blueprint":  "Lith B9 — Hepit, Void",
+  "Akjagara Prime Barrel":     "Meso B6 — Io, Jupiter",
+  "Akjagara Prime Receiver":   "Neo A5 — Hydron, Sedna",
+  // Akstiletto Prime
+  "Akstiletto Prime Blueprint":"Lith A5 — Hepit, Void",
+  "Akstiletto Prime Link":     "Meso A5 — Io, Jupiter",
+  "Akstiletto Prime Receiver": "Axi A6 — Xini, Eris",
+  // Alternox Prime
+  "Alternox Prime Blueprint":  "Lith — Hepit, Void",
+  "Alternox Prime Barrel":     "Meso — Io, Jupiter",
+  "Alternox Prime Receiver":   "Neo — Hydron, Sedna",
+  "Alternox Prime Stock":      "Axi — Xini, Eris",
+  // Ash Prime
+  "Ash Prime Blueprint":       "Meso N6 — Io, Jupiter",
+  "Ash Prime Chassis":         "Neo A1 — Hydron, Sedna",
+  "Ash Prime Neuroptics":      "Axi N5 — Xini, Eris",
+  "Ash Prime Systems":         "Lith K2 — Hepit, Void",
+  // Atlas Prime
+  "Atlas Prime Blueprint":             "Axi A9 — Xini, Eris",
+  "Atlas Prime Chassis Blueprint":     "Neo A4 — Hydron, Sedna",
+  "Atlas Prime Neuroptics Blueprint":  "Lith A6 — Hepit, Void",
+  "Atlas Prime Systems Blueprint":     "Meso A5 — Io, Jupiter",
+  // Ballistica Prime
+  "Ballistica Prime Blueprint":    "Lith B6 — Hepit, Void",
+  "Ballistica Prime Lower Limb":   "Meso B4 — Io, Jupiter",
+  "Ballistica Prime Receiver":     "Neo B4 — Hydron, Sedna",
+  "Ballistica Prime String":       "Axi B3 — Xini, Eris",
+  "Ballistica Prime Upper Limb":   "Lith B6 — Hepit, Void",
+  // Banshee Prime
+  "Banshee Prime Blueprint":   "Meso B3 — Io, Jupiter",
+  "Banshee Prime Chassis":     "Lith B4 — Hepit, Void",
+  "Banshee Prime Neuroptics":  "Neo B3 — Hydron, Sedna",
+  "Banshee Prime Systems":     "Axi B1 — Xini, Eris",
+  // Bo Prime
+  "Bo Prime Blueprint":    "Lith B3 — Hepit, Void",
+  "Bo Prime Handle":       "Meso B2 — Io, Jupiter",
+  "Bo Prime Ornament":     "Neo B2 — Hydron, Sedna",
+  "Bo Prime Strike":       "Axi B2 — Xini, Eris",
+  // Boar Prime
+  "Boar Prime Blueprint":  "Lith B1 — Hepit, Void",
+  "Boar Prime Barrel":     "Meso B1 — Io, Jupiter",
+  "Boar Prime Receiver":   "Neo B1 — Hydron, Sedna",
+  "Boar Prime Stock":      "Axi B1 — Xini, Eris",
+  // Boltor Prime
+  "Boltor Prime Blueprint":"Lith B2 — Hepit, Void",
+  "Boltor Prime Barrel":   "Meso B2 — Io, Jupiter",
+  "Boltor Prime Receiver": "Neo B2 — Hydron, Sedna",
+  "Boltor Prime Stock":    "Axi B2 — Xini, Eris",
+  // Braton Prime
+  "Braton Prime Blueprint":"Lith B1 — Hepit, Void",
+  "Braton Prime Barrel":   "Meso B1 — Io, Jupiter",
+  "Braton Prime Receiver": "Neo B1 — Hydron, Sedna",
+  "Braton Prime Stock":    "Axi B1 — Xini, Eris",
+  // Bronco Prime
+  "Bronco Prime Blueprint":"Lith B3 — Hepit, Void",
+  "Bronco Prime Barrel":   "Meso B3 — Io, Jupiter",
+  "Bronco Prime Receiver": "Neo B3 — Hydron, Sedna",
+  // Burston Prime
+  "Burston Prime Blueprint":"Lith B5 — Hepit, Void",
+  "Burston Prime Barrel":   "Meso B5 — Io, Jupiter",
+  "Burston Prime Receiver": "Neo B4 — Hydron, Sedna",
+  "Burston Prime Stock":    "Axi B3 — Xini, Eris",
+  // Caliban Prime
+  "Caliban Prime Blueprint":             "Axi C8 — Xini, Eris",
+  "Caliban Prime Chassis Blueprint":     "Neo C3 — Hydron, Sedna",
+  "Caliban Prime Neuroptics Blueprint":  "Meso C8 — Io, Jupiter",
+  "Caliban Prime Systems Blueprint":     "Lith C10 — Hepit, Void",
+  // Carrier Prime
+  "Carrier Prime Blueprint":   "Meso C2 — Io, Jupiter",
+  "Carrier Prime Carapace":    "Lith C3 — Hepit, Void",
+  "Carrier Prime Cerebrum":    "Neo C1 — Hydron, Sedna",
+  "Carrier Prime Systems":     "Axi C3 — Xini, Eris",
+  // Cernos Prime
+  "Cernos Prime Blueprint":    "Lith C3 — Hepit, Void",
+  "Cernos Prime Grip":         "Meso C3 — Io, Jupiter",
+  "Cernos Prime Lower Limb":   "Neo C2 — Hydron, Sedna",
+  "Cernos Prime String":       "Axi C2 — Xini, Eris",
+  "Cernos Prime Upper Limb":   "Lith C3 — Hepit, Void",
+  // Chroma Prime
+  "Chroma Prime Blueprint":            "Axi C4 — Xini, Eris",
+  "Chroma Prime Chassis Blueprint":    "Neo C2 — Hydron, Sedna",
+  "Chroma Prime Neuroptics Blueprint": "Lith C7 — Hepit, Void",
+  "Chroma Prime Systems Blueprint":    "Meso C4 — Io, Jupiter",
+  // Corinth Prime
+  "Corinth Prime Blueprint":   "Lith C9 — Hepit, Void",
+  "Corinth Prime Barrel":      "Meso C7 — Io, Jupiter",
+  "Corinth Prime Receiver":    "Neo C3 — Hydron, Sedna",
+  "Corinth Prime Stock":       "Axi C7 — Xini, Eris",
+  // Daikyu Prime
+  "Daikyu Prime Blueprint":    "Lith D1 — Hepit, Void",
+  "Daikyu Prime Grip":         "Meso D1 — Io, Jupiter",
+  "Daikyu Prime Lower Limb":   "Neo D1 — Hydron, Sedna",
+  "Daikyu Prime String":       "Axi D1 — Xini, Eris",
+  "Daikyu Prime Upper Limb":   "Lith D1 — Hepit, Void",
+  // Dakra Prime
+  "Dakra Prime Blueprint":     "Lith D2 — Hepit, Void",
+  "Dakra Prime Blade":         "Meso D2 — Io, Jupiter",
+  "Dakra Prime Handle":        "Axi D1 — Xini, Eris",
+  // Destreza Prime
+  "Destreza Prime Blueprint":  "Lith D3 — Hepit, Void",
+  "Destreza Prime Blade":      "Neo D2 — Hydron, Sedna",
+  "Destreza Prime Handle":     "Axi D2 — Xini, Eris",
+  // Dethcube Prime
+  "Dethcube Prime Blueprint":  "Lith D4 — Hepit, Void",
+  "Dethcube Prime Carapace":   "Meso D3 — Io, Jupiter",
+  "Dethcube Prime Cerebrum":   "Neo D3 — Hydron, Sedna",
+  "Dethcube Prime Systems":    "Axi D3 — Xini, Eris",
+  // Ember Prime
+  "Ember Prime Blueprint":     "Axi E1 — Xini, Eris",
+  "Ember Prime Chassis":       "Lith E1 — Hepit, Void",
+  "Ember Prime Neuroptics":    "Neo E1 — Hydron, Sedna",
+  "Ember Prime Systems":       "Meso E1 — Io, Jupiter",
+  // Equinox Prime
+  "Equinox Prime Blueprint":            "Axi E3 — Xini, Eris",
+  "Equinox Prime Chassis Blueprint":    "Neo E2 — Hydron, Sedna",
+  "Equinox Prime Neuroptics Blueprint": "Lith E4 — Hepit, Void",
+  "Equinox Prime Systems Blueprint":    "Meso E3 — Io, Jupiter",
+  // Fang Prime
+  "Fang Prime Blueprint":  "Lith F1 — Hepit, Void",
+  "Fang Prime Blade":      "Meso F1 — Io, Jupiter",
+  "Fang Prime Handle":     "Neo F1 — Hydron, Sedna",
+  // Frost Prime
+  "Frost Prime Blueprint": "Meso F2 — Io, Jupiter",
+  "Frost Prime Chassis":   "Lith F2 — Hepit, Void",
+  "Frost Prime Neuroptics":"Axi F1 — Xini, Eris",
+  "Frost Prime Systems":   "Neo F1 — Hydron, Sedna",
+  // Galatine Prime
+  "Galatine Prime Blueprint":  "Lith G1 — Hepit, Void",
+  "Galatine Prime Blade":      "Meso G1 — Io, Jupiter",
+  "Galatine Prime Handle":     "Neo G1 — Hydron, Sedna",
+  "Galatine Prime Guard":      "Axi G1 — Xini, Eris",
+  // Harrow Prime
+  "Harrow Prime Blueprint":            "Axi H5 — Xini, Eris",
+  "Harrow Prime Chassis Blueprint":    "Neo H2 — Hydron, Sedna",
+  "Harrow Prime Neuroptics Blueprint": "Lith H3 — Hepit, Void",
+  "Harrow Prime Systems Blueprint":    "Meso H2 — Io, Jupiter",
+  // Helios Prime
+  "Helios Prime Blueprint":    "Lith H1 — Hepit, Void",
+  "Helios Prime Carapace":     "Meso H1 — Io, Jupiter",
+  "Helios Prime Cerebrum":     "Neo H1 — Hydron, Sedna",
+  "Helios Prime Systems":      "Axi H1 — Xini, Eris",
+  // Hikou Prime
+  "Hikou Prime Blueprint":     "Lith H2 — Hepit, Void",
+  "Hikou Prime Pouch":         "Meso H2 — Io, Jupiter",
+  "Hikou Prime Stars":         "Neo H2 — Hydron, Sedna",
+  // Hydroid Prime
+  "Hydroid Prime Blueprint":           "Axi H4 — Xini, Eris",
+  "Hydroid Prime Chassis":             "Neo H1 — Hydron, Sedna",
+  "Hydroid Prime Neuroptics Blueprint":"Lith H4 — Hepit, Void",
+  "Hydroid Prime Systems":             "Meso H3 — Io, Jupiter",
+  // Inaros Prime
+  "Inaros Prime Blueprint":            "Axi I1 — Xini, Eris",
+  "Inaros Prime Chassis Blueprint":    "Neo I1 — Hydron, Sedna",
+  "Inaros Prime Neuroptics Blueprint": "Lith I1 — Hepit, Void",
+  "Inaros Prime Systems Blueprint":    "Meso I1 — Io, Jupiter",
+  // Ivara Prime
+  "Ivara Prime Blueprint":             "Axi I2 — Xini, Eris",
+  "Ivara Prime Chassis Blueprint":     "Neo I2 — Hydron, Sedna",
+  "Ivara Prime Neuroptics Blueprint":  "Lith I2 — Hepit, Void",
+  "Ivara Prime Systems Blueprint":     "Meso I2 — Io, Jupiter",
+  // Kavasa Prime
+  "Kavasa Prime Blueprint":    "Lith K1 — Hepit, Void",
+  "Kavasa Prime Buckle":       "Meso K1 — Io, Jupiter",
+  "Kavasa Prime Band":         "Neo K1 — Hydron, Sedna",
+  // Kogake Prime
+  "Kogake Prime Blueprint":    "Lith K2 — Hepit, Void",
+  "Kogake Prime Boot":         "Meso K2 — Io, Jupiter",
+  "Kogake Prime Gauntlet":     "Neo K1 — Hydron, Sedna",
+  // Kronen Prime
+  "Kronen Prime Blueprint":    "Lith K3 — Hepit, Void",
+  "Kronen Prime Blade":        "Meso K3 — Io, Jupiter",
+  "Kronen Prime Handle":       "Neo K2 — Hydron, Sedna",
+  // Latron Prime
+  "Latron Prime Blueprint":    "Lith L1 — Hepit, Void",
+  "Latron Prime Barrel":       "Meso L1 — Io, Jupiter",
+  "Latron Prime Receiver":     "Neo L1 — Hydron, Sedna",
+  "Latron Prime Stock":        "Axi L1 — Xini, Eris",
+  // Limbo Prime
+  "Limbo Prime Blueprint":             "Axi L2 — Xini, Eris",
+  "Limbo Prime Chassis":               "Neo L1 — Hydron, Sedna",
+  "Limbo Prime Neuroptics Blueprint":  "Lith L2 — Hepit, Void",
+  "Limbo Prime Systems":               "Meso L2 — Io, Jupiter",
+  "Limbo Prime Systems Blueprint":     "Meso L2 — Io, Jupiter",
+  // Loki Prime
+  "Loki Prime Blueprint":      "Axi L1 — Xini, Eris",
+  "Loki Prime Chassis":        "Neo L1 — Hydron, Sedna",
+  "Loki Prime Neuroptics":     "Meso L1 — Io, Jupiter",
+  "Loki Prime Systems":        "Lith L1 — Hepit, Void",
+  // Mag Prime
+  "Mag Prime Blueprint":       "Lith M1 — Hepit, Void",
+  "Mag Prime Chassis":         "Meso M1 — Io, Jupiter",
+  "Mag Prime Neuroptics":      "Neo M1 — Hydron, Sedna",
+  "Mag Prime Systems":         "Axi M1 — Xini, Eris",
+  // Magnus Prime
+  "Magnus Prime Blueprint":    "Lith M2 — Hepit, Void",
+  "Magnus Prime Barrel":       "Meso M2 — Io, Jupiter",
+  "Magnus Prime Receiver":     "Neo M2 — Hydron, Sedna",
+  // Mesa Prime
+  "Mesa Prime Blueprint":              "Axi M3 — Xini, Eris",
+  "Mesa Prime Chassis Blueprint":      "Neo M2 — Hydron, Sedna",
+  "Mesa Prime Neuroptics Blueprint":   "Lith M5 — Hepit, Void",
+  "Mesa Prime Systems Blueprint":      "Meso M4 — Io, Jupiter",
+  // Mirage Prime
+  "Mirage Prime Blueprint":    "Axi M2 — Xini, Eris",
+  "Mirage Prime Chassis":      "Neo M1 — Hydron, Sedna",
+  "Mirage Prime Neuroptics":   "Lith M3 — Hepit, Void",
+  "Mirage Prime Systems":      "Meso M3 — Io, Jupiter",
+  // Nami Skyla Prime
+  "Nami Skyla Prime Blueprint":"Lith N1 — Hepit, Void",
+  "Nami Skyla Prime Blade":    "Meso N1 — Io, Jupiter",
+  "Nami Skyla Prime Hilt":     "Neo N1 — Hydron, Sedna",
+  // Nekros Prime
+  "Nekros Prime Blueprint":    "Axi N2 — Xini, Eris",
+  "Nekros Prime Chassis":      "Neo N1 — Hydron, Sedna",
+  "Nekros Prime Neuroptics":   "Lith N2 — Hepit, Void",
+  "Nekros Prime Systems":      "Meso N2 — Io, Jupiter",
+  // Nidus Prime
+  "Nidus Prime Blueprint":             "Axi N8 — Xini, Eris",
+  "Nidus Prime Chassis Blueprint":     "Neo N12 — Hydron, Sedna",
+  "Nidus Prime Neuroptics Blueprint":  "Lith N9 — Hepit, Void",
+  "Nidus Prime Systems Blueprint":     "Meso N11 — Io, Jupiter",
+  // Nikana Prime
+  "Nikana Prime Blueprint":    "Lith N3 — Hepit, Void",
+  "Nikana Prime Blade":        "Neo N2 — Hydron, Sedna",
+  "Nikana Prime Hilt":         "Axi N3 — Xini, Eris",
+  // Ninkondi Prime
+  "Ninkondi Prime Blueprint":  "Lith N4 — Hepit, Void",
+  "Ninkondi Prime Chain":      "Meso N3 — Io, Jupiter",
+  "Ninkondi Prime Handle":     "Neo N3 — Hydron, Sedna",
+  // Nova Prime
+  "Nova Prime Blueprint":      "Axi N4 — Xini, Eris",
+  "Nova Prime Chassis":        "Meso N4 — Io, Jupiter",
+  "Nova Prime Neuroptics":     "Neo N4 — Hydron, Sedna",
+  "Nova Prime Systems":        "Lith N5 — Hepit, Void",
+  // Nyx Prime
+  "Nyx Prime Blueprint":       "Axi N1 — Xini, Eris",
+  "Nyx Prime Chassis":         "Neo N1 — Hydron, Sedna",
+  "Nyx Prime Neuroptics":      "Lith N1 — Hepit, Void",
+  "Nyx Prime Systems":         "Meso N1 — Io, Jupiter",
+  // Oberon Prime
+  "Oberon Prime Blueprint":    "Axi O1 — Xini, Eris",
+  "Oberon Prime Chassis":      "Neo O1 — Hydron, Sedna",
+  "Oberon Prime Neuroptics":   "Lith O1 — Hepit, Void",
+  "Oberon Prime Systems":      "Meso O1 — Io, Jupiter",
+  // Orthos Prime
+  "Orthos Prime Blueprint":    "Lith O1 — Hepit, Void",
+  "Orthos Prime Blade":        "Meso O1 — Io, Jupiter",
+  "Orthos Prime Handle":       "Neo O1 — Hydron, Sedna",
+  // Pangolin Prime
+  "Pangolin Prime Blueprint":  "Lith P3 — Hepit, Void",
+  "Pangolin Prime Blade":      "Neo P3 — Hydron, Sedna",
+  "Pangolin Prime Handle":     "Axi P4 — Xini, Eris",
+  // Paris Prime
+  "Paris Prime Blueprint":     "Lith P1 — Hepit, Void",
+  "Paris Prime Lower Limb":    "Meso P1 — Io, Jupiter",
+  "Paris Prime String":        "Neo P1 — Hydron, Sedna",
+  "Paris Prime Upper Limb":    "Axi P1 — Xini, Eris",
+  // Phantasma Prime
+  "Phantasma Prime Blueprint": "Lith P4 — Hepit, Void",
+  "Phantasma Prime Barrel":    "Meso P3 — Io, Jupiter",
+  "Phantasma Prime Receiver":  "Neo P4 — Hydron, Sedna",
+  "Phantasma Prime Stock":     "Axi P5 — Xini, Eris",
+  // Pyrana Prime
+  "Pyrana Prime Blueprint":    "Lith P2 — Hepit, Void",
+  "Pyrana Prime Barrel":       "Meso P2 — Io, Jupiter",
+  "Pyrana Prime Receiver":     "Neo P2 — Hydron, Sedna",
+  // Redeemer Prime
+  "Redeemer Prime Blueprint":  "Lith R1 — Hepit, Void",
+  "Redeemer Prime Barrel":     "Meso R1 — Io, Jupiter",
+  "Redeemer Prime Blade":      "Neo R1 — Hydron, Sedna",
+  "Redeemer Prime Receiver":   "Axi R1 — Xini, Eris",
+  // Revenant Prime
+  "Revenant Prime Blueprint":            "Axi R4 — Xini, Eris",
+  "Revenant Prime Chassis Blueprint":    "Neo R4 — Hydron, Sedna",
+  "Revenant Prime Neuroptics Blueprint": "Lith R7 — Hepit, Void",
+  "Revenant Prime Systems Blueprint":    "Meso R4 — Io, Jupiter",
+  // Rhino Prime
+  "Rhino Prime Blueprint":     "Axi R1 — Xini, Eris",
+  "Rhino Prime Chassis":       "Neo R1 — Hydron, Sedna",
+  "Rhino Prime Neuroptics":    "Meso R1 — Io, Jupiter",
+  "Rhino Prime Systems":       "Lith R1 — Hepit, Void",
+  "Rhino Prime Systems Blueprint":"Lith R1 — Hepit, Void",
+  // Rubico Prime
+  "Rubico Prime Blueprint":    "Lith R2 — Hepit, Void",
+  "Rubico Prime Barrel":       "Meso R2 — Io, Jupiter",
+  "Rubico Prime Receiver":     "Neo R2 — Hydron, Sedna",
+  "Rubico Prime Stock":        "Axi R2 — Xini, Eris",
+  // Saryn Prime
+  "Saryn Prime Blueprint":     "Axi S3 — Xini, Eris",
+  "Saryn Prime Chassis":       "Neo S1 — Hydron, Sedna",
+  "Saryn Prime Neuroptics":    "Lith S4 — Hepit, Void",
+  "Saryn Prime Systems":       "Meso S3 — Io, Jupiter",
+  // Scindo Prime
+  "Scindo Prime Blueprint":    "Lith S1 — Hepit, Void",
+  "Scindo Prime Blade":        "Meso S1 — Io, Jupiter",
+  "Scindo Prime Handle":       "Neo S1 — Hydron, Sedna",
+  // Scourge Prime
+  "Scourge Prime Blueprint":   "Lith S9 — Hepit, Void",
+  "Scourge Prime Barrel":      "Neo S13 — Hydron, Sedna",
+  "Scourge Prime Handle":      "Meso S13 — Io, Jupiter",
+  "Scourge Prime Receiver":    "Axi S9 — Xini, Eris",
+  // Sevagoth Prime
+  "Sevagoth Prime Blueprint":            "Axi S8 — Xini, Eris",
+  "Sevagoth Prime Chassis Blueprint":    "Neo S12 — Hydron, Sedna",
+  "Sevagoth Prime Neuroptics Blueprint": "Lith S8 — Hepit, Void",
+  "Sevagoth Prime Systems Blueprint":    "Meso S12 — Io, Jupiter",
+  // Shade Prime
+  "Shade Prime Blueprint":     "Lith S2 — Hepit, Void",
+  "Shade Prime Carapace":      "Meso S2 — Io, Jupiter",
+  "Shade Prime Cerebrum":      "Neo S2 — Hydron, Sedna",
+  "Shade Prime Systems":       "Axi S1 — Xini, Eris",
+  // Silva and Aegis Prime
+  "Silva and Aegis Prime Blueprint":"Lith S3 — Hepit, Void",
+  "Silva and Aegis Prime Blade":    "Meso S3 — Io, Jupiter",
+  "Silva and Aegis Prime Hilt":     "Neo S3 — Hydron, Sedna",
+  // Soma Prime
+  "Soma Prime Blueprint":      "Lith S5 — Hepit, Void",
+  "Soma Prime Barrel":         "Meso S4 — Io, Jupiter",
+  "Soma Prime Receiver":       "Neo S4 — Hydron, Sedna",
+  "Soma Prime Stock":          "Axi S2 — Xini, Eris",
+  // Spira Prime
+  "Spira Prime Blueprint":     "Lith S6 — Hepit, Void",
+  "Spira Prime Pouch":         "Meso S5 — Io, Jupiter",
+  "Spira Prime Stars":         "Neo S5 — Hydron, Sedna",
+  // Stradavar Prime
+  "Stradavar Prime Blueprint": "Lith S7 — Hepit, Void",
+  "Stradavar Prime Barrel":    "Meso S6 — Io, Jupiter",
+  "Stradavar Prime Receiver":  "Neo S6 — Hydron, Sedna",
+  "Stradavar Prime Stock":     "Axi S4 — Xini, Eris",
+  // Strun Prime
+  "Strun Prime Blueprint":     "Lith S2 — Hepit, Void",
+  "Strun Prime Barrel":        "Meso S2 — Io, Jupiter",
+  "Strun Prime Receiver":      "Neo S2 — Hydron, Sedna",
+  "Strun Prime Stock":         "Axi S2 — Xini, Eris",
+  // Sybaris Prime
+  "Sybaris Prime Blueprint":   "Lith S4 — Hepit, Void",
+  "Sybaris Prime Barrel":      "Meso S4 — Io, Jupiter",
+  "Sybaris Prime Receiver":    "Neo S4 — Hydron, Sedna",
+  "Sybaris Prime Stock":       "Axi S3 — Xini, Eris",
+  // Tekko Prime
+  "Tekko Prime Blueprint":     "Lith T3 — Hepit, Void",
+  "Tekko Prime Blade":         "Meso T3 — Io, Jupiter",
+  "Tekko Prime Gauntlet":      "Neo T2 — Hydron, Sedna",
+  // Tiberon Prime
+  "Tiberon Prime Blueprint":   "Lith T1 — Hepit, Void",
+  "Tiberon Prime Barrel":      "Meso T1 — Io, Jupiter",
+  "Tiberon Prime Receiver":    "Neo T1 — Hydron, Sedna",
+  "Tiberon Prime Stock":       "Axi T1 — Xini, Eris",
+  // Tigris Prime
+  "Tigris Prime Blueprint":    "Lith T2 — Hepit, Void",
+  "Tigris Prime Barrel":       "Meso T2 — Io, Jupiter",
+  "Tigris Prime Receiver":     "Neo T2 — Hydron, Sedna",
+  "Tigris Prime Stock":        "Axi T2 — Xini, Eris",
+  // Trinity Prime
+  "Trinity Prime Blueprint":   "Axi T1 — Xini, Eris",
+  "Trinity Prime Chassis":     "Neo T1 — Hydron, Sedna",
+  "Trinity Prime Neuroptics":  "Meso T1 — Io, Jupiter",
+  "Trinity Prime Systems":     "Lith T1 — Hepit, Void",
+  // Valkyr Prime
+  "Valkyr Prime Blueprint":    "Axi V4 — Xini, Eris",
+  "Valkyr Prime Chassis":      "Neo V1 — Hydron, Sedna",
+  "Valkyr Prime Neuroptics":   "Lith V1 — Hepit, Void",
+  "Valkyr Prime Systems":      "Meso V2 — Io, Jupiter",
+  // Vauban Prime
+  "Vauban Prime Blueprint":    "Axi V3 — Xini, Eris",
+  "Vauban Prime Chassis":      "Neo V1 — Hydron, Sedna",
+  "Vauban Prime Neuroptics":   "Lith V2 — Hepit, Void",
+  "Vauban Prime Systems":      "Meso V1 — Io, Jupiter",
+  // Vectis Prime
+  "Vectis Prime Blueprint":    "Lith V3 — Hepit, Void",
+  "Vectis Prime Barrel":       "Meso V3 — Io, Jupiter",
+  "Vectis Prime Receiver":     "Neo V2 — Hydron, Sedna",
+  "Vectis Prime Stock":        "Axi V2 — Xini, Eris",
+  // Venka Prime
+  "Venka Prime Blueprint":     "Lith V4 — Hepit, Void",
+  "Venka Prime Blades":        "Meso V4 — Io, Jupiter",
+  "Venka Prime Gauntlet":      "Neo V3 — Hydron, Sedna",
+  // Volt Prime
+  "Volt Prime Blueprint":          "Axi V1 — Xini, Eris",
+  "Volt Prime Chassis":            "Neo V1 — Hydron, Sedna",
+  "Volt Prime Chassis Blueprint":  "Neo V1 — Hydron, Sedna",
+  "Volt Prime Neuroptics":         "Lith V1 — Hepit, Void",
+  "Volt Prime Systems":            "Meso V1 — Io, Jupiter",
+  // Wukong Prime
+  "Wukong Prime Blueprint":            "Axi W2 — Xini, Eris",
+  "Wukong Prime Chassis":              "Neo W1 — Hydron, Sedna",
+  "Wukong Prime Neuroptics":           "Lith W2 — Hepit, Void",
+  "Wukong Prime Neuroptics Blueprint": "Lith W2 — Hepit, Void",
+  "Wukong Prime Systems":              "Meso W2 — Io, Jupiter",
+  // Wyrm Prime
+  "Wyrm Prime Blueprint":      "Lith W1 — Hepit, Void",
+  "Wyrm Prime Carapace":       "Meso W1 — Io, Jupiter",
+  "Wyrm Prime Cerebrum":       "Neo W1 — Hydron, Sedna",
+  "Wyrm Prime Systems":        "Axi W1 — Xini, Eris",
+  // Zephyr Prime
+  "Zephyr Prime Blueprint":    "Axi Z1 — Xini, Eris",
+  "Zephyr Prime Chassis":      "Neo Z1 — Hydron, Sedna",
+  "Zephyr Prime Neuroptics":   "Lith Z1 — Hepit, Void",
+  "Zephyr Prime Systems":      "Meso Z1 — Io, Jupiter",
+  // Zhuge Prime
+  "Zhuge Prime Blueprint":     "Lith Z2 — Hepit, Void",
+  "Zhuge Prime Barrel":        "Meso Z2 — Io, Jupiter",
+  "Zhuge Prime Receiver":      "Neo Z2 — Hydron, Sedna",
+  "Zhuge Prime Stock":         "Axi Z2 — Xini, Eris",
+  // Mods — general farm locations
+  "Condition Overload":        "Corrupted Ancient (Deimos)",
+  "Blood Rush":                "Lua Spy vaults",
+  "Weeping Wounds":            "Amalgam drops / Lua",
+  "Galvanized Aptitude":       "Steel Path Honors (Arbitrations)",
+  "Galvanized Chamber":        "Steel Path Honors (Arbitrations)",
+  "Galvanized Crosshairs":     "Steel Path Honors (Arbitrations)",
+  "Galvanized Diffusion":      "Steel Path Honors (Arbitrations)",
+  "Galvanized Hell":           "Steel Path Honors (Arbitrations)",
+  "Galvanized Savvy":          "Steel Path Honors (Arbitrations)",
+  "Galvanized Scope":          "Steel Path Honors (Arbitrations)",
+  "Galvanized Shot":           "Steel Path Honors (Arbitrations)",
+  "Hunter Munitions":          "Eidolon Teralyst (Plains bounty)",
+  "Primed Flow":               "Baro Ki'Teer (Void Trader)",
+  "Primed Continuity":         "Baro Ki'Teer (Void Trader)",
+  "Primed Fury":               "Baro Ki'Teer (Void Trader)",
+  "Primed Pressure Point":     "Baro Ki'Teer (Void Trader)",
+  "Primed Reach":              "Baro Ki'Teer (Void Trader)",
+  "Primed Sure Footed":        "Baro Ki'Teer (Void Trader)",
+  "Primed Vigor":              "Baro Ki'Teer (Void Trader)",
+  "Primed Cryo Rounds":        "Baro Ki'Teer (Void Trader)",
+  "Primed Heated Charge":      "Baro Ki'Teer (Void Trader)",
+  "Primed Pistol Gambit":      "Baro Ki'Teer (Void Trader)",
+  "Primed Target Cracker":     "Baro Ki'Teer (Void Trader)",
+  "Primed Fast Hands":         "Baro Ki'Teer (Void Trader)",
+  "Primed Shred":              "Baro Ki'Teer (Void Trader)",
+  "Adaptation":                "Arbitrations reward",
+  "Rolling Guard":             "Arbitrations reward",
+  "Gladiator Might":           "Sanctuary Onslaught",
+  "Gladiator Vice":            "Sanctuary Onslaught",
+  "Gladiator Rush":            "Sanctuary Onslaught",
+  "Gladiator Resolve":         "Sanctuary Onslaught",
+  "Gladiator Aegis":           "Sanctuary Onslaught",
+  "Gladiator Finesse":         "Sanctuary Onslaught",
+  "Berserker Fury":            "Grineer/Corpus enemies (general)",
+  "Maiming Strike":            "Corrupted enemies (Void)",
+  "Narrow Minded":             "Corrupted enemies (Void)",
+  "Overextended":              "Corrupted enemies (Void)",
+  "Transient Fortitude":       "Corrupted enemies (Void)",
+  "Blind Rage":                "Corrupted enemies (Void)",
+  "Fleeting Expertise":        "Corrupted enemies (Void)",
+  "Steel Charge":              "Aura — Maroo's Bazaar weekly",
+  "Corrosive Projection":      "Aura — Invasions / Nightwave",
+  "Energy Siphon":             "Aura — Invasions / Nightwave",
+  // Arcanes — Eidolons
+  "Arcane Energize":           "Eidolon Hydrolyst (Plains of Eidolon)",
+  "Arcane Guardian":           "Eidolon Teralyst (Plains of Eidolon)",
+  "Arcane Grace":              "Eidolon Gantulyst (Plains of Eidolon)",
+  "Arcane Avenger":            "Eidolon Hydrolyst (Plains of Eidolon)",
+  "Arcane Velocity":           "Eidolon Gantulyst (Plains of Eidolon)",
+  "Arcane Fury":               "Eidolon Teralyst (Plains of Eidolon)",
+  "Arcane Barrier":            "Eidolon Teralyst (Plains of Eidolon)",
+  "Arcane Aegis":              "Eidolon Teralyst (Plains of Eidolon)",
+  "Arcane Momentum":           "Eidolon Gantulyst (Plains of Eidolon)",
+  "Arcane Trickery":           "Eidolon Gantulyst (Plains of Eidolon)",
+  "Arcane Ultimatum":          "Eidolon Hydrolyst (Plains of Eidolon)",
+  "Arcane Strike":             "Eidolon Teralyst (Plains of Eidolon)",
+  "Arcane Rage":               "Eidolon Hydrolyst (Plains of Eidolon)",
+  "Arcane Pistoleer":          "Eidolon Hydrolyst (Plains of Eidolon)",
+  "Arcane Precision":          "Eidolon Gantulyst (Plains of Eidolon)",
+  "Magus Anomaly":             "Ropalolyst (Disruption, Jupiter)",
+  "Magus Elevate":             "Vox Solaris (Fortuna standing)",
+  "Magus Nourish":             "Vox Solaris (Fortuna standing)",
+  "Magus Vigor":               "Vox Solaris (Fortuna standing)",
+  "Virtuos Forge":             "Vox Solaris (Fortuna standing)",
+  "Virtuos Strike":            "Vox Solaris (Fortuna standing)",
+  "Virtuos Shadow":            "Vox Solaris (Fortuna standing)",
+};
+
+function getDropLocation(name) {
+  return DROP_LOCATIONS[name] || null;
+}
+
+// Build unified DB
+const ALL_ITEMS = [];
+PRIME_PARTS.forEach(n => ALL_ITEMS.push({ name: n, type: getPrimeType(n) }));
+MODS.forEach(n => ALL_ITEMS.push({ name: n, type: 'mod' }));
+ARCANES.forEach(n => ALL_ITEMS.push({ name: n, type: 'arcane' }));
+ALL_ITEMS.sort((a,b) => a.name.localeCompare(b.name));
+
+document.getElementById('item-db-count').textContent = ALL_ITEMS.length + ' items in database';
+
+function getPrimeType(name) {
+  const n = name.toLowerCase();
+  if (n.includes('blueprint')) return 'blueprint';
+  if (['neuroptics','chassis','systems','carapace','cerebrum','buckle','harness'].some(k=>n.includes(k))) return 'frame';
+  return 'weapon';
+}
+function getType(name) {
+  const nl = name.toLowerCase();
+  if (MODS.some(m=>m.toLowerCase()===nl)) return 'mod';
+  if (ARCANES.some(a=>a.toLowerCase()===nl)) return 'arcane';
+  return getPrimeType(name);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// URL NAME — warframe.market specific conversion
+// ─────────────────────────────────────────────────────────────────────────────
+function toUrlName(name) {
+  return name
+    .toLowerCase()
+    .replace(/&/g, 'and')          // & → and
+    .replace(/'/g, '')             // remove apostrophes
+    .replace(/[^a-z0-9]+/g, '_')  // non-alphanumeric → underscore
+    .replace(/^_+|_+$/g, '');     // trim underscores
+}
+
+function wfmLink(name) {
+  return 'https://warframe.market/items/' + toUrlName(name);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────────────────────
+let items    = JSON.parse(localStorage.getItem('wfv3_items')   || '[]');
+let sold     = new Set(JSON.parse(localStorage.getItem('wfv3_sold')    || '[]'));
+let checked  = new Set(JSON.parse(localStorage.getItem('wfv3_checked') || '[]'));
+let selItems     = new Set(); // currently selected row IDs for WFM open
+let filterMode   = 'all';
+let sortState    = { col:'sell', dir:-1 };
+let recognition  = null;
+let isRecording  = false;
+let timerIv      = null;
+let timerSec     = 0;
+let accumText    = '';
+let interimText  = '';
+let parsedChips  = [];
+let suggestFocus = -1;
+let fetchingPrices = false;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────────────────────
+window.onload = () => {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const ua = navigator.userAgent.toLowerCase();
+  const compat = document.getElementById('browser-compat');
+  if (SR) {
+    if (ua.includes('opr') || ua.includes('opera')) compat.textContent = '✅ Opera — voice supported';
+    else if (ua.includes('edg')) compat.textContent = '✅ Edge — voice supported';
+    else if (ua.includes('chrome')) compat.textContent = '✅ Chrome — voice supported';
+    else compat.textContent = '⚠ Voice may not work here — use Chrome, Edge, or Opera';
+    compat.style.color = compat.textContent.startsWith('✅') ? 'var(--green)' : 'var(--gold)';
+  } else {
+    document.getElementById('mic-btn').textContent = '🚫';
+    document.getElementById('mic-btn').disabled = true;
+    document.getElementById('mic-status').textContent = 'Voice not supported — use Chrome, Edge, or Opera';
+    document.getElementById('mic-status').style.color = 'var(--red)';
+    if (ua.includes('firefox')) {
+      const w = document.getElementById('browser-warn');
+      w.style.display = 'block';
+      w.innerHTML = '⚠ <strong>Firefox does not support voice input.</strong> Please open this page in Chrome, Edge, or Opera. Manual entry below still works perfectly.';
+    }
+  }
+  refresh();
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// VOICE
+// ─────────────────────────────────────────────────────────────────────────────
+function toggleMic() {
+  isRecording ? stopMic() : startMic();
+}
+
+let micStream = null; // keep stream alive for Opera
+
+function startMic() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { alert('Please use Chrome, Edge, or Opera for voice input.'); return; }
+
+  setMicStatus('Requesting microphone...', false);
+
+  // Get mic stream and KEEP IT ALIVE the entire recording session.
+  // Opera releases the hardware if you stop the stream, making SR fail silently.
+  navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+    .then(stream => {
+      micStream = stream;
+      _doStartRecognition(SR);
+    })
+    .catch(err => {
+      setMicStatus('Mic permission denied — allow microphone in browser settings', false);
+      log('Mic denied: ' + err.message, 'error');
+    });
+}
+
+function _doStartRecognition(SR) {
+  accumText = ''; interimText = '';
+  document.getElementById('transcript-box').textContent = 'Listening... speak now';
+  document.getElementById('transcript-box').style.color = 'rgba(212,180,131,.4)';
+  document.getElementById('transcript-box').style.fontStyle = 'italic';
+  document.getElementById('parse-result').style.display = 'none';
+
+  const isOpera = navigator.userAgent.toLowerCase().includes('opr');
+
+  function makeRecognition() {
+    const r = new SR();
+    // Opera does NOT support continuous mode reliably — use single-shot bursts instead
+    r.continuous     = isOpera ? false : true;
+    r.interimResults = isOpera ? false : true;
+    r.lang           = 'en-US';
+    r.maxAlternatives = 1;
+
+    r.onstart = () => { log('🎤 Listening...', 'info'); };
+
+    r.onresult = (e) => {
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const t = e.results[i][0].transcript;
+        if (e.results[i].isFinal) { accumText += t + ' '; interimText = ''; }
+        else interimText = t;
+      }
+      const disp = (accumText + interimText).trim();
+      document.getElementById('transcript-box').textContent = disp || 'Listening...';
+      document.getElementById('transcript-box').style.color = 'var(--text-bright)';
+      document.getElementById('transcript-box').style.fontStyle = 'normal';
+    };
+
+    r.onerror = (e) => {
+      if (e.error === 'no-speech') { log('(no speech, retrying...)', 'info'); return; }
+      if (e.error === 'audio-capture') return;
+      if (e.error === 'not-allowed') {
+        setMicStatus('Mic blocked — check browser permissions', false);
+        _cleanupMic(); return;
+      }
+      log('SR error: ' + e.error, 'warn');
+    };
+
+    r.onend = () => {
+      if (!isRecording) return;
+      // Restart immediately for next burst
+      setTimeout(() => {
+        if (!isRecording) return;
+        recognition = makeRecognition();
+        try { recognition.start(); }
+        catch(x) { log('Restart err: ' + x.message, 'warn'); }
+      }, isOpera ? 300 : 100);
+    };
+
+    return r;
+  }
+
+  recognition = makeRecognition();
+
+  try {
+    recognition.start();
+  } catch(e) {
+    log('SR start failed: ' + e.message, 'error');
+    _cleanupMic();
+    return;
+  }
+
+  isRecording = true;
+  document.getElementById('mic-btn').classList.add('recording');
+  document.getElementById('mic-btn').textContent = '⏹';
+  setMicStatus('🔴 Recording — speak your items now...', true);
+  if (isOpera) setMicStatus('🔴 Recording — pause briefly between items (Opera mode)', true);
+  document.getElementById('mic-timer').style.display = 'block';
+  timerSec = 0;
+  timerIv = setInterval(() => {
+    timerSec++;
+    document.getElementById('mic-timer').textContent =
+      String(Math.floor(timerSec/60)).padStart(2,'0') + ':' + String(timerSec%60).padStart(2,'0');
+  }, 1000);
+}
+
+function _cleanupMic() {
+  isRecording = false;
+  clearInterval(timerIv);
+  if (micStream) { micStream.getTracks().forEach(t => t.stop()); micStream = null; }
+  document.getElementById('mic-btn').classList.remove('recording');
+  document.getElementById('mic-btn').textContent = '🎤';
+  document.getElementById('mic-timer').style.display = 'none';
+}
+
+function stopMic() {
+  isRecording = false;
+  clearInterval(timerIv);
+  if (recognition) { recognition.onend = null; try { recognition.stop(); } catch(x) {} recognition = null; }
+  // Release the mic stream we kept alive for Opera
+  if (micStream) { micStream.getTracks().forEach(t => t.stop()); micStream = null; }
+  document.getElementById('mic-btn').classList.remove('recording');
+  document.getElementById('mic-btn').textContent = '🎤';
+  document.getElementById('mic-timer').style.display = 'none';
+
+  const finalText = (accumText + interimText).trim();
+  document.getElementById('transcript-box').textContent = finalText || '(nothing recorded)';
+  document.getElementById('transcript-box').style.fontStyle = 'normal';
+
+  if (!finalText || finalText.length < 2) {
+    setMicStatus('Nothing detected — check mic permissions and try again', false);
+    log('⚠ No speech captured — check browser mic permissions', 'warn');
+    return;
+  }
+  setMicStatus('Parsing transcript...', false);
+  log('📝 Got ' + finalText.length + ' chars of speech', 'info');
+  parseTranscript(finalText);
+}
+
+function parsePasteBox() {
+  const text = document.getElementById('paste-box').value.trim();
+  if (!text) return;
+  parseTranscript(text);
+  // Scroll down to show results
+  document.getElementById('parse-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function setMicStatus(msg, active) {
+  const el = document.getElementById('mic-status');
+  el.textContent = msg;
+  el.className = active ? 'active' : '';
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PARSE
+// ─────────────────────────────────────────────────────────────────────────────
+function parseTranscript(text) {
+  // Normalize: lowercase, strip punctuation, collapse spaces
+  const norm = text.toLowerCase()
+    .replace(/&/g,'and').replace(/'/g,'').replace(/[,;.!?\-]/g,' ').replace(/\s+/g,' ').trim();
+
+  const found = [];
+  const usedRanges = [];
+  // Sort longest names first so "Mesa Prime Neuroptics Blueprint" beats "Mesa Prime Neuroptics"
+  const sorted = [...ALL_ITEMS].sort((a,b)=>b.name.length-a.name.length);
+
+  for (const item of sorted) {
+    // Build pattern — NO leading/trailing boundary anchors that consume whitespace
+    const pat = item.name.toLowerCase()
+      .replace(/&/g,'(?:and|&)').replace(/'/g,"'?").replace(/\./g,'\\.').replace(/\s+/g,'\\s+');
+    const rx = new RegExp(pat, 'gi');
+    let m;
+    while ((m = rx.exec(norm)) !== null) {
+      const s = m.index, e = s + m[0].length;
+      // Check the char before/after is a word boundary (space, start, end)
+      const before = s === 0 || norm[s-1] === ' ';
+      const after  = e === norm.length || norm[e] === ' ';
+      if (before && after && !usedRanges.some(([a,b])=>s<b&&e>a)) {
+        found.push(item.name);
+        usedRanges.push([s,e]);
+      }
+    }
+  }
+
+  const countMap = {};
+  found.forEach(n => countMap[n] = (countMap[n]||0)+1);
+  parsedChips = Object.entries(countMap).map(([name,qty])=>({name,qty,removed:false}));
+
+  if (!parsedChips.length) {
+    setMicStatus('No items matched — try manual entry or speak more clearly', false);
+    log('⚠ No items matched. Transcript: "' + text.slice(0,80) + '"', 'warn');
+    return;
+  }
+
+  setMicStatus('Found ' + parsedChips.length + ' item(s) — review below', false);
+  log('✅ Matched ' + parsedChips.length + ' items from voice', 'success');
+  renderChips();
+  document.getElementById('parse-result').style.display = 'block';
+}
+
+function renderChips() {
+  const active = parsedChips.filter(c=>!c.removed);
+  document.getElementById('parsed-items').innerHTML = active.map(c=>
+    `<span class="parsed-chip" onclick="removeChip(${JSON.stringify(c.name)})">${c.name}${c.qty>1?' ×'+c.qty:''}</span>`
+  ).join('');
+  document.getElementById('parse-note').textContent = active.length + ' item(s) — click any to remove';
+}
+
+function removeChip(name) {
+  const c = parsedChips.find(x=>x.name===name);
+  if (c) c.removed = true;
+  renderChips();
+}
+
+function clearParsed() {
+  parsedChips = [];
+  document.getElementById('parse-result').style.display = 'none';
+  setMicStatus('Ready — click mic to begin', false);
+}
+
+async function addParsedItems() {
+  const toAdd = parsedChips.filter(c=>!c.removed);
+  if (!toAdd.length) return;
+  document.getElementById('parse-result').style.display = 'none';
+  parsedChips = [];
+  setMicStatus('Ready — click mic to begin', false);
+  toAdd.forEach(c => { for (let q=0; q<c.qty; q++) addItemToList(c.name); });
+  saveState(); refresh();
+  await fetchPendingPrices();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MANUAL
+// ─────────────────────────────────────────────────────────────────────────────
+function onManualInput() {
+  const q = document.getElementById('manual-input').value.trim();
+  suggestFocus = -1;
+  if (q.length < 2) { hideSug(); return; }
+  const matches = ALL_ITEMS.filter(i=>i.name.toLowerCase().includes(q.toLowerCase())).slice(0,12);
+  const list = document.getElementById('suggestion-list');
+  if (!matches.length) { hideSug(); return; }
+  const esc = q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  list.innerHTML = matches.map(m=>{
+    const hi = m.name.replace(new RegExp(`(${esc})`, 'gi'), '<span class="suggestion-match">$1</span>');
+    return `<div class="suggestion-item" data-name="${m.name}" onmousedown="selectSug(${JSON.stringify(m.name)})">${hi}<span class="sug-type">${m.type}</span></div>`;
+  }).join('');
+  list.style.display = 'block';
+}
+
+function hideSug() { document.getElementById('suggestion-list').style.display='none'; }
+
+function selectSug(name) {
+  document.getElementById('manual-input').value = name;
+  hideSug();
+  addManualItem();
+}
+
+function onManualKey(e) {
+  const its = document.getElementById('suggestion-list').querySelectorAll('.suggestion-item');
+  if (e.key==='ArrowDown'){ e.preventDefault(); suggestFocus=Math.min(suggestFocus+1,its.length-1); hilite(its); }
+  else if (e.key==='ArrowUp'){ e.preventDefault(); suggestFocus=Math.max(suggestFocus-1,-1); hilite(its); }
+  else if (e.key==='Enter'){ e.preventDefault(); suggestFocus>=0&&its[suggestFocus]?selectSug(its[suggestFocus].dataset.name):addManualItem(); }
+  else if (e.key==='Escape') hideSug();
+}
+
+function hilite(its) {
+  its.forEach((el,i)=>el.classList.toggle('focused',i===suggestFocus));
+  if (suggestFocus>=0&&its[suggestFocus]) document.getElementById('manual-input').value=its[suggestFocus].dataset.name;
+}
+
+async function addManualItem() {
+  const val = document.getElementById('manual-input').value.trim();
+  if (!val) return;
+  hideSug();
+  document.getElementById('manual-input').value = '';
+  addItemToList(val);
+  saveState(); refresh();
+  await fetchPendingPrices();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ITEM CRUD
+// ─────────────────────────────────────────────────────────────────────────────
+function addItemToList(name) {
+  const url = toUrlName(name);
+  const ex  = items.find(i=>i.urlName===url);
+  if (ex) { ex.qty++; log('+1 ' + name + ' (×' + ex.qty + ')', 'success'); }
+  else { items.push({ id:uid(), name, urlName:url, type:getType(name), qty:1, price:null, priceStatus:'pending' }); log('Added: ' + name, 'success'); }
+}
+
+function uid(){ return Math.random().toString(36).slice(2)+Date.now().toString(36); }
+
+function saveState(){
+  localStorage.setItem('wfv3_items',   JSON.stringify(items));
+  localStorage.setItem('wfv3_sold',    JSON.stringify([...sold]));
+  localStorage.setItem('wfv3_checked', JSON.stringify([...checked]));
+}
+
+function toggleSold(id)  { sold.has(id)?sold.delete(id):sold.add(id); saveState(); refresh(); }
+function toggleCheck(id) { checked.has(id)?checked.delete(id):checked.add(id); saveState(); renderTable(); renderStats(); updateSide(); }
+function removeItem(id)  { items=items.filter(i=>i.id!==id); sold.delete(id); checked.delete(id); selItems.delete(id); updateSelBar(); saveState(); refresh(); }
+function clearAll()      { if(!confirm('Clear all items? Cannot be undone.')) return; items=[]; sold=new Set(); checked=new Set(); saveState(); refresh(); log('Inventory cleared','warn'); }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PRICES — direct WFM API (works when opened locally or from Vercel)
+// ─────────────────────────────────────────────────────────────────────────────
+async function fetchPendingPrices() {
+  if (fetchingPrices) return;
+  const pending = items.filter(i=>i.priceStatus==='pending');
+  if (!pending.length) return;
+  fetchingPrices = true;
+  document.getElementById('progress-wrap').style.display = 'block';
+  for (let i=0; i<pending.length; i++) {
+    const item = pending[i];
+    document.getElementById('progress-label').textContent = `◈ Fetching prices ${i+1}/${pending.length}`;
+    document.getElementById('progress-fill').style.width = Math.round((i+1)/pending.length*100)+'%';
+    document.getElementById('progress-status').textContent = item.name;
+    item.price = await fetchPrice(item.urlName);
+    item.priceStatus = item.price.err ? 'error' : 'done';
+    saveState(); renderTable(); updateSide();
+    await sleep(250);
+  }
+  document.getElementById('progress-wrap').style.display = 'none';
+  fetchingPrices = false;
+  log('◈ Prices fetched for ' + pending.length + ' items', 'success');
+  refresh();
+}
+
+async function fetchPrice(urlName) {
+  try {
+    const r = await fetch('https://api.warframe.market/v1/items/'+urlName+'/statistics',
+      { headers:{ Platform:'pc', Language:'en' } });
+    if (!r.ok) return { sell:null, buy:null, err:true };
+    const d = await r.json();
+    const s = (d?.payload?.statistics_closed?.['48hours'] ?? []);
+    const sells = s.filter(x=>x.order_type==='sell').map(x=>x.median);
+    const buys  = s.filter(x=>x.order_type==='buy').map(x=>x.median);
+    return { sell:sells.length?Math.round(sells[sells.length-1]):null, buy:buys.length?Math.round(buys[buys.length-1]):null };
+  } catch { return { sell:null, buy:null, err:true }; }
+}
+
+async function refreshOnePrice(id) {
+  const item = items.find(i=>i.id===id);
+  if (!item) return;
+  item.priceStatus = 'pending'; renderTable();
+  item.price = await fetchPrice(item.urlName);
+  item.priceStatus = item.price.err?'error':'done';
+  saveState(); renderTable(); updateSide();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SORT / FILTER / RENDER
+// ─────────────────────────────────────────────────────────────────────────────
+function toggleSort(col) {
+  sortState.col===col ? sortState.dir*=-1 : (sortState.col=col, sortState.dir=-1);
+  ['name','qty','sell','buy'].forEach(c=>{ const e=document.getElementById('arr-'+c); if(e) e.textContent=sortState.col===c?(sortState.dir===1?' ▲':' ▼'):''; });
+  renderTable();
+}
+
+function setFilter(mode, btn) {
+  filterMode = mode;
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTable();
+}
+
+function getVisible() {
+  const q = (document.getElementById('search-box')?.value||'').toLowerCase();
+  return items.filter(i=>{
+    if (filterMode==='sold'&&!sold.has(i.id)) return false;
+    if (filterMode==='checked'&&!checked.has(i.id)) return false;
+    if (['weapon','frame','blueprint','mod','arcane'].includes(filterMode)&&i.type!==filterMode) return false;
+    if (q&&!i.name.toLowerCase().includes(q)) return false;
+    return true;
+  }).sort((a,b)=>{
+    const pa=a.price||{},pb=b.price||{};
+    if(sortState.col==='name') return sortState.dir*a.name.localeCompare(b.name);
+    if(sortState.col==='qty')  return sortState.dir*(a.qty-b.qty);
+    if(sortState.col==='sell') return sortState.dir*((pa.sell??-Infinity)-(pb.sell??-Infinity));
+    if(sortState.col==='buy')  return sortState.dir*((pa.buy??-Infinity)-(pb.buy??-Infinity));
+    return 0;
+  });
+}
+
+function refresh() {
+  const has = items.length>0;
+  ['stats-bar','controls','table-wrap'].forEach(id=>document.getElementById(id).style.display=has?(id==='stats-bar'?'flex':'block'):'none');
+  document.getElementById('export-btn').style.display = has?'inline-block':'none';
+  document.getElementById('clear-btn').style.display  = has?'inline-block':'none';
+  renderStats(); renderTable(); updateSide();
+}
+
+function renderStats() {
+  const tq=items.reduce((s,i)=>s+i.qty,0);
+  const es=items.filter(i=>!sold.has(i.id)).reduce((s,i)=>s+(i.price?.sell||0)*i.qty,0);
+  const sv=items.filter(i=>sold.has(i.id)).reduce((s,i)=>s+(i.price?.sell||0)*i.qty,0);
+  document.getElementById('stats-bar').innerHTML=[
+    {l:'Total Qty',v:tq,c:'var(--text)'},{l:'Unique Items',v:items.length,c:'var(--text)'},
+    {l:'Est. Value',v:'◈ '+es.toLocaleString()+'p',c:'var(--green)'},{l:'Sold Value',v:'◈ '+sv.toLocaleString()+'p',c:'var(--gold)'},
+    {l:'Checked Off',v:checked.size,c:'#5ec090'},
+  ].map(s=>`<div class="stat-card"><div class="stat-label">${s.l}</div><div class="stat-value" style="color:${s.c};font-size:${s.l.includes('Value')?12:15}px">${s.v}</div></div>`).join('');
+}
+
+function dropHtml(name) {
+  const locs = DROPS[name];
+  if (!locs || !locs.length) return '<span style="opacity:.2;font-size:10px">—</span>';
+  return '<div class="drop-loc">' + locs.map(l => {
+    // Detect relic entries like "Axi A2 (C)" vs plain sources like "Baro Ki'Teer"
+    const relicMatch = l.match(/^(\w+ \w+) \((C|U|R)\)$/);
+    if (relicMatch) {
+      return `<span class="drop-relic drop-${relicMatch[2]}">${relicMatch[1]} <span style="opacity:.5">${relicMatch[2]}</span></span>`;
+    }
+    return `<span class="drop-src">${l}</span>`;
+  }).join('') + '</div>';
+}
+
+function badgeHtml(t) {
+  return ({blueprint:'<span class="badge badge-bp">BP</span>',frame:'<span class="badge badge-frame">FRAME</span>',
+    weapon:'<span class="badge badge-weapon">WEAPON</span>',mod:'<span class="badge badge-mod">MOD</span>',
+    arcane:'<span class="badge badge-arcane">ARCANE</span>'})[t]||'<span class="badge badge-other">ITEM</span>';
+}
+
+function toggleSel(id, on) {
+  on ? selItems.add(id) : selItems.delete(id);
+  updateSelBar();
+}
+
+function toggleSelectAll(on) {
+  const vis = getVisible();
+  vis.forEach(i => on ? selItems.add(i.id) : selItems.delete(i.id));
+  updateSelBar();
+  renderTable();
+}
+
+function selectAll() {
+  getVisible().forEach(i => selItems.add(i.id));
+  updateSelBar(); renderTable();
+  const chk = document.getElementById('select-all-chk');
+  if (chk) chk.checked = true;
+}
+
+function clearSelection() {
+  selItems.clear();
+  updateSelBar(); renderTable();
+  const chk = document.getElementById('select-all-chk');
+  if (chk) chk.checked = false;
+}
+
+function updateSelBar() {
+  const bar = document.getElementById('sel-bar');
+  const cnt = document.getElementById('sel-count');
+  if (selItems.size > 0) {
+    bar.style.display = 'flex';
+    cnt.textContent = selItems.size + ' selected';
+  } else {
+    bar.style.display = 'none';
+  }
+}
+
+function openSelected() {
+  const toOpen = items.filter(i => selItems.has(i.id));
+  if (!toOpen.length) return;
+  toOpen.forEach(i => window.open(wfmLink(i.name), '_blank'));
+}
+
+function renderTable() {
+  const vis = getVisible();
+  document.getElementById('empty-msg').style.display = items.length>0&&vis.length===0?'block':'none';
+  document.getElementById('count-badge').textContent = vis.length+' items';
+  document.getElementById('tbody').innerHTML = vis.map((item,idx)=>{
+    const isSold=sold.has(item.id), isChk=checked.has(item.id), p=item.price;
+    const ready = item.priceStatus==='done'||item.priceStatus==='error';
+    const sp = !ready?`<span class="pulsing" style="color:var(--text-dim);font-size:10px">···</span>`
+      :p?.err?`<span style="color:#604040;font-size:9px">N/A</span>`
+      :p?.sell!=null?`<span style="color:var(--green)">◈ ${(p.sell*item.qty).toLocaleString()}</span>`
+      :`<span style="opacity:.25">—</span>`;
+    const bp = !ready?`<span class="pulsing" style="color:var(--text-dim);font-size:10px">···</span>`
+      :p?.err?`<span style="color:#604040;font-size:9px">N/A</span>`
+      :p?.buy!=null?`<span style="color:var(--blue)">◈ ${(p.buy*item.qty).toLocaleString()}</span>`
+      :`<span style="opacity:.25">—</span>`;
+    return `<tr class="${isSold?'sold':''} ${isChk&&!isSold?'ischecked':''} fade-up" style="animation-delay:${Math.min(idx,20)*15}ms">
+      <td class="td-sel"><input type="checkbox" class="row-checkbox" data-id="${item.id}" ${selItems.has(item.id)?'checked':''} onchange="toggleSel('${item.id}',this.checked)"></td>
+      <td class="td-name"><a href="${wfmLink(item.name)}" target="_blank" rel="noopener">${item.name}</a></td>
+      <td>${dropHtml(item.name)}</td>
+      <td style="text-align:center">${badgeHtml(item.type)}</td>
+      <td style="text-align:center;font-family:'Orbitron',monospace;font-size:11px;color:${item.qty>1?'var(--gold)':'var(--text-dim)'}">${item.qty>1?'×'+item.qty:'1'}</td>
+      <td class="td-price">${sp}</td>
+      <td class="td-price">${bp}</td>
+      <td class="td-actions">
+        <button class="btn-icon" title="Refresh price" onclick="refreshOnePrice('${item.id}')" style="color:var(--gold)">↺</button>
+        <button class="btn-icon" onclick="toggleSold('${item.id}')" style="color:${isSold?'var(--green)':'var(--text-dim)'}">${isSold?'✓sold':'sell'}</button>
+        <button class="btn-icon" onclick="removeItem('${item.id}')" style="color:#904040">✕</button>
+      </td></tr>`;
+  }).join('');
+}
+
+function updateSide() {
+  const top = [...items].filter(i=>i.price?.sell&&!sold.has(i.id))
+    .sort((a,b)=>(b.price.sell*b.qty)-(a.price.sell*a.qty)).slice(0,10);
+  document.getElementById('top-earners').innerHTML = top.length
+    ? top.map(i=>`<div class="top-item"><span class="top-name"><a href="${wfmLink(i.name)}" target="_blank" rel="noopener">${i.name}</a></span><span class="top-price">◈${(i.price.sell*i.qty).toLocaleString()}</span></div>`).join('')
+    : '<div style="font-size:10px;opacity:.3">Add items to see top earners</div>';
+  const pr=items.filter(i=>i.price?.sell), un=pr.filter(i=>!sold.has(i.id)), sl=pr.filter(i=>sold.has(i.id));
+  document.getElementById('portfolio').innerHTML=`
+    <div style="display:flex;justify-content:space-between"><span>Items:</span><span style="color:var(--text-bright);font-family:'Orbitron',monospace;font-size:11px">${items.reduce((s,i)=>s+i.qty,0)}</span></div>
+    <div style="display:flex;justify-content:space-between"><span>Priced:</span><span style="color:var(--text-bright);font-family:'Orbitron',monospace;font-size:11px">${pr.length}/${items.length}</span></div>
+    <div style="display:flex;justify-content:space-between"><span>Est sell:</span><span style="color:var(--green);font-family:'Orbitron',monospace;font-size:11px">◈${un.reduce((s,i)=>s+(i.price.sell*i.qty),0).toLocaleString()}</span></div>
+    <div style="display:flex;justify-content:space-between"><span>Sold:</span><span style="color:var(--gold);font-family:'Orbitron',monospace;font-size:11px">◈${sl.reduce((s,i)=>s+(i.price.sell*i.qty),0).toLocaleString()}</span></div>
+    <div style="display:flex;justify-content:space-between"><span>Remaining:</span><span style="color:var(--blue);font-family:'Orbitron',monospace;font-size:11px">${un.length}</span></div>`;
+}
+
+function log(msg,type='info') {
+  const box=document.getElementById('log-box');
+  const d=document.createElement('div'); d.className='log-entry log-'+type; d.textContent=msg;
+  box.prepend(d); while(box.children.length>50) box.removeChild(box.lastChild);
+}
+
+function exportCSV() {
+  const rows=[['Item','Type','Qty','Sell (p)','Buy (p)','Status','WFM Link']];
+  items.forEach(i=>rows.push([i.name,i.type,i.qty,i.price?.sell??'',i.price?.buy??'',
+    sold.has(i.id)?'sold':checked.has(i.id)?'checked':'',wfmLink(i.name)]));
+  const csv=rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download='warframe_inventory.csv'; a.click();
+}
+
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+</script>
+</body>
+</html>
