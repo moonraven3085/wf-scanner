@@ -70,6 +70,34 @@ header{background:rgba(200,169,81,.04);border-bottom:1px solid rgba(200,169,81,.
 .section-collapsed .cl-section-body{display:none}
 .section-collapsed .cl-section-arrow{transform:rotate(-90deg)}
 .cl-divider-label{font-size:8px;letter-spacing:3px;color:var(--text-dim);text-transform:uppercase;text-align:center;padding:8px 0 4px;border-top:1px solid rgba(255,255,255,.05);margin-top:4px}
+.res-panel{display:none;padding:20px 24px;flex:1;overflow-y:auto}
+.res-search-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.res-search{flex:1;min-width:200px;background:rgba(255,255,255,.05);border:1px solid rgba(200,169,81,.3);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:13px;padding:8px 12px;border-radius:4px;outline:none}
+.res-search:focus{border-color:var(--gold)}
+.res-filter-btn{background:rgba(255,255,255,.04);border:1px solid rgba(200,169,81,.25);color:var(--text-dim);font-family:'Orbitron',monospace;font-size:8px;letter-spacing:1.5px;padding:6px 12px;border-radius:3px;cursor:pointer;text-transform:uppercase;transition:all .15s}
+.res-filter-btn.active{background:rgba(200,169,81,.15);border-color:var(--gold);color:var(--gold)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px}
+.res-card{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);border-radius:5px;padding:12px 14px;transition:border-color .15s}
+.res-card:hover{border-color:rgba(200,169,81,.3)}
+.res-card-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.res-icon{font-size:20px;width:28px;text-align:center;flex-shrink:0}
+.res-name{font-family:'Orbitron',monospace;font-size:11px;letter-spacing:1px;font-weight:700;color:var(--text-bright);flex:1}
+.res-rarity{font-size:8px;padding:2px 6px;border-radius:2px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap}
+.res-rarity-common{background:rgba(120,160,120,.15);color:#78a878;border:1px solid rgba(120,160,120,.25)}
+.res-rarity-uncommon{background:rgba(100,140,200,.15);color:#6488c8;border:1px solid rgba(100,140,200,.25)}
+.res-rarity-rare{background:rgba(200,169,81,.15);color:var(--gold);border:1px solid rgba(200,169,81,.25)}
+.res-rarity-currency{background:rgba(180,100,220,.15);color:#c064dc;border:1px solid rgba(180,100,220,.25)}
+.res-rarity-special{background:rgba(220,80,80,.15);color:#dc5050;border:1px solid rgba(220,80,80,.2)}
+.res-locations{margin-bottom:6px}
+.res-loc-label{font-size:8px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin-bottom:4px}
+.res-loc-list{display:flex;flex-wrap:wrap;gap:3px}
+.res-loc-tag{font-size:9px;padding:2px 6px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:2px;color:var(--text)}
+.res-loc-tag.best{background:rgba(200,169,81,.1);border-color:rgba(200,169,81,.3);color:var(--gold)}
+.res-tip{font-size:9px;color:var(--text-dim);line-height:1.5;border-top:1px solid rgba(255,255,255,.05);padding-top:6px;margin-top:6px}
+.res-tip strong{color:var(--text)}
+.res-cat-badge{font-size:8px;padding:1px 5px;background:rgba(255,255,255,.05);border-radius:2px;color:var(--text-dim);letter-spacing:.5px}
+.res-count-badge{font-size:10px;color:var(--text-dim);margin-left:auto;font-family:'Orbitron',monospace}
+.res-decay-warn{font-size:8px;color:#ff6b35;background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.25);border-radius:2px;padding:1px 5px;margin-left:auto}
 .btn-icon:hover{opacity:1}
 #voice-section{background:var(--bg3);border:1px solid rgba(200,169,81,.18);padding:20px;display:flex;flex-direction:column;gap:14px}
 .voice-title{font-family:'Orbitron',monospace;font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase}
@@ -192,6 +220,7 @@ td{padding:8px 6px;vertical-align:middle}
     <div style="display:flex;border:1px solid rgba(200,169,81,.4);border-radius:4px;overflow:hidden;margin-right:8px">
       <button id="tab-inventory" onclick="switchPage('inventory')" style="background:rgba(200,169,81,.9);color:#060809;font-family:'Orbitron',monospace;font-size:9px;letter-spacing:2px;border:none;padding:8px 16px;cursor:pointer;font-weight:900;text-transform:uppercase;transition:all .2s">📦 SCANNER</button>
       <button id="tab-checklist" onclick="switchPage('checklist')" style="background:transparent;color:var(--gold);font-family:'Orbitron',monospace;font-size:9px;letter-spacing:2px;border:none;border-left:1px solid rgba(200,169,81,.4);padding:8px 16px;cursor:pointer;font-weight:700;text-transform:uppercase;transition:all .2s">✅ CHECKLIST</button>
+      <button id="tab-resources" onclick="switchPage('resources')" style="background:transparent;color:var(--gold);font-family:'Orbitron',monospace;font-size:9px;letter-spacing:2px;border:none;border-left:1px solid rgba(200,169,81,.4);padding:8px 16px;cursor:pointer;font-weight:700;text-transform:uppercase;transition:all .2s">⛏️ RESOURCES</button>
     </div>
     <span id="item-db-count" style="font-size:10px;color:var(--text-dim);letter-spacing:1px"></span>
     <button class="btn-secondary" id="export-btn" onclick="exportCSV()" style="display:none">⬇ CSV</button>
@@ -365,6 +394,19 @@ td{padding:8px 6px;vertical-align:middle}
   <div class="cl-progress-bar"><div class="cl-progress-fill" id="cl-progress-fill" style="width:0%"></div></div>
   <div id="cl-sections"></div>
 
+<div id="res-panel" class="res-panel">
+  <div class="res-search-bar">
+    <input class="res-search" type="text" id="res-search" placeholder="🔍 Search resources, locations, methods..." oninput="renderResources()">
+    <button class="res-filter-btn active" onclick="setResFilter('all',this)">All</button>
+    <button class="res-filter-btn" onclick="setResFilter('common',this)">Common</button>
+    <button class="res-filter-btn" onclick="setResFilter('uncommon',this)">Uncommon</button>
+    <button class="res-filter-btn" onclick="setResFilter('rare',this)">Rare</button>
+    <button class="res-filter-btn" onclick="setResFilter('currency',this)">Currency</button>
+    <button class="res-filter-btn" onclick="setResFilter('special',this)">Special</button>
+    <span class="res-count-badge" id="res-count"></span>
+  </div>
+  <div class="res-grid" id="res-grid"></div>
+</div>
 </div><!-- /app -->
 
 <script>
@@ -2341,29 +2383,401 @@ function renderChecklist() {
 
 // ── PAGE SWITCH ───────────────────────────────────────────────────────────────
 function switchPage(page) {
-  const inv = document.getElementById('main');
-  const cl  = document.getElementById('checklist-panel');
+  const inv   = document.getElementById('main');
+  const cl    = document.getElementById('checklist-panel');
+  const res   = document.getElementById('res-panel');
   const tabInv = document.getElementById('tab-inventory');
   const tabCl  = document.getElementById('tab-checklist');
+  const tabRes = document.getElementById('tab-resources');
+
+  // Hide all panels
+  [inv, cl, res].forEach(p => { if(p) p.style.display = 'none'; });
+  // Reset all tab styles
+  [tabInv, tabCl, tabRes].forEach(t => {
+    if(t) { t.style.background = 'transparent'; t.style.color = 'var(--gold)'; }
+  });
+
   if (page === 'checklist') {
-    inv.style.display = 'none';
-    cl.style.display  = 'block';
-    tabInv.style.background = 'transparent';
-    tabInv.style.color = 'var(--gold)';
-    tabCl.style.background = 'rgba(200,169,81,.9)';
-    tabCl.style.color = '#060809';
+    if (cl) cl.style.display = 'block';
+    if (tabCl) { tabCl.style.background = 'rgba(200,169,81,.9)'; tabCl.style.color = '#060809'; }
     renderChecklist();
+  } else if (page === 'resources') {
+    if (res) res.style.display = 'flex';
+    if (tabRes) { tabRes.style.background = 'rgba(200,169,81,.9)'; tabRes.style.color = '#060809'; }
+    renderResources();
   } else {
-    inv.style.display = '';
-    cl.style.display  = 'none';
-    tabInv.style.background = 'rgba(200,169,81,.9)';
-    tabInv.style.color = '#060809';
-    tabCl.style.background = 'transparent';
-    tabCl.style.color = 'var(--gold)';
+    if (inv) inv.style.display = '';
+    if (tabInv) { tabInv.style.background = 'rgba(200,169,81,.9)'; tabInv.style.color = '#060809'; }
   }
 }
 
 clLoad();
+</script>
+
+<script>
+// ── WARFRAME 2026 RESOURCE DATABASE ─────────────────────────────────────────
+const RES_DATA = [
+
+  // ═══ COMMON CRAFTING RESOURCES ═══
+  {
+    id:'ferrite', name:'Ferrite', icon:'🟫', cat:'common', rarity:'common',
+    locations:['Mercury — Apollodorus (Survival)','Earth — Tikal (Excavation)','Lua — Circulus (Survival)','Neptune — Laomedeia','Void missions'],
+    best:'Mercury Apollodorus or Lua Circulus with farming squad',
+    tip:'Drops everywhere early game. Steel Path Circulus (Lua) is the endgame meta — full farmsquad with Khora+Nekros+Nova gives massive yields alongside Neurodes and Lua Thrax Plasm.',
+    usage:'Warframe components, weapon parts, basic gear'
+  },
+  {
+    id:'alloy_plate', name:'Alloy Plate', icon:'🔩', cat:'common', rarity:'common',
+    locations:['Venus — Malva / Ishtar','Ceres — Gabii (Dark Sector Survival)','Jupiter — Sinai','Phobos','Sedna — Vodyanoi'],
+    best:'Ceres Gabii (+35% resource dark sector) or Sedna Vodyanoi',
+    tip:'Gabii gives +35% resource drop bonus. Vodyanoi is excellent for stacking Alloy Plates alongside Endo. Both work well with a Nekros.',
+    usage:'Warframes, weapons, Archwing components'
+  },
+  {
+    id:'nano_spores', name:'Nano Spores', icon:'🦠', cat:'common', rarity:'common',
+    locations:['Deimos — Terrorem (Assassination)','Saturn — Piscinas (Survival)','Eris — Akkad (Defense)','Neptune'],
+    best:'Deimos Terrorem or Saturn Piscinas',
+    tip:'You will never run out of these naturally. Only farm on demand. Deimos Terrorem drops the most with Nekros present.',
+    usage:'Warframe components, crafting materials, Sentinels'
+  },
+  {
+    id:'rubedo', name:'Rubedo', icon:'🔴', cat:'common', rarity:'common',
+    locations:['Phobos — Stickney','Pluto — Palus','Earth','Lua — Yuvarium','Void'],
+    best:'Phobos Stickney or Lua Yuvarium farming squad',
+    tip:'Common but used in large quantities for Prime crafting. Lua farming missions (Yuvarium/Circulus) give Rubedo as a side effect of Neurode farming.',
+    usage:'Prime parts, Warframe components, high-tier weapons'
+  },
+  {
+    id:'salvage', name:'Salvage', icon:'⚙️', cat:'common', rarity:'common',
+    locations:['Mars — Wahiba (Dark Sector Survival)','Jupiter — Amalthea','Sedna','Kuva Fortress'],
+    best:'Mars Wahiba dark sector (+25% resources)',
+    tip:'Wahiba has a resource drop bonus and is accessible early. Stack with Nekros for better rates. You rarely need huge quantities.',
+    usage:'Weapons, Warframe components, clan research'
+  },
+  {
+    id:'circuits', name:'Circuits', icon:'💡', cat:'common', rarity:'common',
+    locations:['Venus — Malva / Elara','Ceres — Gabii / Draco','Kuva Fortress'],
+    best:'Ceres Gabii (dark sector, +35% resources)',
+    tip:'Comes with Alloy Plates naturally from Gabii. Run Gabii for Orokin Cells and you\'ll cap Circuits as a side resource.',
+    usage:'Warframes, weapons, Sentinels, Dojo research'
+  },
+  {
+    id:'plastids', name:'Plastids', icon:'🧬', cat:'common', rarity:'common',
+    locations:['Saturn — Piscinas (Dark Sector Survival)','Uranus — Ophelia (Survival)','Phobos','Pluto','Eris'],
+    best:'Saturn Piscinas (+20% resource bonus) or Uranus Ophelia',
+    tip:'Ophelia is the endgame go-to: Polymer Bundles, Plastids, Gallium, and Tellurium all drop here. Bring Nekros.',
+    usage:'Warframes, Sentinels, weapons, high-tier crafting'
+  },
+  {
+    id:'polymer', name:'Polymer Bundle', icon:'🧵', cat:'common', rarity:'common',
+    locations:['Mercury','Venus','Uranus — Ophelia (Survival)'],
+    best:'Uranus Ophelia — best all-around resource node on Uranus',
+    tip:'Uranus Ophelia is legendary for its density of drops: Polymer, Plastids, Gallium, and Tellurium all in one. Run it with Nekros and a resource booster.',
+    usage:'Warframes, weapons, Sentinels, Archwing'
+  },
+  {
+    id:'cryotic', name:'Cryotic', icon:'❄️', cat:'common', rarity:'common',
+    locations:['Any Excavation mission — 100 Cryotic per completed extractor','Earth — Tikal (beginner friendly)','Hieracon (Pluto) — high level, more enemies'],
+    best:'Hieracon (Pluto) for speed; Tikal (Earth) for solo beginners',
+    tip:'You get exactly 100 Cryotic per extractor regardless of mission level. Hieracon has higher enemy density so extractors charge faster with a squad. Only farm when needed.',
+    usage:'Archwing components, Orokin Catalysts/Reactors, some weapons'
+  },
+
+  // ═══ UNCOMMON RESOURCES ═══
+  {
+    id:'morphics', name:'Morphics', icon:'🔮', cat:'uncommon', rarity:'uncommon',
+    locations:['Mercury — Apollodorus','Mars — Wahiba','Phobos — Stickney','Europa','Pluto'],
+    best:'Mars Wahiba (dark sector) or Mercury Apollodorus (quick)',
+    tip:'Captain Vor on Mercury has a notable drop chance for Morphics. Mars Wahiba is best if you have it unlocked. Never a bottleneck if you run missions regularly.',
+    usage:'Warframes, weapons, many blueprints'
+  },
+  {
+    id:'control_module', name:'Control Module', icon:'🎛️', cat:'uncommon', rarity:'uncommon',
+    locations:['Europa — Larzac (Dark Sector)','Neptune — Psamathe (Survival)','Void missions (any)'],
+    best:'Void survival missions — any node gives Control Modules',
+    tip:'Void missions are by far the most reliable. They also drop Argon Crystals as a bonus. Bring Nekros for better rates.',
+    usage:'Archwing, Warframes, weapons, Prime crafting'
+  },
+  {
+    id:'gallium', name:'Gallium', icon:'🔶', cat:'uncommon', rarity:'uncommon',
+    locations:['Mars — Lieutenant Lech Kril (Assassination)','Uranus — Ophelia (Survival)','Uranus — Assur'],
+    best:'Uranus Ophelia (stacks with Plastids+Tellurium farm)',
+    tip:'Lech Kril has a dedicated Gallium drop. Ophelia gives it passively. You rarely need more than 20 at a time.',
+    usage:'Warframes, weapons, mid-tier blueprints'
+  },
+  {
+    id:'oxium', name:'Oxium', icon:'🔷', cat:'uncommon', rarity:'uncommon',
+    locations:['Jupiter — Io (Defense)','Jupiter — Cameria (Survival)','Jupiter — Elara','Europa — Hynd'],
+    best:'Jupiter Io defense — Oxium Ospreys spawn constantly',
+    tip:'Kill Oxium Ospreys before they self-destruct — each one drops 10–30 Oxium if killed. Io Defense keeps spawning them. Bring a weapon with good AoE to pop them fast.',
+    usage:'Archwing, Corpus weapons, many blueprints requiring 300–600 Oxium'
+  },
+  {
+    id:'hexenon', name:'Hexenon', icon:'💠', cat:'uncommon', rarity:'uncommon',
+    locations:['Jupiter — Cameria (Survival)','Jupiter — Sinai (Dark Sector Defense)','Disruption missions on Jupiter'],
+    best:'Jupiter Cameria with Nekros',
+    tip:'Only found on Jupiter. Cameria dark sector has +30% resource bonus. This is the main bottleneck for Wisp crafting.',
+    usage:'Wisp crafting, some weapon and component recipes'
+  },
+  {
+    id:'tellurium', name:'Tellurium', icon:'🌊', cat:'uncommon', rarity:'uncommon',
+    locations:['Uranus — Ophelia (Survival)','Uranus — any Archwing mission','Kuva Fortress'],
+    best:'Uranus Ophelia or any Archwing mission on Uranus',
+    tip:'Rare but only needed in small quantities (5–10 per blueprint). Archwing missions on Uranus give it reliably. Ophelia gives it as a side drop alongside Plastids.',
+    usage:'Archwing components, some Warframe blueprints'
+  },
+
+  // ═══ RARE RESOURCES ═══
+  {
+    id:'neurodes', name:'Neurodes', icon:'🧠', cat:'rare', rarity:'rare',
+    locations:['Earth — Tikal (Excavation)','Lua — Circulus / Yuvarium (Survival)','Deimos — Magnacidium (Assassination)','Eris — Zabala'],
+    best:'Lua Circulus farmsquad (Khora+Nekros+Nova) — best rate in game',
+    tip:'Lua Circulus is the meta endgame farm. Neurodes drop alongside Thrax Plasm, Ferrite, and Rubedo. A 4-man squad with Pilfering Khora and Nekros can yield 40–80 per hour. Magnacidium on Deimos is great solo.',
+    usage:'Warframes, weapons, Forma — always in demand'
+  },
+  {
+    id:'neural_sensors', name:'Neural Sensors', icon:'🔆', cat:'rare', rarity:'rare',
+    locations:['Jupiter — Cameria (Survival)','Jupiter — Alad V (Assassination, Themisto)','Kuva Fortress — Taveuni (Survival)'],
+    best:'Kuva Fortress Taveuni or Jupiter Cameria with farming squad',
+    tip:'Taveuni on Kuva Fortress is the highest-level and most efficient with a farming squad. Cameria dark sector (+30%) works well mid-game. Alad V on Themisto drops them directly.',
+    usage:'Warframes, weapons, Clan Tech research'
+  },
+  {
+    id:'orokin_cell', name:'Orokin Cell', icon:'🟡', cat:'rare', rarity:'rare',
+    locations:['Ceres — Gabii (Dark Sector Survival)','Saturn — Piscinas / Helene','Deimos — Magnacidium','General Sargas Ruk (Saturn, Tethys)'],
+    best:'Ceres Gabii (+35% resource dark sector) — multi-resource efficient',
+    tip:'Gabii is the community favorite: Orokin Cells, Alloy Plates, Circuits, and Nano Spores all drop here. Boss kills (Sargas Ruk, Lech Kril) always have a chance to drop them. Run Nekros.',
+    usage:'Prime blueprints, Forma, Reactors/Catalysts — most-needed rare resource'
+  },
+  {
+    id:'argon_crystal', name:'Argon Crystal', icon:'💎', cat:'rare', rarity:'special',
+    locations:['Void — Hepit (Capture, fastest)','Void — Teshub (Exterminate)','Void — Oxomoco (Survival)','Corrupted Vor (boss) — 50% drop'],
+    best:'Void Hepit Capture — 2 min run, reliable drop every few runs',
+    tip:'⚠️ DECAYS after 24hrs real time! Only farm when you\'re ready to craft immediately. Hepit is the fastest possible node — it\'s a 1-minute Capture in the Void. Run it 3–5 times and you\'re stocked.',
+    usage:'Orokin Lab research, Archwing, late-game weapon crafting — always decays!'
+  },
+  {
+    id:'nitain', name:'Nitain Extract', icon:'🌿', cat:'rare', rarity:'rare',
+    locations:['Nightwave Cred Shop (15 Creds for 3)','Ghoul Purge Bounties (occasional)','Resource Caches (random chance)'],
+    best:'Nightwave Cred Shop — spend 15 Creds per 3 Nitain Extract',
+    tip:'Do NOT try to farm Nitain from caches — the drop rate is terrible. Spend Nightwave Credits. Always stock up when Nightwave is active. You need 10+ for most Warframe blueprints.',
+    usage:'Many Warframes, Archwing, Clan Dojo research'
+  },
+
+  // ═══ OPEN WORLD RESOURCES ═══
+  {
+    id:'toroids', name:'Toroids (Cetus / Fortuna)', icon:'🔵', cat:'uncommon', rarity:'uncommon',
+    locations:['Orb Vallis — Raise Wanted Level to 4 near specific POIs (Spaceport, Temple of Profit, Enrichment Labs)','Venus Bounties (Toroid variants by tier)'],
+    best:'Max Wanted Level (4) at Temple of Profit POI — enemies spawn in waves',
+    tip:'Raising wanted level to 4 causes enemies to swarm. Stay near a POI and use AoE. Each kill has a chance to drop Calda/Sola/Vega Toroids. Bring Nekros for +50% loot chance.',
+    usage:'Vox Solaris standing rank-up sacrifices, weapon blueprints'
+  },
+  {
+    id:'debt_bonds', name:'Debt-Bonds (Fortuna)', icon:'📜', cat:'currency', rarity:'currency',
+    locations:['Fortuna Bounties (all tiers)','Ticker in Fortuna (trades them for Credits/resources)'],
+    best:'Fortuna Bounties Tier 3–5 for highest-tier bonds',
+    tip:'Ticker sells debt bonds for Credits, which is sometimes faster than bounties. Familial Debt-Bonds (rarest) only from T4/T5 bounties. Used to rank up Solaris United.',
+    usage:'Solaris United standing sacrifices for rank-up'
+  },
+  {
+    id:'fish_parts', name:'Fish Parts / Servofish (Open World)', icon:'🐟', cat:'uncommon', rarity:'uncommon',
+    locations:['Plains of Eidolon — fishing spots (day/night variants)','Orb Vallis — Fortuna lakes','Deimos — Cambion Drift fishing'],
+    best:'Rare fish (Murkray on PoE, Tromyzon on Orb Vallis) during correct cycle',
+    tip:'Buy the right bait from Hok (Plains) or The Business (Fortuna). Rare fish only appear at night (Plains) or cold cycle (Fortuna). Each fish cut at Fisher Hai-Luk gives components for Quills/Vox Solaris standing trades.',
+    usage:'Quills standing, Vox Solaris, Ostron crafting, Zaw components'
+  },
+  {
+    id:'voca', name:'Voca / Cavia Standing (Deimos)', icon:'🗣️', cat:'currency', rarity:'currency',
+    locations:['Albrecht\'s Laboratories tileset (Deimos) — enemy drops','Cavia Bounties from Fibonacci','Deep Archimedea / Netracell completion'],
+    best:'Steel Path Deimos survival with looting abilities',
+    tip:'Voca drops from most enemies in Albrecht\'s Labs. Run Deimos survival on SP and trade to Loid. Deep Archimedea gives 15,000 standing per clear — by far the best Cavia standing source.',
+    usage:'Cavia rank-up — required for Netracells and Deep Archimedea access'
+  },
+  {
+    id:'hex_treasures', name:'Hex Treasures / The Hex Standing', icon:'💜', cat:'currency', rarity:'currency',
+    locations:['Scattered across Höllvania (1999 map)','The Hex Bounties (billboard near Garage Pom-2 PC)','Leticia in Höllvania Central Mall'],
+    best:'Collect Hex Treasures while running bounties — passive income',
+    tip:'Trade Hex Treasures to Leticia for standing. Bounties also award standing directly. Temporal Archimedea completion awards 15,000 The Hex standing — best single-run source.',
+    usage:'The Hex syndicate rank-up, Kaya\'s weekly arcane, Temporal Archimedea access'
+  },
+
+  // ═══ SPECIAL / ENDGAME CURRENCIES ═══
+  {
+    id:'kuva', name:'Kuva', icon:'🔴', cat:'currency', rarity:'currency',
+    locations:['Kuva Fortress — Taveuni Survival (200 per Harvester)','Kuva Fortress — Disruption (100/200/350 per rotation)','Kuva Siphon missions (550–700)','Kuva Flood missions (1,100–1,400)','Arbitrations (exchange)','Weekly vendors (Yonta: 35k, Palladino, Teshin)'],
+    best:'Kuva Fortress Disruption or Flood missions for rate; Arbitrations for passive',
+    tip:'Kuva Flood missions give 2× the Kuva of Siphons and spawn every 30 min. Stack Resource Booster + Smeeta Kavat Charm for up to 5,600 per Flood. Disruption on Kuva Fortress has no resource booster effect on rotation rewards — only enemy drops benefit.',
+    usage:'Riven mod rolling, Kuva weapon creation, Lich/Sister influence'
+  },
+  {
+    id:'endo', name:'Endo', icon:'🟢', cat:'currency', rarity:'currency',
+    locations:['Sedna — Vodyanoi (Arena, Rathuum)','Arbitrations (rotation rewards)','Ayatan Sculptures → Maroo','Dissolve duplicate mods','Archon Hunt weekly','Sorties'],
+    best:'Vodyanoi arena (Sedna) with Nekros/Khora — best rate per hour',
+    tip:'Vodyanoi is the king of Endo farming. Fill Ayatan Sculptures with Amber Stars before trading to Maroo for max Endo value. Dissolving unwanted mods from long farms adds up fast. Archon Hunt gives up to 8,000 weekly.',
+    usage:'Mod upgrading — the universal bottleneck for all builds'
+  },
+  {
+    id:'credits', name:'Credits', icon:'💰', cat:'currency', rarity:'currency',
+    locations:['Index (Neptune — Credit Heist) — 200k+ per run','Profit-Taker Orb (Orb Vallis, Phase 4) — 125k+ per run','Any mission — scales with level','Void Fissure missions — bonus credits on refinement','Riven mods from Sorties sell for credits'],
+    best:'The Index (Neptune) — 500k+ credits per 10 min run with high-risk wager',
+    tip:'The Index is unmatched for credits. High-risk wager gives 200k per win (400k if first win of day). Bring any tanky/damage frame and a credit booster for 1M+ per run. Profit-Taker Phase 4 also gives 125k+ and Toroids.',
+    usage:'Trading tax, blueprint purchases, Clan Dojo research, Syndicate rank-up'
+  },
+  {
+    id:'steel_essence', name:'Steel Essence', icon:'⚔️', cat:'currency', rarity:'special',
+    locations:['Steel Path Daily Incursion — 25 per day (guaranteed)','Steel Path Acolytes — 4–8 per kill (spawn over time in endless)','Steel Path mission completion bonus'],
+    best:'Steel Path Incursion daily (25 SE) + long Survival with farming squad',
+    tip:'Acolytes spawn every 10 min in endless Steel Path missions and each drops 4–8 SE. Run 1hr+ SP Survival with Khora/Nekros for 80–120 SE/hr. Smeeta Kavat can double SE drops from Acolytes. Never skip the daily 25 SE incursion.',
+    usage:'Teshin shop: Arcanes, Kuva (15 SE = 10k), Umbra Forma, Riven Ciphers'
+  },
+  {
+    id:'vitus_essence', name:'Vitus Essence', icon:'🟣', cat:'currency', rarity:'special',
+    locations:['Arbitrations — 1 guaranteed per rotation + 7% chance for 3 more','Arbitration Shield Drone drops (6% chance, 1 each)'],
+    best:'Long Arbitration Survival missions with Nekros/Khora farming squad',
+    tip:'Arbitrations are the only source. Shield drones drop Vitus but are immune to all abilities — use weapons. A 1-hour Arbitration Survival can yield 15–30 Vitus. Smeeta Kavat doubles drops. You need 911 Vitus total to buy everything from Acrithis.',
+    usage:'Acrithis: Galvanized mods, Arcane Adapters, Exilus Adapters, cosmetics'
+  },
+  {
+    id:'thrax_plasm', name:'Thrax Plasm (Zariman)', icon:'⚡', cat:'currency', rarity:'special',
+    locations:['Zariman — Void Cascade (SP: ~830/hr)','Zariman — Mobile Defense (best per-mission rate)','Zariman Bounties (T4/T5)','Lua Conjuction missions (Yuvarium/Circulus bonus drops)'],
+    best:'Steel Path Void Cascade with squad — ~830 Thrax Plasm per hour',
+    tip:'Thrax enemies drop 6–10 Plasm each. SP Void Cascade spawns constant Thrax. 1hr gives ~830 Plasm + ~42 Arcanes as a bonus. Looting abilities (Khora/Nekros) do NOT work on Plasm — only resource boosters and Smeeta Charm apply.',
+    usage:'Holdfast/Holdfasts standing rank-up, Zariman weapon crafting, Arcane recipes'
+  },
+  {
+    id:'void_traces', name:'Void Traces', icon:'🌀', cat:'currency', rarity:'currency',
+    locations:['Any Void Fissure mission — 10 reactant = traces','Granum Void objectives (5/10/15 traces)','Isolation Vault optional objectives (Deimos)'],
+    best:'Radiant Relic missions — collect 10 reactant = 25–30 traces per run',
+    tip:'Cap is 4,500 total. Spend them to refine relics to Radiant (100 traces each) for 10% Gold drop chance vs 2% Intact. Radsharing 4 Radiant relics means someone gets a Gold drop 33% of the time.',
+    usage:'Relic refinement — essential for prime part farming efficiency'
+  },
+  {
+    id:'riven_sliver', name:'Riven Slivers', icon:'🌙', cat:'currency', rarity:'special',
+    locations:['Steel Path — any completion drops 1 sliver','Acrithis (Duviri) — weekly offering'],
+    best:'Clear Steel Path nodes you haven\'t done yet — easiest slivers',
+    tip:'Iron Wake on Earth (Palladino) converts 10 Riven Slivers into 35,000 Kuva — one of the best passive Kuva sources. Combine with weekly SP clears.',
+    usage:'10 Slivers → 35,000 Kuva (Palladino, Iron Wake, Earth)'
+  },
+  {
+    id:'aya', name:'Aya', icon:'🟤', cat:'currency', rarity:'currency',
+    locations:['Any mission during Prime Resurgence event','Void Fissures give Aya as rotation rewards','Steel Path Disruption (high rate)'],
+    best:'Steel Path Disruption missions during Prime Resurgence events',
+    tip:'Aya is used for Rank 4/5 Syndicate pledge sacrifices and for purchasing Vaulted Prime parts from Regal Aya bundles. Farm aggressively during Prime Resurgence events when Vaulted content returns.',
+    usage:'Vaulted Prime access during Prime Resurgence, Syndicate rank-up (R4/R5)'
+  },
+  {
+    id:'voidplume', name:'Voidplume / Holdfast Standing', icon:'🕊️', cat:'currency', rarity:'currency',
+    locations:['Zariman missions — Voidplumes scattered throughout','Zariman Bounties','Void Cascade (passive pickup)'],
+    best:'Collect while running Zariman Void Cascade for Thrax Plasm',
+    tip:'5 Voidplume Pinion = 35,000 Kuva from Archimedean Yonta (weekly). Prioritize Pinions for Kuva conversion. Collect other Voidplumes passively during Void Cascade farm — never skip them.',
+    usage:'Holdfast standing, Yonta\'s weekly 35k Kuva, Zariman syndicate'
+  },
+
+  // ═══ SYNDICATE / SPECIAL ITEMS ═══
+  {
+    id:'mutagen_mass', name:'Mutagen Mass / Fieldron / Detonite Injector', icon:'🧪', cat:'special', rarity:'special',
+    locations:['Invasion missions (both sides of conflict)','Dojo research (Chem Lab crafting — 24hr each)','Help Clem weekly alert — 3 Mutagen Mass'],
+    best:'Invasion missions — complete both sides for double reward',
+    tip:'Always complete the Help Clem weekly — it gives 3 Mutagen Mass free. Invasion missions rotate these constantly. Mutagen Mass is worth 5–10p each on WFM — list your extras.',
+    usage:'Clan Dojo research, bio-weapon crafting, mutation-type blueprints'
+  },
+  {
+    id:'forma', name:'Forma / Blueprints', icon:'🔧', cat:'special', rarity:'special',
+    locations:['Nightwave Cred Shop (25 Creds per built Forma)','Void Relic rewards','Sortie rotation rewards','Alert missions','Deep/Temporal Archimedea (Omni Forma)'],
+    best:'Craft from blueprints continuously — 1 BP per crafting slot, 24hrs',
+    tip:'Never buy built Forma — always buy the blueprint for 35,000 credits and craft it. Keep 3–5 always queued. Nightwave Cred Shop is the most reliable bulk source. Omni Forma from endgame content works as Universal Forma.',
+    usage:'Polarity slots on Warframes, weapons, companions — essential for endgame builds'
+  },
+  {
+    id:'archon_shards', name:'Archon Shards', icon:'💠', cat:'special', rarity:'special',
+    locations:['Archon Hunt weekly (guaranteed 1 per week)','Bird 3 — Cavia weekly offering','Deep Archimedea — Tauforged shards','Temporal Archimedea — Tauforged shards','Netracells (chance)'],
+    best:'Complete ALL weekly shard sources: Archon Hunt + Bird 3 + Deep/Temporal Archimedea',
+    tip:'Standard shards: Crimson (str), Azure (dur/shield), Amber (hp/energy), Topaz, Violet, Emerald. Tauforged shards (gold) from endgame content give 1.5× the stat bonus. Each Warframe can hold 5 shards. Prioritize Crimson and Azure for most builds.',
+    usage:'Permanent warframe stat upgrades — the most impactful endgame progression system'
+  },
+  {
+    id:'ducats', name:'Orokin Ducats', icon:'🏆', cat:'currency', rarity:'currency',
+    locations:['Ducat Kiosks in any Relay — trade Prime parts for Ducats','Common: 15 · Uncommon: 45 · Rare: 100 Ducats per part'],
+    best:'Farm unvaulted relics → open for common/uncommon parts → trade for Ducats',
+    tip:'Only trade Prime parts you have duplicates of or parts with no trade value (<1p on WFM). Never trade Rare (Gold) parts for Ducats unless you have 10+. Best Ducat-per-relic: farm Lith relics for common parts (15 Ducats × many = fast stack). Always stock 1,000+ Ducats for Baro.',
+    usage:'Baro Ki\'Teer purchases: Primed mods, exclusive weapons, cosmetics'
+  },
+  {
+    id:'standing_general', name:'Syndicate Standing (General)', icon:'🏅', cat:'currency', rarity:'currency',
+    locations:['Syndicate missions (7 daily per faction)','Medallions found in missions (hidden, 1–5 per mission)','Syndicate sigil equipped during any mission','Universal Medallions from Disruption missions'],
+    best:'Cap daily standing every day — run daily missions with sigil equipped',
+    tip:'Daily cap = 16,000 + (MR × 500). Always equip your syndicate sigil before any mission. Universal Medallions from Disruption give 1,000 standing to any faction. Medallions hidden in missions are bonus — scan with Thief\'s Wit to find them.',
+    usage:'Syndicate rank-up → augment mods, weapons, unique items for trade or use'
+  },
+
+];
+
+// ── RESOURCE FILTER STATE ─────────────────────────────────────────────────────
+let resFilter = 'all';
+
+function setResFilter(cat, btn) {
+  resFilter = cat;
+  document.querySelectorAll('.res-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderResources();
+}
+
+function renderResources() {
+  const q = (document.getElementById('res-search')?.value || '').toLowerCase();
+  const grid = document.getElementById('res-grid');
+  const countEl = document.getElementById('res-count');
+  if (!grid) return;
+
+  const filtered = RES_DATA.filter(r => {
+    if (resFilter !== 'all' && r.rarity !== resFilter && r.cat !== resFilter) return false;
+    if (q) {
+      const searchable = (r.name + ' ' + r.locations.join(' ') + ' ' + r.tip + ' ' + r.usage + ' ' + r.best).toLowerCase();
+      if (!searchable.includes(q)) return false;
+    }
+    return true;
+  });
+
+  if (countEl) countEl.textContent = filtered.length + ' resources';
+
+  const RARITY_CLASS = {
+    common: 'res-rarity-common', uncommon: 'res-rarity-uncommon',
+    rare: 'res-rarity-rare', currency: 'res-rarity-currency', special: 'res-rarity-special'
+  };
+  const RARITY_LABEL = {
+    common: 'Common', uncommon: 'Uncommon', rare: 'Rare', currency: 'Currency', special: 'Special'
+  };
+
+  grid.innerHTML = filtered.map(r => {
+    const rarityClass = RARITY_CLASS[r.rarity] || 'res-rarity-common';
+    const rarityLabel = RARITY_LABEL[r.rarity] || r.rarity;
+    const isDecay = r.id === 'argon_crystal';
+
+    const locTags = r.locations.map((loc, i) => {
+      const isBest = r.best.toLowerCase().includes(loc.split(' — ')[0].toLowerCase()) ||
+                     r.best.toLowerCase().includes(loc.split('(')[0].trim().toLowerCase());
+      return `<span class="res-loc-tag${isBest && i === 0 ? ' best' : ''}">${loc}</span>`;
+    }).join('');
+
+    return `<div class="res-card">
+      <div class="res-card-header">
+        <span class="res-icon">${r.icon}</span>
+        <span class="res-name">${r.name}</span>
+        ${isDecay ? '<span class="res-decay-warn">⏳ DECAYS 24H</span>' : ''}
+        <span class="res-rarity ${rarityClass}">${rarityLabel}</span>
+      </div>
+      <div class="res-locations">
+        <div class="res-loc-label">Locations</div>
+        <div class="res-loc-list">${locTags}</div>
+      </div>
+      <div class="res-locations" style="margin-top:6px">
+        <div class="res-loc-label">Best Method</div>
+        <div class="res-loc-list"><span class="res-loc-tag best">${r.best}</span></div>
+      </div>
+      <div class="res-tip"><strong>Tip:</strong> ${r.tip}<br><span style="opacity:.6;font-size:8px">Used for: ${r.usage}</span></div>
+    </div>`;
+  }).join('');
+}
+
 </script>
 </body>
 </html>
