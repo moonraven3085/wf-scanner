@@ -36,14 +36,16 @@ header{background:rgba(200,169,81,.04);border-bottom:1px solid rgba(200,169,81,.
 .page-tab{background:none;border:none;border-bottom:2px solid transparent;color:var(--text-dim);font-family:'Orbitron',monospace;font-size:10px;letter-spacing:2px;padding:12px 24px;cursor:pointer;transition:all .2s;text-transform:uppercase}
 .page-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
 .page-tab:hover:not(.active){color:var(--text);border-bottom-color:rgba(200,169,81,.3)}
-#checklist-panel{display:none;padding:0 0 40px}
-.cl-section{margin-bottom:28px}
+#checklist-panel{display:none;padding:0 0 40px;flex-direction:column}
+.cl-sections-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px;align-items:start}
+@media(max-width:900px){.cl-sections-grid{grid-template-columns:1fr}}
+.cl-section{margin-bottom:24px;break-inside:avoid}
 .cl-section-header{display:flex;align-items:center;gap:10px;padding:10px 0 8px;border-bottom:1px solid rgba(200,169,81,.15);margin-bottom:12px;cursor:pointer;user-select:none}
 .cl-section-icon{font-size:18px;width:24px;text-align:center}
 .cl-section-title{font-family:'Orbitron',monospace;font-size:11px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;font-weight:700;flex:1}
 .cl-section-prog{font-size:10px;color:var(--text-dim);font-family:'Orbitron',monospace}
 .cl-section-arrow{font-size:10px;color:var(--text-dim);transition:transform .2s}
-.cl-section-body{display:grid;gap:6px}
+.cl-section-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:6px}
 .cl-task{display:flex;align-items:flex-start;gap:10px;padding:8px 10px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);border-radius:4px;cursor:pointer;transition:background .15s;position:relative}
 .cl-task:hover{background:rgba(255,255,255,.04)}
 .cl-task.done{opacity:.45}
@@ -66,7 +68,7 @@ header{background:rgba(200,169,81,.04);border-bottom:1px solid rgba(200,169,81,.
 .cl-progress-bar{height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;margin-bottom:20px}
 .cl-progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--green));border-radius:2px;transition:width .4s}
 .cl-total-badge{font-family:'Orbitron',monospace;font-size:10px;color:var(--text-dim);margin-left:auto}
-.cl-biweekly-note{font-size:9px;color:#ff9f43;background:rgba(255,159,67,.1);border:1px solid rgba(255,159,67,.2);border-radius:3px;padding:2px 6px;margin-left:auto}
+.cl-biweekly-note{font-size:9px;color:#ff9f43;background:rgba(255,159,67,.1);border:1px solid rgba(255,159,67,.2);border-radius:3px;padding:2px 6px;margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
 .section-collapsed .cl-section-body{display:none}
 .section-collapsed .cl-section-arrow{transform:rotate(-90deg)}
 .cl-divider-label{font-size:8px;letter-spacing:3px;color:var(--text-dim);text-transform:uppercase;text-align:center;padding:8px 0 4px;border-top:1px solid rgba(255,255,255,.05);margin-top:4px}
@@ -386,7 +388,7 @@ td{padding:8px 6px;vertical-align:middle}
 
 </div><!-- /main -->
 
-<div id="checklist-panel" style="display:none;padding:20px 24px;flex:1;overflow-y:auto;flex-direction:column">
+<div id="checklist-panel" style="display:none;padding:20px 24px 40px;flex:1;overflow-y:auto;flex-direction:column">
   <div class="cl-reset-bar">
     <button class="btn-icon" onclick="resetChecklist('daily')" title="Reset daily tasks">↺ Reset Daily</button>
     <button class="btn-icon" onclick="resetChecklist('weekly')" title="Reset weekly tasks">↺ Reset Weekly</button>
@@ -2376,7 +2378,7 @@ function renderChecklist() {
     </div>`;
   });
 
-  container.innerHTML = sectionsHtml;
+  container.innerHTML = '<div class="cl-sections-grid">' + sectionsHtml + '</div>';
 
   const overallPct = totalAll ? Math.round(totalDone/totalAll*100) : 0;
   const badge = document.getElementById('cl-total-badge');
