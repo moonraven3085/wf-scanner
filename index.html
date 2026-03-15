@@ -33,43 +33,6 @@ header{background:rgba(200,169,81,.04);border-bottom:1px solid rgba(200,169,81,.
 .btn-danger{border-color:rgba(200,80,80,.35)!important;color:#d07070!important}
 .btn-danger:hover{background:rgba(200,80,80,.08)!important}
 .btn-icon{background:none;border:none;cursor:pointer;font-size:12px;padding:2px 5px;opacity:.45;transition:opacity .15s;color:inherit;font-family:'Rajdhani',sans-serif}
-.page-tab{background:none;border:none;border-bottom:2px solid transparent;color:var(--text-dim);font-family:'Orbitron',monospace;font-size:10px;letter-spacing:2px;padding:12px 24px;cursor:pointer;transition:all .2s;text-transform:uppercase}
-.page-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
-.page-tab:hover:not(.active){color:var(--text);border-bottom-color:rgba(200,169,81,.3)}
-#checklist-panel{display:none;padding:0 0 40px}
-.cl-section{margin-bottom:28px}
-.cl-section-header{display:flex;align-items:center;gap:10px;padding:10px 0 8px;border-bottom:1px solid rgba(200,169,81,.15);margin-bottom:12px;cursor:pointer;user-select:none}
-.cl-section-icon{font-size:18px;width:24px;text-align:center}
-.cl-section-title{font-family:'Orbitron',monospace;font-size:11px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;font-weight:700;flex:1}
-.cl-section-prog{font-size:10px;color:var(--text-dim);font-family:'Orbitron',monospace}
-.cl-section-arrow{font-size:10px;color:var(--text-dim);transition:transform .2s}
-.cl-section-body{display:grid;gap:6px}
-.cl-task{display:flex;align-items:flex-start;gap:10px;padding:8px 10px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);border-radius:4px;cursor:pointer;transition:background .15s;position:relative}
-.cl-task:hover{background:rgba(255,255,255,.04)}
-.cl-task.done{opacity:.45}
-.cl-task.done .cl-task-name{text-decoration:line-through}
-.cl-checkbox{width:16px;height:16px;min-width:16px;border:1.5px solid rgba(200,169,81,.4);border-radius:3px;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;font-size:11px}
-.cl-task.done .cl-checkbox{background:var(--green);border-color:var(--green);color:#000}
-.cl-task-content{flex:1;min-width:0}
-.cl-task-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px}
-.cl-task-desc{font-size:10px;color:var(--text-dim);line-height:1.5}
-.cl-task-tags{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap}
-.cl-tag{font-size:8px;padding:1px 5px;border-radius:2px;letter-spacing:.5px;font-weight:700;text-transform:uppercase}
-.cl-tag-plat{background:rgba(130,180,255,.15);color:#82b4ff;border:1px solid rgba(130,180,255,.2)}
-.cl-tag-shard{background:rgba(64,180,160,.15);color:#40b4a0;border:1px solid rgba(64,180,160,.2)}
-.cl-tag-endo{background:rgba(200,140,60,.15);color:#c88c3c;border:1px solid rgba(200,140,60,.2)}
-.cl-tag-stand{background:rgba(180,100,180,.15);color:#b464b4;border:1px solid rgba(180,100,180,.2)}
-.cl-tag-endgame{background:rgba(220,80,80,.15);color:#dc5050;border:1px solid rgba(220,80,80,.25)}
-.cl-tag-beginner{background:rgba(80,180,80,.15);color:#50b450;border:1px solid rgba(80,180,80,.2)}
-.cl-tag-mid{background:rgba(180,150,60,.15);color:#b4963c;border:1px solid rgba(180,150,60,.2)}
-.cl-reset-bar{display:flex;gap:8px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
-.cl-progress-bar{height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;margin-bottom:20px}
-.cl-progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--green));border-radius:2px;transition:width .4s}
-.cl-total-badge{font-family:'Orbitron',monospace;font-size:10px;color:var(--text-dim);margin-left:auto}
-.cl-biweekly-note{font-size:9px;color:#ff9f43;background:rgba(255,159,67,.1);border:1px solid rgba(255,159,67,.2);border-radius:3px;padding:2px 6px;margin-left:auto}
-.section-collapsed .cl-section-body{display:none}
-.section-collapsed .cl-section-arrow{transform:rotate(-90deg)}
-.cl-divider-label{font-size:8px;letter-spacing:3px;color:var(--text-dim);text-transform:uppercase;text-align:center;padding:8px 0 4px;border-top:1px solid rgba(255,255,255,.05);margin-top:4px}
 .btn-icon:hover{opacity:1}
 #voice-section{background:var(--bg3);border:1px solid rgba(200,169,81,.18);padding:20px;display:flex;flex-direction:column;gap:14px}
 .voice-title{font-family:'Orbitron',monospace;font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase}
@@ -108,7 +71,6 @@ header{background:rgba(200,169,81,.04);border-bottom:1px solid rgba(200,169,81,.
 .stat-label{font-size:7px;letter-spacing:3px;color:var(--text-dim);text-transform:uppercase;margin-bottom:3px}
 .stat-value{font-family:'Orbitron',monospace;font-size:14px;font-weight:900}
 #controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-#legend-bar{display:none;gap:14px;flex-wrap:wrap;padding:3px 4px}
 .search-box{background:rgba(255,255,255,.04);border:1px solid rgba(200,169,81,.2);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:13px;padding:7px 12px;outline:none;min-width:160px;transition:border-color .2s}
 .search-box:focus{border-color:rgba(200,169,81,.5)}
 .search-box::placeholder{color:#4a5060}
@@ -133,13 +95,7 @@ td{padding:8px 6px;vertical-align:middle}
 .td-name a:hover{color:var(--gold);text-decoration:underline}
 .drop-loc{font-size:9px;color:var(--text-dim);letter-spacing:.3px;margin-top:2px;line-height:1.5}
 .drop-relic{display:inline-block;margin-right:4px;white-space:nowrap}
-.drop-C{color:#a0b0c0}.drop-U{color:#60a8e8}.drop-R{color:#f0c040}
-.row-vaulted{background:rgba(255,107,53,.04)!important}
-.row-vaulted td{border-bottom-color:rgba(255,107,53,.08)!important}
-.row-gold{background:rgba(240,192,64,.04)!important}
-.row-gold td{border-bottom-color:rgba(240,192,64,.1)!important}
-.drop-vaulted{display:inline-block;margin-left:4px;font-size:8px;color:#ff6b35;background:rgba(255,107,53,.12);border:1px solid rgba(255,107,53,.3);border-radius:3px;padding:0 3px;vertical-align:middle;font-weight:700;letter-spacing:.5px}
-.hv-star{font-size:10px;vertical-align:middle;filter:drop-shadow(0 0 3px gold)}
+.drop-C{color:#a0b0c0}.drop-U{color:#c8a951}.drop-R{color:#d07070}
 .drop-src{color:#8090b0;font-style:italic}
 .td-price{font-family:'Orbitron',monospace;font-size:11px;text-align:right;font-weight:700}
 .td-actions{text-align:right;white-space:nowrap}
@@ -194,11 +150,6 @@ td{padding:8px 6px;vertical-align:middle}
     <button class="btn-secondary btn-danger" id="clear-btn" onclick="clearAll()" style="display:none">✕ Clear</button>
   </div>
 </header>
-
-<div id="page-nav" style="display:flex;gap:0;border-bottom:1px solid rgba(200,169,81,.2);background:rgba(0,0,0,.15)">
-  <button class="page-tab active" id="tab-inventory" onclick="switchPage('inventory')">📦 Inventory Scanner</button>
-  <button class="page-tab" id="tab-checklist" onclick="switchPage('checklist')">✅ Daily Checklist</button>
-</div>
 
 <div id="main">
 <div id="left">
@@ -284,15 +235,6 @@ td{padding:8px 6px;vertical-align:middle}
     <button class="tab" onclick="setFilter('arcane',this)">Arcanes</button>
     <button class="tab" onclick="setFilter('sold',this)">✓ Sold</button>
     <span style="font-size:10px;color:var(--text-dim);margin-left:auto" id="count-badge"></span>
-  </div>
-
-  <!-- LEGEND BAR -->
-  <div id="legend-bar" style="font-size:9px;color:var(--text-dim);padding:3px 2px 1px;gap:14px;flex-wrap:wrap">
-    <span title="Rare drop — 2% chance (Radiant: 6%)">🟡 Gold (Rare)</span>
-    <span title="Uncommon drop — 11% chance (Radiant: 17%)">🔵 Silver (Uncommon)</span>
-    <span title="Common drop — 25% chance">🟫 Bronze (Common)</span>
-    <span title="This item is not currently in active drop tables">🔒 Vaulted</span>
-    <span title="High trade value on warframe.market">⭐ High Value</span>
   </div>
 
   <!-- SELECTION BAR -->
@@ -529,41 +471,265 @@ const ARCANES = [
 ];
 
 const DROPS = {
-  "Serration": ["Scaldra Eradicator", "Scaldra Dedicant", "Electric Crawler", "Kuva Scorpion", "Narmer Scorpion"],
-  "Split Chamber": ["Leech Osprey", "Narmer Leech Osprey", "Narmer Mine Osprey", "Narmer Sapping Osprey", "Sapping Osprey"],
-  "Heavy Caliber": ["Derelict Vault"],
-  "Point Strike": ["Bailiff", "Butcher", "Drahk Master", "Drekar Butcher", "Drekar Manic"],
-  "Vital Sense": ["Axio Stropha Crewman", "Juno Malleus Machinist", "Narmer Prod Crewman", "Orm Stropha Crewman", "Prod Crewman"],
-  "Vigilante Armaments": ["Earth/Cetus (Level 20 - 40 Cetus Bounty), Rotation B", "Plains Commander"],
-  "Vigilante Supplies": ["Plains Commander", "Narmer Thumper Bull", "Narmer Thumper Doma", "Narmer Thumper", "Tusk Thumper Bull"],
-  "Vigilante Fervor": ["Earth/Cetus (Level 20 - 40 Cetus Bounty), Rotation C", "Plains Commander"],
-  "Vigilante Offense": ["Plains Commander", "Narmer Thumper Bull", "Narmer Thumper Doma", "Narmer Thumper", "Tusk Thumper Bull"],
-  "Vigilante Pursuit": ["Earth/Cetus (Level 30 - 50 Cetus Bounty), Rotation C", "Earth/Cetus (Level 15 - 25 Plague Star), Rotation A", "Plains Commander"],
-  "Hunter Munitions": ["Earth/Cetus (Level 15 - 25 Ghoul Bounty), Rotation A", "Hemocyte", "Ghoul Rictus Alpha"],
-  "Hunter Adrenaline": ["Earth/Cetus (Level 15 - 25 Ghoul Bounty), Rotation A", "Hemocyte", "Ghoul Rictus Alpha"],
-  "Hunter Command": ["Ghoul Auger Alpha", "Earth/Cetus (Level 40 - 50 Ghoul Bounty), Rotation A", "Hemocyte"],
-  "Hunter Recovery": ["Earth/Cetus (Level 40 - 50 Ghoul Bounty), Rotation A", "Hemocyte", "Ghoul Auger Alpha"],
-  "Hunter Synergy": ["Earth/Cetus (Level 40 - 50 Ghoul Bounty), Rotation A", "Hemocyte", "Ghoul Auger Alpha"],
-  "Hunter Instinct": ["Sanctuary Onslaught"],
-  "Primed Cryo Rounds": ["Baro Ki'Teer"],
-  "Primed Infected Clip": ["Baro Ki'Teer"],
-  "Primed Charged Shell": ["Baro Ki'Teer"],
-  "Primed Bane of Corpus": ["Baro Ki'Teer"],
-  "Primed Bane of Grineer": ["Baro Ki'Teer"],
-  "Primed Bane of Infested": ["Baro Ki'Teer"],
-  "Primed Bane of Corrupted": ["Baro Ki'Teer"],
-  "Primed Expel Corpus": ["Baro Ki'Teer"],
-  "Primed Expel Grineer": ["Baro Ki'Teer"],
-  "Primed Expel Infested": ["Baro Ki'Teer"],
-  "Primed Expel Corrupted": ["Baro Ki'Teer"],
-  "Primed Fast Hands": ["Baro Ki'Teer"],
-  "Primed Pistol Gambit": ["Baro Ki'Teer"],
-  "Primed Target Cracker": ["Baro Ki'Teer"],
-  "Primed Heated Charge": ["Baro Ki'Teer"],
-  "Primed Magazine Warp": ["Baro Ki'Teer"],
-  "Primed Slip Magazine": ["Baro Ki'Teer"],
-  "Primed Ravage": ["Baro Ki'Teer"],
-  "Primed Shred": ["Baro Ki'Teer"],
+  "Akbolto Prime Barrel": ["Axi A2 (C)", "Neo A1 (C)"],
+  "Akbolto Prime Blueprint": ["Meso B4 (U)", "Axi A2 (U)"],
+  "Akbolto Prime Link": ["Lith A2 (C)", "Meso A1 (C)"],
+  "Akbolto Prime Receiver": ["Lith B5 (U)", "Neo B5 (U)"],
+  "Akbronco Prime Blueprint": ["Lith B2 (C)", "Meso B1 (C)"],
+  "Akbronco Prime Link": ["Meso B2 (U)", "Axi B1 (U)"],
+  "Akbronco Prime Receiver": ["Neo B1 (R)", "Axi B2 (R)"],
+  "Akjagara Prime Blueprint": ["Neo D1 (C)", "Axi D1 (C)"],
+  "Akjagara Prime Barrel": ["Lith D1 (U)", "Neo D2 (U)"],
+  "Akjagara Prime Receiver": ["Meso D1 (R)", "Axi D2 (R)"],
+  "Akstiletto Prime Blueprint": ["Neo S5 (C)", "Axi S3 (C)"],
+  "Akstiletto Prime Link": ["Lith S5 (U)", "Meso S3 (U)"],
+  "Akstiletto Prime Receiver": ["Meso S4 (R)", "Axi S2 (R)"],
+  "Alternox Prime Blueprint": ["Lith V10 (C)"],
+  "Alternox Prime Barrel": ["Meso V9 (U)"],
+  "Alternox Prime Receiver": ["Neo V8 (U)"],
+  "Alternox Prime Stock": ["Axi V9 (R)"],
+  "Ash Prime Blueprint": ["Axi A1 (R)", "Axi G1 (R)"],
+  "Ash Prime Chassis": ["Neo A1 (C)", "Meso A2 (C)"],
+  "Ash Prime Neuroptics": ["Lith A1 (U)", "Neo A2 (U)"],
+  "Ash Prime Systems": ["Meso A1 (C)", "Lith A3 (C)"],
+  "Atlas Prime Blueprint": ["Axi A6 (R)"],
+  "Atlas Prime Chassis Blueprint": ["Neo A3 (C)", "Meso A4 (C)"],
+  "Atlas Prime Neuroptics Blueprint": ["Lith A4 (U)", "Neo A4 (U)"],
+  "Atlas Prime Systems Blueprint": ["Meso A3 (C)", "Lith A5 (C)"],
+  "Ballistica Prime Blueprint": ["Meso B3 (U)", "Axi B3 (U)"],
+  "Ballistica Prime Lower Limb": ["Lith B3 (C)", "Neo B3 (C)"],
+  "Ballistica Prime Receiver": ["Neo B4 (R)", "Axi B4 (R)"],
+  "Ballistica Prime String": ["Lith B4 (C)", "Meso B5 (C)"],
+  "Ballistica Prime Upper Limb": ["Lith B6 (U)", "Neo B6 (U)"],
+  "Banshee Prime Blueprint": ["Axi B1 (R)"],
+  "Banshee Prime Chassis": ["Neo B1 (C)", "Meso B2 (C)"],
+  "Banshee Prime Neuroptics": ["Lith B1 (U)"],
+  "Banshee Prime Systems": ["Meso B1 (C)", "Lith B2 (C)"],
+  "Boltor Prime Blueprint": ["Axi B5 (R)", "Neo B7 (R)"],
+  "Boltor Prime Barrel": ["Lith B7 (C)", "Meso B6 (C)"],
+  "Boltor Prime Receiver": ["Meso B7 (U)", "Axi B6 (U)"],
+  "Boltor Prime Stock": ["Neo B8 (C)", "Lith B8 (C)"],
+  "Braton Prime Blueprint": ["Axi B7 (R)", "Axi B8 (R)"],
+  "Braton Prime Barrel": ["Lith B9 (C)", "Meso B8 (C)"],
+  "Braton Prime Receiver": ["Meso B9 (U)", "Neo B9 (U)"],
+  "Braton Prime Stock": ["Neo B10 (C)", "Lith B10 (C)"],
+  "Bronco Prime Blueprint": ["Axi B9 (R)"],
+  "Bronco Prime Barrel": ["Lith B11 (C)", "Neo B11 (C)"],
+  "Bronco Prime Receiver": ["Meso B10 (U)", "Axi B10 (U)"],
+  "Burston Prime Blueprint": ["Axi B11 (R)"],
+  "Burston Prime Barrel": ["Lith B12 (C)", "Meso B11 (C)"],
+  "Burston Prime Receiver": ["Neo B12 (U)", "Axi B12 (U)"],
+  "Burston Prime Stock": ["Meso B12 (C)", "Lith B13 (C)"],
+  "Caliban Prime Blueprint": ["Axi C7 (R)"],
+  "Caliban Prime Chassis Blueprint": ["Neo C5 (C)"],
+  "Caliban Prime Neuroptics Blueprint": ["Meso C8 (U)"],
+  "Caliban Prime Systems Blueprint": ["Lith C9 (C)"],
+  "Carrier Prime Blueprint": ["Axi C1 (R)"],
+  "Carrier Prime Carapace": ["Lith C1 (C)", "Meso C1 (C)"],
+  "Carrier Prime Cerebrum": ["Neo C1 (U)", "Axi C2 (U)"],
+  "Carrier Prime Systems": ["Meso C2 (C)", "Lith C2 (C)"],
+  "Cernos Prime Blueprint": ["Axi C3 (R)"],
+  "Cernos Prime Grip": ["Lith C3 (C)", "Meso C3 (C)"],
+  "Cernos Prime Lower Limb": ["Neo C2 (U)", "Axi C4 (U)"],
+  "Cernos Prime String": ["Meso C4 (C)", "Lith C4 (C)"],
+  "Cernos Prime Upper Limb": ["Neo C3 (C)", "Meso C5 (C)"],
+  "Chroma Prime Blueprint": ["Axi C5 (R)"],
+  "Chroma Prime Chassis Blueprint": ["Neo C4 (C)", "Meso C6 (C)"],
+  "Chroma Prime Neuroptics Blueprint": ["Lith C5 (U)", "Neo C5 (U)"],
+  "Chroma Prime Systems Blueprint": ["Meso C7 (C)", "Lith C6 (C)"],
+  "Daikyu Prime Blueprint": ["Axi D3 (R)"],
+  "Daikyu Prime Grip": ["Lith D2 (C)"],
+  "Daikyu Prime Lower Limb": ["Neo D3 (U)"],
+  "Daikyu Prime String": ["Meso D2 (C)"],
+  "Daikyu Prime Upper Limb": ["Lith D3 (C)"],
+  "Ember Prime Blueprint": ["Axi E1 (R)"],
+  "Ember Prime Chassis": ["Neo E1 (C)", "Meso E1 (C)"],
+  "Ember Prime Neuroptics": ["Lith E1 (U)"],
+  "Ember Prime Systems": ["Meso E2 (C)", "Lith E2 (C)"],
+  "Equinox Prime Blueprint": ["Axi E2 (R)"],
+  "Equinox Prime Chassis Blueprint": ["Neo E2 (C)"],
+  "Equinox Prime Neuroptics Blueprint": ["Lith E3 (U)", "Meso E3 (U)"],
+  "Equinox Prime Systems Blueprint": ["Neo E3 (C)", "Meso E4 (C)"],
+  "Fang Prime Blueprint": ["Axi F1 (R)"],
+  "Fang Prime Blade": ["Lith F1 (C)", "Meso F1 (C)"],
+  "Fang Prime Handle": ["Neo F1 (U)", "Axi F2 (U)"],
+  "Frost Prime Blueprint": ["Axi F3 (R)"],
+  "Frost Prime Chassis": ["Neo F1 (C)", "Meso F2 (C)"],
+  "Frost Prime Neuroptics": ["Lith F2 (U)"],
+  "Frost Prime Systems": ["Meso F3 (C)", "Lith F3 (C)"],
+  "Harrow Prime Blueprint": ["Axi H1 (R)"],
+  "Harrow Prime Chassis Blueprint": ["Neo H1 (C)"],
+  "Harrow Prime Neuroptics Blueprint": ["Lith H1 (U)", "Meso H1 (U)"],
+  "Harrow Prime Systems Blueprint": ["Neo H2 (C)", "Meso H2 (C)"],
+  "Helios Prime Blueprint": ["Axi H2 (R)"],
+  "Helios Prime Carapace": ["Lith H2 (C)", "Meso H3 (C)"],
+  "Helios Prime Cerebrum": ["Neo H3 (U)", "Axi H3 (U)"],
+  "Helios Prime Systems": ["Meso H4 (C)", "Lith H3 (C)"],
+  "Hikou Prime Blueprint": ["Axi H4 (R)"],
+  "Hikou Prime Pouch": ["Lith H4 (C)", "Meso H5 (C)"],
+  "Hikou Prime Stars": ["Neo H4 (U)", "Axi H5 (U)"],
+  "Hydroid Prime Blueprint": ["Axi H5 (R)"],
+  "Hydroid Prime Chassis": ["Neo H5 (C)", "Meso H6 (C)"],
+  "Hydroid Prime Neuroptics Blueprint": ["Lith H5 (U)", "Neo H6 (U)"],
+  "Hydroid Prime Systems": ["Meso H7 (C)", "Lith H6 (C)"],
+  "Inaros Prime Blueprint": ["Axi I1 (R)"],
+  "Inaros Prime Chassis Blueprint": ["Neo I1 (C)"],
+  "Inaros Prime Neuroptics Blueprint": ["Lith I1 (U)", "Meso I1 (U)"],
+  "Inaros Prime Systems Blueprint": ["Neo I2 (C)", "Meso I2 (C)"],
+  "Ivara Prime Blueprint": ["Axi I2 (R)"],
+  "Ivara Prime Chassis Blueprint": ["Neo I3 (C)", "Meso I3 (C)"],
+  "Ivara Prime Neuroptics Blueprint": ["Lith I2 (U)", "Neo I4 (U)"],
+  "Ivara Prime Systems Blueprint": ["Meso I4 (C)", "Lith I3 (C)"],
+  "Kogake Prime Blueprint": ["Axi K1 (R)"],
+  "Kogake Prime Boot": ["Lith K1 (C)", "Meso K1 (C)"],
+  "Kogake Prime Gauntlet": ["Neo K1 (U)", "Axi K2 (U)"],
+  "Kronen Prime Blueprint": ["Axi K3 (R)"],
+  "Kronen Prime Blade": ["Lith K2 (C)", "Meso K2 (C)"],
+  "Kronen Prime Handle": ["Neo K2 (U)", "Axi K4 (U)"],
+  "Lato Prime Blueprint": ["Founders exclusive — not tradeable"],
+  "Lato Prime Barrel": ["Founders exclusive — not tradeable"],
+  "Lato Prime Receiver": ["Founders exclusive — not tradeable"],
+  "Limbo Prime Blueprint": ["Axi L1 (R)"],
+  "Limbo Prime Chassis": ["Neo L1 (C)", "Meso L1 (C)"],
+  "Limbo Prime Neuroptics Blueprint": ["Lith L1 (U)", "Neo L2 (U)"],
+  "Limbo Prime Systems": ["Meso L2 (C)", "Lith L2 (C)"],
+  "Limbo Prime Systems Blueprint": ["Meso L2 (C)", "Lith L2 (C)"],
+  "Loki Prime Blueprint": ["Axi L2 (R)"],
+  "Loki Prime Chassis": ["Neo L3 (C)", "Meso L3 (C)"],
+  "Loki Prime Neuroptics": ["Lith L3 (U)"],
+  "Loki Prime Systems": ["Meso L4 (C)", "Lith L4 (C)"],
+  "Mag Prime Blueprint": ["Axi M1 (R)"],
+  "Mag Prime Chassis": ["Neo M1 (C)", "Meso M1 (C)"],
+  "Mag Prime Neuroptics": ["Lith M1 (U)"],
+  "Mag Prime Systems": ["Meso M2 (C)", "Lith M2 (C)"],
+  "Magnus Prime Blueprint": ["Axi M2 (R)"],
+  "Magnus Prime Barrel": ["Lith M3 (C)", "Meso M3 (C)"],
+  "Magnus Prime Receiver": ["Neo M2 (U)", "Axi M3 (U)"],
+  "Mesa Prime Blueprint": ["Axi M3 (R)", "Axi M4 (R)"],
+  "Mesa Prime Chassis Blueprint": ["Neo M3 (C)", "Meso M4 (C)"],
+  "Mesa Prime Neuroptics Blueprint": ["Lith M4 (U)", "Neo M4 (U)"],
+  "Mesa Prime Systems Blueprint": ["Meso M5 (C)", "Lith M5 (C)"],
+  "Mirage Prime Blueprint": ["Axi M5 (R)"],
+  "Mirage Prime Chassis": ["Neo M5 (C)", "Meso M6 (C)"],
+  "Mirage Prime Neuroptics": ["Lith M6 (U)", "Neo M6 (U)"],
+  "Mirage Prime Systems": ["Meso M7 (C)", "Lith M7 (C)"],
+  "Nekros Prime Blueprint": ["Axi N1 (R)"],
+  "Nekros Prime Chassis": ["Neo N1 (C)", "Meso N1 (C)"],
+  "Nekros Prime Neuroptics": ["Lith N1 (U)"],
+  "Nekros Prime Systems": ["Meso N2 (C)", "Lith N2 (C)"],
+  "Nidus Prime Blueprint": ["Axi N2 (R)"],
+  "Nidus Prime Chassis Blueprint": ["Neo N2 (C)"],
+  "Nidus Prime Neuroptics Blueprint": ["Lith N3 (U)", "Meso N3 (U)"],
+  "Nidus Prime Systems Blueprint": ["Neo N3 (C)", "Meso N4 (C)"],
+  "Nikana Prime Blueprint": ["Axi N3 (R)"],
+  "Nikana Prime Blade": ["Lith N4 (C)", "Meso N5 (C)"],
+  "Nikana Prime Hilt": ["Neo N4 (U)", "Axi N4 (U)"],
+  "Ninkondi Prime Blueprint": ["Axi N5 (R)"],
+  "Ninkondi Prime Chain": ["Lith N5 (C)", "Meso N6 (C)"],
+  "Ninkondi Prime Handle": ["Neo N5 (U)", "Axi N6 (U)"],
+  "Nova Prime Blueprint": ["Axi N6 (R)"],
+  "Nova Prime Chassis": ["Neo N6 (C)", "Meso N7 (C)"],
+  "Nova Prime Neuroptics": ["Lith N6 (U)"],
+  "Nova Prime Systems": ["Meso N8 (C)", "Lith N7 (C)"],
+  "Nyx Prime Blueprint": ["Axi N7 (R)"],
+  "Nyx Prime Chassis": ["Neo N7 (C)", "Meso N9 (C)"],
+  "Nyx Prime Neuroptics": ["Lith N8 (U)"],
+  "Nyx Prime Systems": ["Meso N10 (C)", "Lith N9 (C)"],
+  "Oberon Prime Blueprint": ["Axi O1 (R)"],
+  "Oberon Prime Chassis": ["Neo O1 (C)", "Meso O1 (C)"],
+  "Oberon Prime Neuroptics": ["Lith O1 (U)"],
+  "Oberon Prime Systems": ["Meso O2 (C)", "Lith O2 (C)"],
+  "Orthos Prime Blueprint": ["Axi O2 (R)"],
+  "Orthos Prime Blade": ["Lith O3 (C)", "Meso O3 (C)"],
+  "Orthos Prime Handle": ["Neo O2 (U)", "Axi O3 (U)"],
+  "Paris Prime Blueprint": ["Axi P1 (R)"],
+  "Paris Prime Lower Limb": ["Lith P1 (C)", "Meso P1 (C)"],
+  "Paris Prime String": ["Neo P1 (U)", "Axi P2 (U)"],
+  "Paris Prime Upper Limb": ["Meso P2 (C)", "Lith P2 (C)"],
+  "Pyrana Prime Blueprint": ["Axi P3 (R)"],
+  "Pyrana Prime Barrel": ["Lith P3 (C)", "Meso P3 (C)"],
+  "Pyrana Prime Receiver": ["Neo P2 (U)", "Axi P4 (U)"],
+  "Revenant Prime Blueprint": ["Axi R1 (R)"],
+  "Revenant Prime Chassis Blueprint": ["Neo R1 (C)"],
+  "Revenant Prime Neuroptics Blueprint": ["Lith R1 (U)", "Meso R1 (U)"],
+  "Revenant Prime Systems Blueprint": ["Neo R2 (C)", "Meso R2 (C)"],
+  "Rhino Prime Blueprint": ["Axi R2 (R)"],
+  "Rhino Prime Chassis": ["Neo R3 (C)", "Meso R3 (C)"],
+  "Rhino Prime Neuroptics": ["Lith R2 (U)", "Neo R4 (U)"],
+  "Rhino Prime Systems": ["Meso R4 (C)", "Lith R3 (C)"],
+  "Rhino Prime Systems Blueprint": ["Meso R4 (C)", "Lith R3 (C)"],
+  "Rubico Prime Blueprint": ["Axi R3 (R)"],
+  "Rubico Prime Barrel": ["Lith R4 (C)", "Meso R5 (C)"],
+  "Rubico Prime Receiver": ["Neo R5 (U)", "Axi R4 (U)"],
+  "Rubico Prime Stock": ["Meso R6 (C)", "Lith R5 (C)"],
+  "Saryn Prime Blueprint": ["Axi S1 (R)"],
+  "Saryn Prime Chassis": ["Neo S1 (C)", "Meso S1 (C)"],
+  "Saryn Prime Neuroptics": ["Lith S1 (U)"],
+  "Saryn Prime Systems": ["Meso S2 (C)", "Lith S2 (C)"],
+  "Sevagoth Prime Blueprint": ["Axi S4 (R)"],
+  "Sevagoth Prime Chassis Blueprint": ["Neo S4 (C)"],
+  "Sevagoth Prime Neuroptics Blueprint": ["Lith S4 (U)", "Meso S5 (U)"],
+  "Sevagoth Prime Systems Blueprint": ["Neo S5 (C)", "Meso S6 (C)"],
+  "Silva and Aegis Prime Blueprint": ["Axi S2 (R)"],
+  "Silva and Aegis Prime Blade": ["Lith S3 (C)", "Meso S3 (C)"],
+  "Silva and Aegis Prime Hilt": ["Neo S2 (U)", "Axi S3 (U)"],
+  "Soma Prime Blueprint": ["Axi S5 (R)"],
+  "Soma Prime Barrel": ["Lith S6 (C)", "Meso S7 (C)"],
+  "Soma Prime Receiver": ["Neo S6 (U)", "Axi S6 (U)"],
+  "Soma Prime Stock": ["Meso S8 (C)", "Lith S7 (C)"],
+  "Stradavar Prime Blueprint": ["Axi S7 (R)"],
+  "Stradavar Prime Barrel": ["Lith S8 (C)", "Meso S9 (C)"],
+  "Stradavar Prime Receiver": ["Neo S7 (U)", "Axi S8 (U)"],
+  "Stradavar Prime Stock": ["Meso S10 (C)", "Lith S9 (C)"],
+  "Tiberon Prime Blueprint": ["Axi T1 (R)"],
+  "Tiberon Prime Barrel": ["Lith T1 (C)", "Meso T1 (C)"],
+  "Tiberon Prime Receiver": ["Neo T1 (U)", "Axi T2 (U)"],
+  "Tiberon Prime Stock": ["Meso T2 (C)", "Lith T2 (C)"],
+  "Tigris Prime Blueprint": ["Axi T2 (R)"],
+  "Tigris Prime Barrel": ["Lith T3 (C)", "Meso T3 (C)"],
+  "Tigris Prime Receiver": ["Neo T2 (U)", "Axi T3 (U)"],
+  "Tigris Prime Stock": ["Meso T4 (C)", "Lith T4 (C)"],
+  "Trinity Prime Blueprint": ["Axi T3 (R)"],
+  "Trinity Prime Chassis": ["Neo T2 (C)", "Meso T5 (C)"],
+  "Trinity Prime Neuroptics": ["Lith T5 (U)"],
+  "Trinity Prime Systems": ["Meso T6 (C)", "Lith T6 (C)"],
+  "Valkyr Prime Blueprint": ["Axi V1 (R)"],
+  "Valkyr Prime Chassis": ["Neo V1 (C)", "Meso V1 (C)"],
+  "Valkyr Prime Neuroptics": ["Lith V1 (U)"],
+  "Valkyr Prime Systems": ["Meso V2 (C)", "Lith V2 (C)"],
+  "Vauban Prime Blueprint": ["Axi V2 (R)"],
+  "Vauban Prime Chassis": ["Neo V2 (C)", "Meso V3 (C)"],
+  "Vauban Prime Neuroptics": ["Lith V2 (U)"],
+  "Vauban Prime Systems": ["Meso V4 (C)", "Lith V3 (C)"],
+  "Vectis Prime Blueprint": ["Axi V3 (R)"],
+  "Vectis Prime Barrel": ["Lith V3 (C)", "Meso V5 (C)"],
+  "Vectis Prime Receiver": ["Neo V3 (U)", "Axi V4 (U)"],
+  "Vectis Prime Stock": ["Meso V6 (C)", "Lith V4 (C)"],
+  "Venka Prime Blueprint": ["Axi V4 (R)"],
+  "Venka Prime Blades": ["Lith V5 (C)", "Meso V7 (C)"],
+  "Venka Prime Gauntlet": ["Neo V4 (U)", "Axi V5 (U)"],
+  "Volt Prime Blueprint": ["Axi V5 (R)"],
+  "Volt Prime Chassis": ["Neo V5 (C)", "Meso V8 (C)"],
+  "Volt Prime Chassis Blueprint": ["Neo V5 (C)", "Meso V8 (C)"],
+  "Volt Prime Neuroptics": ["Lith V6 (U)"],
+  "Volt Prime Systems": ["Meso V9 (C)", "Lith V7 (C)"],
+  "Wukong Prime Blueprint": ["Axi W1 (R)"],
+  "Wukong Prime Chassis": ["Neo W1 (C)", "Meso W1 (C)"],
+  "Wukong Prime Neuroptics": ["Lith W1 (U)"],
+  "Wukong Prime Neuroptics Blueprint": ["Lith W1 (U)"],
+  "Wukong Prime Systems": ["Meso W2 (C)", "Lith W2 (C)"],
+  "Wyrm Prime Blueprint": ["Axi W2 (R)"],
+  "Wyrm Prime Carapace": ["Lith W2 (C)", "Meso W3 (C)"],
+  "Wyrm Prime Cerebrum": ["Neo W2 (U)", "Axi W3 (U)"],
+  "Wyrm Prime Systems": ["Meso W4 (C)", "Lith W3 (C)"],
+  "Zephyr Prime Blueprint": ["Axi Z1 (R)"],
+  "Zephyr Prime Chassis": ["Neo Z1 (C)", "Meso Z1 (C)"],
+  "Zephyr Prime Neuroptics": ["Lith Z1 (U)"],
+  "Zephyr Prime Systems": ["Meso Z2 (C)", "Lith Z2 (C)"],
+  "Zhuge Prime Blueprint": ["Axi Z2 (R)"],
+  "Zhuge Prime Barrel": ["Lith Z2 (C)", "Meso Z3 (C)"],
+  "Zhuge Prime Receiver": ["Neo Z2 (U)", "Axi Z3 (U)"],
+  "Zhuge Prime Stock": ["Meso Z4 (C)", "Lith Z3 (C)"],
   "Primed Continuity": ["Baro Ki'Teer"],
   "Primed Flow": ["Baro Ki'Teer"],
   "Primed Fury": ["Baro Ki'Teer"],
@@ -572,6 +738,21 @@ const DROPS = {
   "Primed Vigor": ["Baro Ki'Teer"],
   "Primed Pressure Point": ["Baro Ki'Teer"],
   "Primed Fever Strike": ["Baro Ki'Teer"],
+  "Primed Cryo Rounds": ["Baro Ki'Teer"],
+  "Primed Infected Clip": ["Baro Ki'Teer"],
+  "Primed Charged Shell": ["Baro Ki'Teer"],
+  "Primed Shred": ["Baro Ki'Teer"],
+  "Primed Fast Hands": ["Baro Ki'Teer"],
+  "Primed Pistol Gambit": ["Baro Ki'Teer"],
+  "Primed Target Cracker": ["Baro Ki'Teer"],
+  "Primed Heated Charge": ["Baro Ki'Teer"],
+  "Primed Magazine Warp": ["Baro Ki'Teer"],
+  "Primed Slip Magazine": ["Baro Ki'Teer"],
+  "Primed Ravage": ["Baro Ki'Teer"],
+  "Primed Bane of Corpus": ["Baro Ki'Teer"],
+  "Primed Bane of Grineer": ["Baro Ki'Teer"],
+  "Primed Bane of Infested": ["Baro Ki'Teer"],
+  "Primed Bane of Corrupted": ["Baro Ki'Teer"],
   "Primed Smite Corpus": ["Baro Ki'Teer"],
   "Primed Smite Grineer": ["Baro Ki'Teer"],
   "Primed Smite Infested": ["Baro Ki'Teer"],
@@ -584,144 +765,16 @@ const DROPS = {
   "Galvanized Savvy": ["Arbitrations"],
   "Galvanized Scope": ["Arbitrations"],
   "Galvanized Shot": ["Arbitrations"],
-  "Amalgam Serration": ["Ropalolyst, Disruption (Jupiter/Ganymede)"],
-  "Amalgam Barrel Diffusion": ["Ropalolyst, Disruption (Jupiter/Ganymede)"],
-  "Amalgam Organ Shatter": ["Ropalolyst, Disruption (Jupiter/Ganymede)"],
-  "Amalgam Ripkas True Steel": ["Jupiter/The Ropalolyst (Assassination)"],
-  "Amalgam Furax Body Count": ["Jupiter/The Ropalolyst (Assassination)"],
-  "Amalgam Javlok Magazine Warp": ["Jupiter/The Ropalolyst (Assassination)"],
-  "Amalgam Daikyu Target Acquired": ["Jupiter/The Ropalolyst (Assassination)"],
-  "Narrow Minded": ["Derelict Vault"],
-  "Overextended": ["Derelict Vault"],
-  "Transient Fortitude": ["Derelict Vault"],
-  "Blind Rage": ["Derelict Vault"],
-  "Fleeting Expertise": ["Derelict Vault"],
-  "Continuity": ["Juno Glaxion Moa", "Narmer Glaxion Moa", "Elite Shield Lancer", "General Sargas Ruk", "Duviri/Endless: Tier 6 (Normal)"],
-  "Streamline": ["Arid Hellion", "Arid Lancer", "Coildrive", "Drekar Scorpion", "Frontier Hellion"],
-  "Intensify": ["The Hollow Vein", "The Anatomizer", "The Severed Warden", "The Unseeing Herald", "The Fragmented Suzerain"],
-  "Stretch": ["Primm", "Scrofa Shield Osprey", "Terra Attack Drone", "Terra Oxium Osprey", "Terra Shield Osprey"],
-  "Flow": ["Arid Butcher", "Bailiff Defector", "Bailiff", "Butcher", "Drahk Master"],
-  "Constitution": ["Nightmare Mode Rewards, Rotation C"],
-  "Augur Accord": ["Earth/Cetus (Level 20 - 40 Cetus Bounty), Rotation A", "Recon Commander"],
-  "Augur Reach": ["Earth/Cetus (Level 30 - 50 Cetus Bounty), Rotation A", "Recon Commander"],
-  "Augur Message": ["Earth/Cetus (Level 15 - 25 Plague Star), Rotation A", "Earth/Cetus (Level 30 - 50 Cetus Bounty), Rotation C", "Recon Commander"],
-  "Augur Secrets": ["Recon Commander", "Narmer Thumper Bull", "Narmer Thumper Doma", "Narmer Thumper", "Tusk Thumper Bull"],
-  "Augur Seeker": ["Recon Commander", "Narmer Thumper Bull", "Narmer Thumper Doma", "Narmer Thumper", "Tusk Thumper Bull"],
-  "Condition Overload": ["Basal Diploid Rex", "Basal Diploid", "Deimos Carnis", "Deimos Jugulus", "Deimos Leaping Thrasher"],
-  "Blood Rush": ["Duviri/Endless: Tier 1 (Normal)", "Duviri/Endless: Tier 3 (Normal)", "Deimos/Cambion Drift (Level 30 - 40 Cambion Drift Bounty), Rotation A", "Lua/Pavlov (Spy), Rotation A"],
-  "Weeping Wounds": ["Duviri/Endless: Tier 1 (Normal)", "Duviri/Endless: Tier 3 (Normal)", "Deimos/Cambion Drift (Level 15 - 25 Cambion Drift Bounty), Rotation A"],
-  "Gladiator Might": ["Earth/Cetus (Level 20 - 40 Cetus Bounty), Rotation B", "Aerial Commander"],
-  "Gladiator Vice": ["Aerial Commander", "Narmer Thumper Bull", "Narmer Thumper Doma", "Narmer Thumper", "Tusk Thumper Bull"],
-  "Gladiator Rush": ["Earth/Cetus (Level 30 - 50 Cetus Bounty), Rotation A", "Aerial Commander"],
-  "Gladiator Resolve": ["Earth/Cetus (Level 30 - 50 Cetus Bounty), Rotation B", "Aerial Commander"],
-  "Gladiator Aegis": ["Earth/Cetus (Level 20 - 40 Cetus Bounty), Rotation A", "Aerial Commander"],
-  "Gladiator Finesse": ["Aerial Commander", "Narmer Thumper Bull", "Narmer Thumper Doma", "Narmer Thumper", "Tusk Thumper Bull"],
-  "True Steel": ["Kuva Roller", "Latcher", "Roller Sentry", "Roller", "Tusk Roller"],
-  "Organ Shatter": ["Arcane Boiler", "Boiler", "Toxic Ancient", "Sprag", "Ven'Kra Tel"],
-  "Pressure Point": ["Ceres/Lex (Capture)", "Earth/Mantle (Capture)", "Eris/Cosis (Capture)", "Eris/Isos (Capture)", "Europa/Abaddon (Capture)"],
-  "Spoiled Strike": ["Derelict Vault"],
-  "Fury": ["Corrupted Ancient", "Orb Vallis - Enrichment Labs Enemies", "Orb Vallis - Spaceport Enemies", "Axio Elite Crewman", "Elite Crewman"],
-  "Reach": ["Primm", "Scrofa Shield Osprey", "Terra Attack Drone", "Terra Oxium Osprey", "Terra Shield Osprey"],
-  "Body Count": ["Deimos/Cambion Drift (Level 15 - 25 Cambion Drift Bounty), Rotation C", "Jupiter/The Ropalolyst (Assassination)"],
-  "Drifting Contact": ["Nightmare Mode Rewards, Rotation B"],
-  "Maiming Strike": ["Duviri/Endless: Tier 6 (Normal)", "Duviri/Endless: Tier 4 (Normal)", "Deimos/Cambion Drift (Level 15 - 25 Cambion Drift Bounty), Rotation B"],
-  "Berserker Fury": ["Corrupted Ancient", "Chroma", "Commandeered Ember Prime", "Commandeered Protea Prime", "Infested Mesa"],
-  "Blaze": ["Elite Vorac Weaver", "Elite Axio Weaver", "Vorac Weaver", "Nightmare Mode Rewards, Rotation A", "Axio Weaver"],
-  "Hellfire": ["Orb Vallis - Spaceport Enemies", "Juno Geminex Moa", "Kuva Roller", "Latcher", "Narmer Geminex Moa"],
-  "Stormbringer": ["Orb Vallis - Enrichment Labs Enemies", "Ballista", "Juno Dera Moa", "Kuva Ballista", "Narmer Ballista"],
-  "Infected Clip": ["Aurax Actinic", "Aurax Vertec", "Axio Detron Crewman", "Axio Elite Crewman", "Axio Numon"],
-  "Cryo Rounds": ["Orb Vallis - Enrichment Labs Enemies", "Orb Vallis - Spaceport Enemies", "Orb Vallis - Temple of Profit Enemies", "Derivator Crewman", "Axio Shockwave Moa"],
-  "Malignant Force": ["Corrupted Vor"],
-  "High Voltage": ["Eris/Candiru (Caches), Rotation C", "Eris/Lepis (Caches), Rotation C", "Eris/Naeglar (Caches), Rotation C", "Eris/Psoro (Caches), Rotation C", "Eris/Viver (Caches), Rotation C"],
-  "Rime Rounds": ["Ceres/Bode (Spy), Rotation C", "Europa/Valac (Spy), Rotation C", "Jupiter/Amalthea (Spy), Rotation C", "Saturn/Aegaeon (Spy), Rotation C", "Saturn/Dione (Spy), Rotation C"],
-  "Thermite Rounds": ["Thermic Raknoid", "Eris/Cyath (Spy), Rotation C", "Eris/Gnathos (Spy), Rotation C", "Neptune/Nereid (Spy), Rotation C", "Pluto/Oceanum (Spy), Rotation C"],
-  "Shocking Touch": ["Arid Eviscerator", "Arid Trooper", "Denial Bursa", "Drekar Eviscerator", "Drekar Trooper"],
-  "Volcanic Edge": ["Thermic Raknoid", "Ceres/Hapke (Spy), Rotation C", "Earth/Cambria (Spy), Rotation C", "Mars/Arval (Spy), Rotation C", "Mercury/Suisei (Spy), Rotation C"],
-  "Point Blank": ["Deimos Runner", "Orphid Husks", "Volatile Runner", "Duviri/Endless: Tier 1 (Normal)", "Duviri/Endless: Tier 3 (Normal)"],
-  "Chilling Grasp": ["Fog Comba", "Juno Malleus Machinist", "Nul Comba", "Sap Comba", "Scrofa Crewman"],
-  "Contagious Spread": ["Electric Crawler", "Narmer Scavenger Drone", "Scavenger Drone", "Duviri/Endless: Tier 1 (Normal)", "Duviri/Endless: Tier 3 (Normal)"],
-  "Charged Shell": ["Corpus Tech", "Corpus Warden", "Latrox Une", "Narmer Corpus Tech", "Narmer Crewman Warden"],
-  "Incendiary Coat": ["Thermic Raknoid", "Axio Nullifier Crewman", "Narmer Nullifier Crewman", "Narmer Sniper Crewman", "Nullifier Crewman"],
-  "Scattering Inferno": ["Thermic Raknoid", "Ceres/Bode (Spy), Rotation C", "Europa/Valac (Spy), Rotation C", "Jupiter/Amalthea (Spy), Rotation C", "Saturn/Aegaeon (Spy), Rotation C"],
-  "Hell's Chamber": ["Juno Elite Crewman", "Attack Drone", "Carabus", "Frontier Regulator", "Juno Oxium Osprey"],
-  "Shotgun Spazz": ["General Enemy Drop"],
-  "Seeking Force": ["Kuva Powerclaw", "Narmer Powerfist", "Powerfist", "Duviri/Endless: Tier 6 (Normal)", "Duviri/Endless: Tier 4 (Normal)"],
-  "Ravage": ["Axio Nullifier Crewman", "Narmer Nullifier Crewman", "Narmer Sniper Crewman", "Nullifier Crewman", "Orm Nullifier Crewman"],
-  "Vicious Spread": ["Derelict Vault"],
-  "Vicious Frost": ["Ceres/Hapke (Spy), Rotation C", "Earth/Cambria (Spy), Rotation C", "Mars/Arval (Spy), Rotation C", "Mercury/Suisei (Spy), Rotation C", "Phobos/Grildrig (Spy), Rotation C"],
-  "Virulent Scourge": ["Corrupted Vor"],
-  "Voltaic Strike": ["Baro Ki'Teer"],
-  "Shell Shock": ["Eris/Candiru (Caches), Rotation C", "Eris/Lepis (Caches), Rotation C", "Eris/Naeglar (Caches), Rotation C", "Eris/Psoro (Caches), Rotation C", "Eris/Viver (Caches), Rotation C"],
-  "Frostbite": ["Nokko: Corporate Restructuring Rewards, Rotation B", "Nokko: Critter Liberation Rewards, Rotation B", "Nokko: Weed The Gardens Rewards, Rotation B", "Eris/Cyath (Spy), Rotation C", "Eris/Gnathos (Spy), Rotation C"],
-  "Scorch": ["Thermic Raknoid", "Eris/Cyath (Spy), Rotation C", "Eris/Gnathos (Spy), Rotation C", "Neptune/Nereid (Spy), Rotation C", "Pluto/Oceanum (Spy), Rotation C"],
-  "Toxic Barrage": ["Corrupted Vor"],
-  "Pistol Pestilence": ["Corrupted Vor"],
-  "Convulsion": ["Primm", "Scrofa Shield Osprey", "Terra Attack Drone", "Terra Oxium Osprey", "Terra Shield Osprey"],
-  "Deep Freeze": ["Duviri/Endless: Tier 1 (Normal)", "Duviri/Endless: Tier 3 (Normal)", "Exploiter Orb", "Kuva Larvling", "Saturn Six Fugitive"],
-  "Jolt": ["Baro Ki'Teer"],
-  "Pathogen Rounds": ["Anti Moa", "Axio Disc Moa", "Orm Disc Moa", "Taro Disc Moa", "Vapos Anti Moa"],
-  "Pistol Gambit": ["Arid Eviscerator", "Arid Trooper", "Drekar Eviscerator", "Drekar Trooper", "Eviscerator"],
-  "Target Cracker": ["Kuva Powerclaw", "Narmer Powerfist", "Powerfist", "Juno Crewman", "Duviri/Endless: Tier 1 (Normal)"],
-  "Lethal Torrent": ["Nightmare Mode Rewards, Rotation C"],
-  "Barrel Diffusion": ["Arid Seeker", "Axio Engineer", "Axio Tech", "Drekar Seeker", "Frontier Seeker"],
-  "Hornet Strike": ["Arcane Boiler", "Boiler", "Toxic Ancient", "Duviri/Endless: Tier 1 (Normal)", "Duviri/Endless: Tier 3 (Normal)"],
-  "Anemic Agility": ["Derelict Vault"],
-  "Hollow Point": ["Derelict Vault"],
-  "Slip Magazine": ["Arcane Boiler", "Boiler", "Toxic Ancient", "Arid Heavy Gunner", "Corrupted Warden"],
-  "Sure Shot": ["Electric Crawler", "Kuva Scorch", "Narmer Scorch", "Scorch", "Ghoul Auger"],
-  "Stunning Speed": ["Nightmare Mode Rewards, Rotation A"],
-  "Killing Blow": ["Arid Seeker", "Drekar Seeker", "Frontier Seeker", "Grineer Manic", "Kuva Seeker"],
-  "Collision Force": ["Eidolon Teralyst"],
-  "Accelerated Blast": ["Nightmare Mode Rewards, Rotation A"],
-  "Seeking Fury": ["Nightmare Mode Rewards, Rotation B"],
-  "Full Moon": ["Orokin Vault (Deimos)"],
-  "Power Throw": ["Corrupted Butcher", "Corrupted Lancer", "Duviri/Endless: Tier 1 (Normal)", "Duviri/Endless: Tier 3 (Normal)", "Eris/Cyath (Spy), Rotation C"],
-  "Volatile Rebound": ["Deimos Carnis", "Deimos Jugulus", "Deimos Leaping Thrasher", "Deimos Saxum", "Leaping Thrasher"],
-  "Entropy Flight": ["Cephalon Suda, Wise"],
-  "Energy Conversion": ["Cephalon Simaris, Energy Conversion
-"],
-  "Umbral Intensify": ["Cephalon Simaris, Complete The Sacrifice"],
-  "Umbral Vitality": ["Cephalon Simaris, Complete The Sacrifice"],
-  "Umbral Fiber": ["Cephalon Simaris, Complete The Sacrifice"],
-  "Adaptation": ["Arbitrations, Rotation A", "Arbitrations, Rotation B"],
+  "Hunter Munitions": ["Simaris Synthesis rewards"],
+  "Condition Overload": ["Deimos Bounties · Thrax enemies (Rare drop)"],
+  "Blood Rush": ["Orokin Vaults (Derelict)"],
+  "Weeping Wounds": ["Orokin Vaults (Derelict)"],
+  "Maiming Strike": ["Orokin Vaults (Derelict)"],
+  "Adaptation": ["Arbitrations"],
   "Rolling Guard": ["Arbitrations"],
-  "Brief Respite": ["Orphid Specter"],
-  "Rage": ["Kuva Napalm", "Napalm", "Narmer Napalm", "Tusk Napalm", "Chroma"],
-  "Quick Thinking": ["Corrupted Ancient", "Duviri/Endless: Tier 6 (Normal)", "Duviri/Endless: Tier 4 (Normal)"],
-  "Redirection": ["Corrupted Drahk", "Drahk", "Kubrow", "Kuva Drahk", "Tamm"],
-  "Vitality": ["Corrupted Drahk", "Drahk", "Kubrow", "Kuva Drahk", "Tamm"],
-  "Steel Fiber": ["Nox", "Crawler", "Necramech (Tier 1)", "Ceres/Draco (Survival), Rotation B", "Eris/Hymeno (Survival), Rotation B"],
-  "Armored Agility": ["Nightmare Mode Rewards, Rotation B"],
-  "Rush": ["Techrot Volatile Galliflex", "Techrot Galliflex", "Fusion Moa", "Vapos Fusion Moa", "Exo Eviscerator"],
-  "Handspring": ["Corpus Tech", "Corpus Warden", "Latrox Une", "Narmer Corpus Tech", "Narmer Crewman Warden"],
-  "Preparation": ["Nightmare Mode"],
-  "Cunning Drift": ["Lua Puzzle Rooms"],
-  "Enduring Drift": ["Lua Puzzle Rooms"],
-  "Power Drift": ["Lua Puzzle Rooms"],
-  "Speed Drift": ["Lua Puzzle Rooms"],
-  "Stealth Drift": ["Lua Puzzle Rooms"],
-  "Undying Will": ["Darek Draga", "Dargyn Pilot", "Draga", "Elite Arid Lancer", "Elite Frontier Lancer"],
-  "Warm Coat": ["Arcane Boiler", "Boiler", "Toxic Ancient", "Bombard", "Kuva Bombard"],
-  "Antitoxin": ["Fusion Moa", "Vapos Fusion Moa", "Duviri/Endless: Tier 1 (Normal)", "Duviri/Endless: Tier 3 (Normal)"],
-  "Steel Charge": ["Duviri/Endless: Tier 1 (Normal)", "Duviri/Endless: Tier 3 (Normal)"],
-  "Corrosive Projection": ["Duviri/Endless: Tier 1 (Normal)", "Duviri/Endless: Tier 3 (Normal)"],
-  "Energy Siphon": ["Duviri/Endless: Tier 1 (Normal)", "Duviri/Endless: Tier 3 (Normal)"],
-  "Sprint Boost": ["Duviri/Endless: Tier 1 (Normal)", "Duviri/Endless: Tier 3 (Normal)"],
-  "Rejuvenation": ["Duviri/Endless: Tier 1 (Normal)", "Duviri/Endless: Tier 3 (Normal)"],
-  "Physique": ["Duviri/Endless: Tier 1 (Normal)", "Duviri/Endless: Tier 3 (Normal)"],
-  "Rifle Amp": ["Duviri/Endless: Tier 1 (Normal)", "Duviri/Endless: Tier 3 (Normal)"],
-  "Pistol Amp": ["Duviri/Endless: Tier 1 (Normal)", "Duviri/Endless: Tier 3 (Normal)", "Knave Specter"],
-  "Shotgun Amp": ["Duviri/Endless: Tier 1 (Normal)", "Duviri/Endless: Tier 3 (Normal)", "Feyarch Specter"],
-  "Dead Eye": ["Nightwave Cred Offerings"],
-  "Growing Power": ["Knave Specter"],
-  "Infested Impedance": ["Duviri/Endless: Tier 1 (Normal)", "Duviri/Endless: Tier 3 (Normal)"],
-  "Loot Detector": ["Duviri/Endless: Tier 1 (Normal)", "Duviri/Endless: Tier 3 (Normal)"],
-  "Enemy Radar": ["Duviri/Endless: Tier 1 (Normal)", "Duviri/Endless: Tier 3 (Normal)"],
-  "Enemy Sense": ["Flameblade", "Kuva Flameblade", "Narmer Flameblade", "Tusk Flameblade", "Tusk Predator"],
-  "Master Thief": ["Kuva Scorpion", "Narmer Scorpion", "Scorpion", "Kuva Lich Agor Rok (Level 80 - 100)", "Cinderthresh Hyena"],
-  "Shield Disruption": ["Nightwave Cred Offerings"],
-  "Stand United": ["Orphid Specter"],
-  "Toxic Resistance": ["Nightmare Mode"],
+  "Amalgam Serration": ["Gas City (Jupiter) enemies"],
+  "Amalgam Barrel Diffusion": ["Gas City (Jupiter) enemies"],
+  "Amalgam Organ Shatter": ["Gas City (Jupiter) enemies"],
   "Arcane Energize": ["Eidolon Teralyst (Rare) · Plains of Eidolon"],
   "Arcane Guardian": ["Eidolon Teralyst (Uncommon) · Plains of Eidolon"],
   "Arcane Grace": ["Eidolon Gantulyst (Rare) · Plains of Eidolon"],
@@ -902,439 +955,488 @@ const DROPS = {
 // RELIC DROP LOCATIONS — relic tier + common farm missions
 // Format: "Item Name": "Relic(s) — best farm location"
 // ─────────────────────────────────────────────────────────────────────────────
-const HIGH_VALUE = new Set(["Alternox Prime", "Alternox Prime Blueprint", "Alternox Prime Stock", "Amalgam Serration", "Arcane Avenger", "Arcane Barrier", "Arcane Energize", "Arcane Grace", "Arcane Guardian", "Arcane Healing", "Arcane Velocity", "Blind Rage", "Blood Rush", "Caliban Prime Neuroptics", "Caliban Prime Neuroptics Blueprint", "Caliban Prime Systems", "Caliban Prime Systems Blueprint", "Cedo Prime", "Cedo Prime Blueprint", "Cernos Prime Lower Limb", "Condition Overload", "Daikyu Prime Grip", "Dual Zoren Prime Blade", "Epitaph Prime Receiver", "Exilus Weapon Adapter", "Exilus Weapon Adapter Blueprint", "Fleeting Expertise", "Galvanized Aptitude", "Galvanized Chamber", "Galvanized Crosshairs", "Galvanized Diffusion", "Galvanized Hell", "Galvanized Savvy", "Galvanized Scope", "Galvanized Shot", "Gyre Prime Neuroptics", "Gyre Prime Neuroptics Blueprint", "Hunter Munitions", "Kestrel Prime Grip", "Kompressa Prime Barrel", "Lavos Prime Systems", "Lavos Prime Systems Blueprint", "Magus Elevate", "Magus Overload", "Maiming Strike", "Narrow Minded", "Nautilus Prime", "Nautilus Prime Blueprint", "Nautilus Prime Cerebrum", "Nyx Prime Neuroptics", "Nyx Prime Neuroptics Blueprint", "Okina Prime", "Okina Prime Blueprint", "Overextended", "Primed Continuity", "Primed Fever Strike", "Primed Flow", "Primed Fury", "Primed Magazine Warp", "Primed Pressure Point", "Primed Ravage", "Primed Reach", "Primed Shred", "Primed Sure Footed", "Primed Vigor", "Protea Prime Chassis", "Protea Prime Chassis Blueprint", "Protea Prime Systems", "Protea Prime Systems Blueprint", "Quassus Prime Blade", "Rolling Guard", "Scindo Prime Blade", "Sevagoth Prime Chassis", "Sevagoth Prime Chassis Blueprint", "Transient Fortitude", "Trumna Prime Barrel", "Trumna Prime Receiver", "Vadarya Prime", "Vadarya Prime Blueprint", "Valkyr Prime Chassis", "Valkyr Prime Chassis Blueprint", "Velox Prime Barrel", "Venato Prime Blade", "Venka Prime Gauntlet", "Virtuos Strike", "Virtuos Tempo", "Xaku Prime", "Xaku Prime Blueprint", "Yareli Prime Neuroptics", "Yareli Prime Neuroptics Blueprint", "Yareli Prime Systems", "Yareli Prime Systems Blueprint"]);
 const DROP_LOCATIONS = {
-  "Akbolto Prime Barrel": "Lith A3 🔵 / Lith C2 🔵 [VAULTED]",
-  "Akbolto Prime Blueprint": "Axi G2 🔵 / Axi H5 🔵 [VAULTED]",
-  "Akbolto Prime Link": "Axi H4 🔵 / Lith S7 🔵 [VAULTED]",
-  "Akbolto Prime Receiver": "Axi A12 🟡 / Axi A3 🟡 [VAULTED]",
-  "Akbronco Prime Blueprint": "Meso P17 🔵",
-  "Akbronco Prime Link": "Neo O3 🔵",
-  "Akbronco Prime Receiver": "See wiki.warframe.com",
-  "Akjagara Prime Blueprint": "Axi B4 🔵 / Axi M3 🔵 [VAULTED]",
-  "Akjagara Prime Barrel": "Lith A3 🟡 / Meso A1 🟡 [VAULTED]",
-  "Akjagara Prime Receiver": "Axi L3 🔵 / Lith M6 🔵 [VAULTED]",
-  "Aklex Prime Blueprint": "Axi A2 🔵 / Neo O1 🔵 [VAULTED]",
-  "Aklex Prime Barrel": "See wiki.warframe.com",
-  "Aklex Prime Receiver": "See wiki.warframe.com",
-  "Aksomati Prime Blueprint": "Axi B4 🔵 / Axi G6 🔵 [VAULTED]",
-  "Aksomati Prime Barrel": "Lith B7 🔵 / Meso D6 🔵 [VAULTED]",
-  "Aksomati Prime Receiver": "Axi D2 🔵 / Axi G4 🔵 [VAULTED]",
-  "Akstiletto Prime Blueprint": "Lith A1 🟡 / Lith A2 🟡 [VAULTED]",
-  "Akstiletto Prime Link": "Axi N1 🔵 / Lith V7 🔵 [VAULTED]",
-  "Akstiletto Prime Receiver": "Axi A7 🔵 / Axi H1 🔵 [VAULTED]",
-  "Alternox Prime Blueprint": "Axi A20 🟡",
-  "Alternox Prime Barrel": "Lith N18 🔵",
-  "Alternox Prime Receiver": "Neo P9 🔵",
-  "Alternox Prime Stock": "Meso A9 🟡",
-  "Anku Prime Blueprint": "See wiki.warframe.com",
-  "Anku Prime Blade": "See wiki.warframe.com",
-  "Anku Prime Handle": "See wiki.warframe.com",
-  "Ankyros Prime Blueprint": "Lith B1 🔵 / Lith B4 🔵 [VAULTED]",
-  "Ankyros Prime Gauntlet": "Meso M1 🔵 / Meso S14 🔵 [VAULTED]",
-  "Ankyros Prime Band": "See wiki.warframe.com",
-  "Ash Prime Blueprint": "Axi I3 🔵 / Lith S3 🔵 [VAULTED]",
-  "Ash Prime Chassis": "Axi B1 🔵 / Axi K12 🔵 [VAULTED]",
-  "Ash Prime Neuroptics": "Axi N2 🔵 / Meso N2 🔵 [VAULTED]",
-  "Ash Prime Systems": "Axi A7 🟡 / Axi N1 🟡 [VAULTED]",
-  "Atlas Prime Blueprint": "Lith D1 🔵 / Lith K6 🔵 [VAULTED]",
-  "Atlas Prime Chassis Blueprint": "Axi B3 🔵 / Lith B8 🔵 [VAULTED]",
-  "Atlas Prime Neuroptics Blueprint": "Axi A11 🟡 / Axi A6 🟡 [VAULTED]",
-  "Atlas Prime Systems Blueprint": "Axi F1 🔵 / Lith N4 🔵 [VAULTED]",
-  "Ballistica Prime Blueprint": "Lith B2 🟡 / Lith B3 🟡 [VAULTED]",
-  "Ballistica Prime Lower Limb": "Axi K5 🔵 / Axi V6 🔵 [VAULTED]",
-  "Ballistica Prime Receiver": "Lith P2 🔵 / Lith R1 🔵 [VAULTED]",
-  "Ballistica Prime String": "Axi A4 🔵 / Meso G1 🔵 [VAULTED]",
-  "Ballistica Prime Upper Limb": "Axi M3 🔵 / Lith T1 🔵 [VAULTED]",
-  "Banshee Prime Blueprint": "Axi A12 🔵 / Axi C3 🔵 [VAULTED]",
-  "Banshee Prime Chassis": "Meso B2 🟡 / Neo B1 🟡 [VAULTED]",
-  "Banshee Prime Neuroptics": "Axi H5 🔵 / Lith B5 🔵 [VAULTED]",
-  "Banshee Prime Systems": "Axi B1 🟡 / Axi B2 🟡 [VAULTED]",
-  "Bo Prime Blueprint": "Lith G2 🔵 / Lith O2 🔵 [VAULTED]",
-  "Bo Prime Handle": "Neo F1 🔵 / Neo V8 🔵 [VAULTED]",
-  "Bo Prime Ornament": "Axi L4 🔵 / Meso E1 🔵 [VAULTED]",
-  "Bo Prime Strike": "See wiki.warframe.com",
-  "Boar Prime Blueprint": "Meso F4 🔵 / Neo B3 🔵 [VAULTED]",
-  "Boar Prime Barrel": "Axi D4 🔵 / Axi V2 🔵 [VAULTED]",
-  "Boar Prime Receiver": "Axi R1 🔵 / Axi S4 🔵 [VAULTED]",
-  "Boar Prime Stock": "Lith B1 🟡 / Meso B1 🟡 [VAULTED]",
-  "Boltor Prime Blueprint": "Lith B4 🟡 / Meso B10 🟡 [VAULTED]",
-  "Boltor Prime Barrel": "Lith E1 🔵 / Meso M1 🔵 [VAULTED]",
-  "Boltor Prime Receiver": "Lith B1 🔵 / Neo G6 🔵 [VAULTED]",
-  "Boltor Prime Stock": "Axi R1 🔵 / Axi R4 🔵 [VAULTED]",
-  "Braton Prime Blueprint": "Meso V11 🔵 / Meso V13 🔵",
-  "Braton Prime Barrel": "Neo C7 🔵",
-  "Braton Prime Receiver": "Meso X1 🔵",
-  "Braton Prime Stock": "Lith K12 🔵 / Lith N18 🔵",
-  "Bronco Prime Blueprint": "Lith N18 🔵",
-  "Bronco Prime Barrel": "Meso V12 🔵 / Neo C6 🔵",
-  "Bronco Prime Receiver": "Lith L7 🔵 / Meso V13 🔵",
-  "Burston Prime Blueprint": "Neo K9 🔵",
-  "Burston Prime Barrel": "Meso V13 🔵",
-  "Burston Prime Receiver": "Meso A9 🔵",
-  "Burston Prime Stock": "Axi T13 🔵 / Lith Q2 🔵",
-  "Caliban Prime Blueprint": "Meso V11 🔵 / Meso V13 🔵",
-  "Caliban Prime Chassis Blueprint": "Lith K12 🔵 / Meso Y1 🔵",
-  "Caliban Prime Neuroptics Blueprint": "Neo C7 🟡",
-  "Caliban Prime Systems Blueprint": "Axi C10 🟡",
-  "Carrier Prime Blueprint": "Lith V7 🔵 / Meso P12 🔵 [VAULTED]",
-  "Carrier Prime Carapace": "Axi N2 🔵 / Lith S5 🔵 [VAULTED]",
-  "Carrier Prime Cerebrum": "Lith C1 🟡 / Meso C1 🟡 [VAULTED]",
-  "Carrier Prime Systems": "Axi A7 🔵 / Axi K12 🔵 [VAULTED]",
-  "Cernos Prime Blueprint": "Neo V9 🔵",
-  "Cernos Prime Grip": "Axi S8 🔵",
-  "Cernos Prime Lower Limb": "Lith C7 🟡",
-  "Cernos Prime String": "Axi V10 🔵",
-  "Cernos Prime Upper Limb": "Meso N11 🔵",
-  "Chroma Prime Blueprint": "Axi A6 🔵 / Axi D1 🔵 [VAULTED]",
-  "Chroma Prime Chassis Blueprint": "Axi R2 🔵 / Meso C5 🔵 [VAULTED]",
-  "Chroma Prime Neuroptics Blueprint": "Lith C3 🟡 / Lith C4 🟡 [VAULTED]",
-  "Chroma Prime Systems Blueprint": "Axi C3 🟡 / Axi C4 🟡 [VAULTED]",
-  "Corinth Prime Blueprint": "Axi T4 🔵 / Lith A4 🔵 [VAULTED]",
-  "Corinth Prime Barrel": "Axi C5 🟡 / Axi C6 🟡 [VAULTED]",
-  "Corinth Prime Receiver": "Axi P4 🔵 / Axi T7 🔵 [VAULTED]",
-  "Corinth Prime Stock": "Axi C8 🟡 / Lith C6 🟡 [VAULTED]",
-  "Daikyu Prime Blueprint": "Lith E2 🔵 / Lith Q2 🔵",
-  "Daikyu Prime Grip": "Lith D7 🟡",
-  "Daikyu Prime Lower Limb": "Axi C10 🔵 / Meso A9 🔵",
-  "Daikyu Prime String": "Axi A20 🔵",
-  "Daikyu Prime Upper Limb": "Neo C7 🔵",
-  "Dakra Prime Blueprint": "Axi R1 🔵 / Lith M1 🔵 [VAULTED]",
-  "Dakra Prime Blade": "Axi D4 🟡 / Axi S4 🔵 [VAULTED]",
-  "Dakra Prime Handle": "Lith M2 🔵 / Lith M8 🔵 [VAULTED]",
-  "Destreza Prime Blueprint": "Axi D3 🔵 / Axi K4 🔵 [VAULTED]",
-  "Destreza Prime Blade": "Axi D1 🟡 / Axi D2 🟡 [VAULTED]",
-  "Destreza Prime Handle": "Axi D2 🔵 / Axi M4 🔵 [VAULTED]",
-  "Dethcube Prime Blueprint": "Lith D1 🟡 / Lith D3 🟡 [VAULTED]",
-  "Dethcube Prime Carapace": "Axi N7 🔵 / Lith M6 🔵 [VAULTED]",
-  "Dethcube Prime Cerebrum": "Lith D2 🟡 / Meso D4 🟡 [VAULTED]",
-  "Dethcube Prime Systems": "Axi I1 🔵 / Axi P2 🔵 [VAULTED]",
-  "Ember Prime Blueprint": "Axi E1 🟡 / Lith E1 🟡 [VAULTED]",
-  "Ember Prime Chassis": "Meso B10 🔵 / Meso F2 🔵 [VAULTED]",
-  "Ember Prime Neuroptics": "Meso F3 🔵 / Meso S14 🔵 [VAULTED]",
-  "Ember Prime Systems": "Axi R4 🔵 / Axi S2 🔵 [VAULTED]",
-  "Epitaph Prime Blueprint": "Axi C10 🔵 / Lith D7 🔵",
-  "Epitaph Prime Barrel": "Axi P8 🔵 / Lith Q2 🔵 / Neo P9 🔵",
-  "Epitaph Prime Receiver": "Lith E2 🟡",
-  "Epitaph Prime Stock": "See wiki.warframe.com",
-  "Equinox Prime Blueprint": "Axi K5 🔵 / Axi T3 🔵 [VAULTED]",
-  "Equinox Prime Chassis Blueprint": "Axi A8 🔵 / Axi P1 🔵 [VAULTED]",
-  "Equinox Prime Neuroptics Blueprint": "Axi T9 🔵 / Lith L1 🔵 [VAULTED]",
-  "Equinox Prime Systems Blueprint": "Meso E2 🟡 / Meso E3 🟡 [VAULTED]",
-  "Fang Prime Blueprint": "Axi P8 🔵 / Axi Y1 🔵 / Neo P9 🔵",
-  "Fang Prime Blade": "Meso P17 🔵 / Meso V11 🔵",
-  "Fang Prime Handle": "Lith G14 🔵",
-  "Frost Prime Blueprint": "Meso F2 🟡 / Meso F3 🟡 [VAULTED]",
-  "Frost Prime Chassis": "Lith G1 🔵 / Meso E1 🔵 [VAULTED]",
-  "Frost Prime Neuroptics": "Axi D4 🔵 / Axi E1 🔵 [VAULTED]",
-  "Frost Prime Systems": "Lith G2 🔵 / Lith M8 🔵 [VAULTED]",
-  "Furis Prime Blueprint": "See wiki.warframe.com",
-  "Furis Prime Barrel": "See wiki.warframe.com",
-  "Furis Prime Receiver": "See wiki.warframe.com",
-  "Galatine Prime Blueprint": "Axi G1 🟡 / Meso G1 🟡 [VAULTED]",
-  "Galatine Prime Blade": "Axi N4 🔵 / Axi O2 🔵 [VAULTED]",
-  "Galatine Prime Handle": "Axi K2 🔵 / Axi O1 🔵 [VAULTED]",
-  "Galatine Prime Guard": "See wiki.warframe.com",
-  "Harrow Prime Blueprint": "Axi K6 🔵 / Lith B11 🔵 [VAULTED]",
-  "Harrow Prime Chassis Blueprint": "Axi N10 🔵 / Axi S15 🔵 [VAULTED]",
-  "Harrow Prime Neuroptics Blueprint": "Axi A16 🔵 / Axi S12 🔵 [VAULTED]",
-  "Harrow Prime Systems Blueprint": "Axi H7 🟡 / Lith H10 🟡 [VAULTED]",
-  "Helios Prime Blueprint": "Lith C3 🔵 / Lith N2 🔵 [VAULTED]",
-  "Helios Prime Carapace": "Axi A3 🔵 / Axi C3 🔵 [VAULTED]",
-  "Helios Prime Cerebrum": "Axi H1 🟡 / Axi H2 🟡 [VAULTED]",
-  "Helios Prime Systems": "Axi A12 🔵 / Axi N5 🔵 [VAULTED]",
-  "Hikou Prime Blueprint": "Axi S8 🔵",
-  "Hikou Prime Pouch": "Lith C7 🔵",
-  "Hikou Prime Stars": "Axi V10 🔵",
-  "Hydroid Prime Blueprint": "Axi K5 🔵 / Meso B2 🔵 [VAULTED]",
-  "Hydroid Prime Chassis": "Axi C3 🔵 / Axi C4 🔵 [VAULTED]",
-  "Hydroid Prime Neuroptics Blueprint": "Axi A3 🔵 / Axi M3 🔵 [VAULTED]",
-  "Hydroid Prime Systems": "Axi H3 🟡 / Axi H4 🟡 [VAULTED]",
-  "Inaros Prime Blueprint": "Axi K12 🔵 / Axi W1 🔵 [VAULTED]",
-  "Inaros Prime Chassis Blueprint": "Axi K6 🔵 / Axi O5 🔵 [VAULTED]",
-  "Inaros Prime Neuroptics Blueprint": "Axi I1 🟡 / Axi I2 🟡 [VAULTED]",
-  "Inaros Prime Systems Blueprint": "Axi A13 🔵 / Axi G7 🔵 [VAULTED]",
-  "Ivara Prime Blueprint": "Axi B4 🔵 / Axi S13 🔵 [VAULTED]",
-  "Ivara Prime Chassis Blueprint": "Lith I1 🟡 / Neo I1 🟡 [VAULTED]",
-  "Ivara Prime Neuroptics Blueprint": "Lith D3 🔵 / Meso B5 🔵 [VAULTED]",
-  "Ivara Prime Systems Blueprint": "Axi A15 🔵 / Axi A9 🔵 [VAULTED]",
-  "Kavasa Prime Blueprint": "See wiki.warframe.com",
-  "Kavasa Prime Buckle": "Axi B1 🔵 / Axi K1 🟡 [VAULTED]",
-  "Kavasa Prime Band": "Lith C1 🔵 / Lith L3 🔵 [VAULTED]",
-  "Kogake Prime Blueprint": "Axi C4 🔵 / Axi K4 🔵 [VAULTED]",
-  "Kogake Prime Boot": "Axi A12 🔵 / Axi A3 🔵 [VAULTED]",
-  "Kogake Prime Gauntlet": "Lith K2 🟡 / Lith K5 🟡 [VAULTED]",
-  "Kronen Prime Blueprint": "Axi H3 🔵 / Axi L3 🔵 [VAULTED]",
-  "Kronen Prime Blade": "Axi K2 🟡 / Axi K3 🟡 [VAULTED]",
-  "Kronen Prime Handle": "Axi G3 🔵 / Axi L5 🔵 [VAULTED]",
-  "Latron Prime Blueprint": "Axi L1 🔵 / Lith G1 🔵 [VAULTED]",
-  "Latron Prime Barrel": "Axi D4 🔵 / Axi E1 🔵 [VAULTED]",
-  "Latron Prime Receiver": "Axi S2 🔵 / Neo B8 🔵 [VAULTED]",
-  "Latron Prime Stock": "Lith G2 🔵 / Meso F2 🔵 [VAULTED]",
-  "Lato Prime Blueprint": "See wiki.warframe.com",
-  "Lato Prime Barrel": "See wiki.warframe.com",
-  "Lato Prime Receiver": "See wiki.warframe.com",
-  "Limbo Prime Blueprint": "Meso T3 🔵 / Meso Z1 🔵 [VAULTED]",
-  "Limbo Prime Chassis": "Axi L3 🟡 / Axi L5 🟡 [VAULTED]",
-  "Limbo Prime Neuroptics Blueprint": "Axi L2 🟡 / Axi M4 🔵 [VAULTED]",
-  "Limbo Prime Systems": "Axi D3 🔵 / Axi T3 🔵 [VAULTED]",
-  "Limbo Prime Systems Blueprint": "Axi D3 🔵 / Axi T3 🔵 [VAULTED]",
-  "Loki Prime Blueprint": "Axi S2 🔵 / Meso F3 🔵 [VAULTED]",
-  "Loki Prime Chassis": "Lith G2 🔵 / Lith O2 🔵 [VAULTED]",
-  "Loki Prime Neuroptics": "Meso O3 🔵 / Neo E1 🔵 [VAULTED]",
-  "Loki Prime Systems": "Axi L1 🟡 / Axi L4 🟡 [VAULTED]",
-  "Mag Prime Blueprint": "Lith M1 🟡 / Lith M2 🟡 [VAULTED]",
-  "Mag Prime Chassis": "Meso B1 🔵 / Meso B3 🔵 [VAULTED]",
-  "Mag Prime Neuroptics": "Axi D4 🔵 / Axi V2 🔵 [VAULTED]",
-  "Mag Prime Systems": "Axi R1 🔵 / Axi S4 🔵 [VAULTED]",
-  "Magnus Prime Blueprint": "Axi C7 🔵 / Axi K10 🔵 [VAULTED]",
-  "Magnus Prime Barrel": "Axi M2 🟡 / Axi M5 🟡 [VAULTED]",
-  "Magnus Prime Receiver": "Axi M5 🔵 / Axi T8 🔵 [VAULTED]",
-  "Mesa Prime Blueprint": "Lith C6 🔵 / Lith D1 🔵 [VAULTED]",
-  "Mesa Prime Chassis Blueprint": "Axi H4 🔵 / Axi M1 🔵 [VAULTED]",
-  "Mesa Prime Neuroptics Blueprint": "Axi M3 🟡 / Axi M4 🟡 [VAULTED]",
-  "Mesa Prime Systems Blueprint": "Lith D5 🔵 / Lith M6 🟡 [VAULTED]",
-  "Mirage Prime Blueprint": "Axi M1 🟡 / Lith M7 🟡 [VAULTED]",
-  "Mirage Prime Chassis": "Axi A12 🔵 / Axi H4 🔵 [VAULTED]",
-  "Mirage Prime Neuroptics": "Axi T2 🔵 / Lith W1 🔵 [VAULTED]",
-  "Mirage Prime Systems": "Axi H5 🔵 / Axi R2 🔵 [VAULTED]",
-  "Nami Skyla Prime Blueprint": "Axi L2 🔵 / Axi L3 🔵 [VAULTED]",
-  "Nami Skyla Prime Blade": "Axi N5 🟡 / Lith N9 🟡 [VAULTED]",
-  "Nami Skyla Prime Hilt": "See wiki.warframe.com",
-  "Nekros Prime Blueprint": "Axi N3 🟡 / Lith H10 🔵 [VAULTED]",
-  "Nekros Prime Chassis": "Axi G1 🔵 / Axi N4 🔵 [VAULTED]",
-  "Nekros Prime Neuroptics": "Axi N5 🔵 / Lith K11 🔵 [VAULTED]",
-  "Nekros Prime Systems": "Lith N2 🟡 / Meso N16 🟡 [VAULTED]",
-  "Nidus Prime Blueprint": "Axi A14 🔵 / Lith K10 🔵 [VAULTED]",
-  "Nidus Prime Chassis Blueprint": "Axi N12 🟡 / Lith N12 🟡 [VAULTED]",
-  "Nidus Prime Neuroptics Blueprint": "Axi N10 🟡 / Axi N9 🟡 [VAULTED]",
-  "Nidus Prime Systems Blueprint": "Meso A3 🔵 / Meso B5 🔵 [VAULTED]",
-  "Nikana Prime Blueprint": "Axi A1 🟡 / Axi N12 🔵 [VAULTED]",
-  "Nikana Prime Blade": "Axi S5 🔵 / Meso N4 🟡 [VAULTED]",
-  "Nikana Prime Hilt": "Axi N2 🟡 / Axi N4 🟡 [VAULTED]",
-  "Ninkondi Prime Blueprint": "Axi G3 🔵 / Axi T9 🔵 [VAULTED]",
-  "Ninkondi Prime Chain": "Axi P1 🔵 / Lith D1 🔵 [VAULTED]",
-  "Ninkondi Prime Handle": "Lith N13 🟡 / Lith N4 🟡 [VAULTED]",
-  "Nova Prime Blueprint": "Axi S4 🔵 / Meso D5 🔵 [VAULTED]",
-  "Nova Prime Chassis": "Lith N1 🟡 / Neo N12 🟡 [VAULTED]",
-  "Nova Prime Neuroptics": "Lith C1 🔵 / Lith K4 🔵 [VAULTED]",
-  "Nova Prime Systems": "Axi S7 🔵 / Lith C1 🔵 [VAULTED]",
-  "Nyx Prime Blueprint": "Neo V9 🔵",
-  "Nyx Prime Chassis": "Axi S8 🔵",
-  "Nyx Prime Neuroptics": "Meso N11 🟡",
-  "Nyx Prime Systems": "Lith C7 🔵",
-  "Oberon Prime Blueprint": "Lith H2 🔵 / Lith M3 🔵 [VAULTED]",
-  "Oberon Prime Chassis": "Axi H2 🔵 / Axi N5 🔵 [VAULTED]",
-  "Oberon Prime Neuroptics": "Lith O1 🟡 / Meso O1 🟡 [VAULTED]",
-  "Oberon Prime Systems": "Axi A15 🔵 / Axi O1 🟡 [VAULTED]",
-  "Orthos Prime Blueprint": "Neo D9 🔵",
-  "Orthos Prime Blade": "Neo P9 🔵",
-  "Orthos Prime Handle": "Meso V14 🔵",
-  "Pangolin Prime Blueprint": "Axi P4 🟡 / Lith P5 🟡 [VAULTED]",
-  "Pangolin Prime Blade": "Axi A11 🔵 / Axi A13 🔵 [VAULTED]",
-  "Pangolin Prime Handle": "Axi C6 🔵 / Axi I1 🔵 [VAULTED]",
-  "Panthera Prime Blueprint": "Axi C5 🔵 / Axi I1 🔵 [VAULTED]",
-  "Panthera Prime Barrel": "Lith P3 🟡 / Lith P4 🟡 [VAULTED]",
-  "Panthera Prime Receiver": "Meso P2 🟡 / Meso P5 🟡 [VAULTED]",
-  "Panthera Prime Stock": "Axi M2 🔵 / Axi S10 🔵 [VAULTED]",
-  "Paris Prime Blueprint": "Neo C6 🔵",
-  "Paris Prime Lower Limb": "Lith G14 🔵",
-  "Paris Prime String": "Axi S18 🔵 / Neo D9 🔵 / Neo P9 🔵",
-  "Paris Prime Upper Limb": "Axi Y1 🔵 / Neo O3 🔵",
-  "Phantasma Prime Blueprint": "Axi N10 🔵 / Axi N9 🔵 [VAULTED]",
-  "Phantasma Prime Barrel": "Lith P8 🟡 / Meso P10 🟡 [VAULTED]",
-  "Phantasma Prime Receiver": "Lith B10 🔵 / Lith T10 🔵 [VAULTED]",
-  "Phantasma Prime Stock": "Axi C9 🔵 / Axi P6 🟡 [VAULTED]",
-  "Pyrana Prime Blueprint": "Axi P1 🟡 / Axi P2 🟡 [VAULTED]",
-  "Pyrana Prime Barrel": "Axi A8 🔵 / Axi C4 🔵 [VAULTED]",
-  "Pyrana Prime Receiver": "Axi C3 🔵 / Axi D3 🔵 [VAULTED]",
-  "Redeemer Prime Blueprint": "Axi G2 🔵 / Axi M4 🔵 [VAULTED]",
-  "Redeemer Prime Barrel": "See wiki.warframe.com",
-  "Redeemer Prime Blade": "Lith D5 🔵 / Lith L2 🔵 [VAULTED]",
-  "Redeemer Prime Receiver": "See wiki.warframe.com",
-  "Revenant Prime Blueprint": "Lith R2 🟡 / Lith R3 🟡 [VAULTED]",
-  "Revenant Prime Chassis Blueprint": "Axi C9 🔵 / Axi F2 🔵 [VAULTED]",
-  "Revenant Prime Neuroptics Blueprint": "Axi D5 🔵 / Lith S14 🔵 [VAULTED]",
-  "Revenant Prime Systems Blueprint": "Axi A16 🔵 / Axi B8 🔵 [VAULTED]",
-  "Rhino Prime Blueprint": "Axi R1 🟡 / Axi R4 🟡 [VAULTED]",
-  "Rhino Prime Chassis": "Lith E1 🔵 / Meso M1 🔵 [VAULTED]",
-  "Rhino Prime Neuroptics": "Lith B1 🔵 / Lith B4 🔵 [VAULTED]",
-  "Rhino Prime Systems Blueprint": "Axi S3 🔵 / Neo B3 🔵 [VAULTED]",
-  "Rhino Prime Systems": "Axi S3 🔵 / Neo B3 🔵 [VAULTED]",
-  "Rubico Prime Blueprint": "Meso R1 🟡 / Meso R2 🟡 [VAULTED]",
-  "Rubico Prime Barrel": "Axi M1 🔵 / Lith S8 🔵 [VAULTED]",
-  "Rubico Prime Receiver": "Axi T5 🔵 / Lith A3 🔵 [VAULTED]",
-  "Rubico Prime Stock": "Axi A9 🔵 / Axi D2 🔵 [VAULTED]",
-  "Saryn Prime Blueprint": "Axi N12 🔵 / Axi N6 🔵 [VAULTED]",
-  "Saryn Prime Chassis": "Lith S17 🟡 / Meso S2 🟡 [VAULTED]",
-  "Saryn Prime Neuroptics": "Axi V9 🔵 / Lith A1 🔵 [VAULTED]",
-  "Saryn Prime Systems": "Axi G1 🔵 / Axi S5 🔵 [VAULTED]",
-  "Scindo Prime Blueprint": "Lith C7 🔵",
-  "Scindo Prime Blade": "Axi S8 🟡",
-  "Scindo Prime Handle": "Meso N11 🔵",
-  "Scourge Prime Blueprint": "Axi S11 🟡 / Axi S12 🟡 [VAULTED]",
-  "Scourge Prime Barrel": "Axi S10 🟡 / Axi S14 🟡 [VAULTED]",
-  "Scourge Prime Handle": "Axi K11 🔵 / Axi T11 🔵 [VAULTED]",
-  "Scourge Prime Receiver": "See wiki.warframe.com",
-  "Sevagoth Prime Blueprint": "Lith L7 🔵 / Meso V12 🔵",
-  "Sevagoth Prime Chassis Blueprint": "Axi S18 🟡",
-  "Sevagoth Prime Neuroptics Blueprint": "Axi Y1 🔵 / Meso A9 🔵 / Neo K9 🔵",
-  "Sevagoth Prime Systems Blueprint": "Lith D7 🔵 / Lith E2 🔵",
-  "Shade Prime Blueprint": "Axi A17 🔵 / Axi H8 🔵 [VAULTED]",
-  "Shade Prime Carapace": "Axi S16 🟡 / Axi S19 🟡 [VAULTED]",
-  "Shade Prime Cerebrum": "Axi G11 🔵 / Lith C12 🔵 [VAULTED]",
-  "Shade Prime Systems": "Axi B6 🔵 / Lith A6 🔵 [VAULTED]",
-  "Silva and Aegis Prime Blueprint": "See wiki.warframe.com",
-  "Silva and Aegis Prime Blade": "See wiki.warframe.com",
-  "Silva and Aegis Prime Hilt": "See wiki.warframe.com",
-  "Soma Prime Blueprint": "Lith M1 🔵 / Meso B3 🔵 [VAULTED]",
-  "Soma Prime Barrel": "Lith M2 🔵 / Meso D5 🔵 [VAULTED]",
-  "Soma Prime Receiver": "Lith K4 🔵 / Lith S3 🔵 [VAULTED]",
-  "Soma Prime Stock": "Axi S4 🟡 / Axi S7 🟡 [VAULTED]",
-  "Spira Prime Blueprint": "Lith C5 🔵 / Lith N2 🔵 [VAULTED]",
-  "Spira Prime Pouch": "Axi S5 🟡 / Lith S1 🟡 [VAULTED]",
-  "Spira Prime Stars": "See wiki.warframe.com",
-  "Stradavar Prime Blueprint": "Lith S10 🟡 / Lith S13 🟡 [VAULTED]",
-  "Stradavar Prime Barrel": "Lith M4 🔵 / Lith M5 🔵 [VAULTED]",
-  "Stradavar Prime Receiver": "Axi A10 🔵 / Axi W1 🔵 [VAULTED]",
-  "Stradavar Prime Stock": "Axi B3 🔵 / Axi R3 🔵 [VAULTED]",
-  "Strun Prime Blueprint": "Lith S11 🟡 / Lith S12 🟡 [VAULTED]",
-  "Strun Prime Barrel": "Axi N12 🔵 / Axi N8 🔵 [VAULTED]",
-  "Strun Prime Receiver": "Axi I2 🔵 / Axi T8 🔵 [VAULTED]",
-  "Strun Prime Stock": "Axi K10 🔵 / Lith G5 🔵 [VAULTED]",
-  "Sybaris Prime Blueprint": "Axi B2 🔵 / Axi K2 🔵 [VAULTED]",
-  "Sybaris Prime Barrel": "Axi S13 🟡 / Axi S6 🟡 [VAULTED]",
-  "Sybaris Prime Receiver": "Axi C4 🔵 / Neo G3 🔵 [VAULTED]",
-  "Sybaris Prime Stock": "Axi A15 🔵 / Axi K4 🔵 [VAULTED]",
-  "Tekko Prime Blueprint": "Lith L2 🔵 / Lith P5 🔵 [VAULTED]",
-  "Tekko Prime Blade": "Axi T6 🟡 / Axi T7 🟡 [VAULTED]",
-  "Tekko Prime Gauntlet": "Axi C5 🔵 / Axi G4 🔵 [VAULTED]",
-  "Tiberon Prime Blueprint": "Axi L2 🔵 / Axi O2 🔵 [VAULTED]",
-  "Tiberon Prime Barrel": "Meso T1 🟡 / Neo K3 🔵 [VAULTED]",
-  "Tiberon Prime Receiver": "Axi D1 🔵 / Axi G5 🔵 [VAULTED]",
-  "Tiberon Prime Stock": "Lith T2 🟡 / Lith T6 🟡 [VAULTED]",
-  "Tigris Prime Blueprint": "Axi T1 🟡 / Axi T11 🟡 [VAULTED]",
-  "Tigris Prime Barrel": "Axi S6 🔵 / Lith K1 🔵 [VAULTED]",
-  "Tigris Prime Receiver": "Axi V5 🔵 / Lith S9 🔵 [VAULTED]",
-  "Tigris Prime Stock": "Lith B2 🔵 / Lith K11 🔵 [VAULTED]",
-  "Trinity Prime Blueprint": "Axi S1 🔵 / Lith K1 🔵 [VAULTED]",
-  "Trinity Prime Chassis": "Axi H1 🔵 / Axi H2 🔵 [VAULTED]",
-  "Trinity Prime Neuroptics": "Axi C1 🔵 / Axi V3 🔵 [VAULTED]",
-  "Trinity Prime Systems": "Axi A1 🔵 / Axi C2 🔵 [VAULTED]",
-  "Valkyr Prime Blueprint": "Lith C7 🔵",
-  "Valkyr Prime Chassis": "Neo V9 🟡",
-  "Valkyr Prime Neuroptics": "Meso N11 🔵",
-  "Valkyr Prime Systems": "Axi V10 🔵",
-  "Vasto Prime Blueprint": "Axi A5 🔵 / Axi P5 🔵 [VAULTED]",
-  "Vasto Prime Barrel": "Axi A5 🔵 / Axi M4 🔵 [VAULTED]",
-  "Vasto Prime Receiver": "Axi A5 🔵 / Lith A1 🔵 [VAULTED]",
-  "Vauban Prime Blueprint": "Axi F1 🔵 / Lith F2 🟡 [VAULTED]",
-  "Vauban Prime Chassis": "Axi V1 🟡 / Lith V4 🟡 [VAULTED]",
-  "Vauban Prime Neuroptics": "Lith V7 🟡 / Meso N2 🟡 [VAULTED]",
-  "Vauban Prime Systems": "Lith V2 🟡 / Lith V8 🟡 [VAULTED]",
-  "Vectis Prime Blueprint": "Lith A1 🔵 / Meso C7 🔵 [VAULTED]",
-  "Vectis Prime Barrel": "Axi C1 🔵 / Axi H1 🔵 [VAULTED]",
-  "Vectis Prime Receiver": "Lith V10 🟡 / Meso V1 🟡 [VAULTED]",
-  "Vectis Prime Stock": "Axi K12 🔵 / Axi V2 🟡 [VAULTED]",
-  "Velox Prime Blueprint": "Axi S18 🔵 / Lith D7 🔵 / Neo C6 🔵",
-  "Velox Prime Barrel": "Meso V11 🟡 / Meso V14 🟡",
-  "Velox Prime Receiver": "Axi A20 🔵 / Axi P8 🔵 / Meso V12 🔵",
-  "Velox Prime Stock": "See wiki.warframe.com",
-  "Venka Prime Blueprint": "Axi S8 🔵",
-  "Venka Prime Blades": "Neo V9 🔵",
-  "Venka Prime Gauntlet": "Axi V10 🟡",
-  "Volt Prime Blueprint": "Axi N3 🔵 / Lith O2 🔵 [VAULTED]",
-  "Volt Prime Chassis": "Axi V8 🔵 / Meso O3 🔵 [VAULTED]",
-  "Volt Prime Chassis Blueprint": "Axi V8 🔵 / Meso O3 🔵 [VAULTED]",
-  "Volt Prime Neuroptics": "Axi V1 🔵 / Axi V8 🟡 [VAULTED]",
-  "Volt Prime Systems": "Axi L4 🔵 / Lith V1 🔵 [VAULTED]",
-  "Wukong Prime Blueprint": "Axi W1 🟡 / Axi W2 🟡 [VAULTED]",
-  "Wukong Prime Chassis": "Axi A10 🔵 / Axi T6 🔵 [VAULTED]",
-  "Wukong Prime Neuroptics": "Axi G2 🔵 / Axi T4 🔵 [VAULTED]",
-  "Wukong Prime Neuroptics Blueprint": "Axi G2 🔵 / Axi T4 🔵 [VAULTED]",
-  "Wukong Prime Systems": "Axi A11 🔵 / Axi P3 🔵 [VAULTED]",
-  "Wyrm Prime Blueprint": "Axi S2 🔵 / Neo E1 🔵 [VAULTED]",
-  "Wyrm Prime Carapace": "Axi L1 🔵 / Axi L4 🔵 [VAULTED]",
-  "Wyrm Prime Cerebrum": "Lith G2 🔵 / Lith O2 🔵 [VAULTED]",
-  "Wyrm Prime Systems": "Meso E1 🔵 / Meso O3 🔵 [VAULTED]",
-  "Zephyr Prime Blueprint": "Axi G5 🔵 / Meso Z1 🟡 [VAULTED]",
-  "Zephyr Prime Chassis": "Axi L3 🔵 / Axi O3 🔵 [VAULTED]",
-  "Zephyr Prime Neuroptics": "Axi A4 🔵 / Axi O4 🔵 [VAULTED]",
-  "Zephyr Prime Systems": "Lith Z1 🟡 / Lith Z2 🟡 [VAULTED]",
-  "Zhuge Prime Blueprint": "Axi A6 🔵 / Axi T4 🔵 [VAULTED]",
-  "Zhuge Prime Barrel": "Neo Z3 🟡 / Neo Z5 🟡 [VAULTED]",
-  "Zhuge Prime Receiver": "Axi B3 🔵 / Axi D1 🔵 [VAULTED]",
-  "Zhuge Prime Stock": "See wiki.warframe.com",
-  "Arcane Energize": "Veil/Erato Skirmish Rot C · Hydrolyst Cap",
-  "Arcane Guardian": "The Descendia: Infernum 20 Triple Arcane Rewards · Veil/Erato Skirmish Rot C · Neptune/Mammon's Prospect (Skirmish) Rot C",
-  "Arcane Grace": "Veil/Erato Skirmish Rot C · Hydrolyst Cap",
-  "Arcane Avenger": "Duviri/Endless: Tier 1 (Normal) · Duviri/Endless: Tier 3 (Normal) · Veil/Erato Skirmish Rot C",
-  "Arcane Aegis": "Veil/Erato Skirmish Rot C · Venus/Vesper Strait (Skirmish) Rot C · The Descendia: Infernum 20 Triple Arcane Rewards",
-  "Arcane Arachne": "Duviri/Endless: Tier 1 (Normal) · Duviri/Endless: Tier 3 (Normal) · Veil/Erato Skirmish Rot C",
-  "Arcane Barrier": "Veil/Erato Skirmish Rot C · Hydrolyst Cap",
-  "Arcane Blessing": "Lua/Circulus (Survival) Rot C",
-  "Arcane Cadence": "Check wiki.warframe.com",
-  "Arcane Consequence": "Duviri/Endless: Tier 1 (Normal) · Duviri/Endless: Tier 3 (Normal) · The Descendia: Infernum 20 Triple Arcane Rewards",
-  "Arcane Deflection": "Duviri/Endless: Tier 1 (Normal) · Duviri/Endless: Tier 3 (Normal) · The Descendia: Infernum 20 Triple Arcane Rewards",
-  "Arcane Fury": "Duviri/Endless: Tier 1 (Normal) · Duviri/Endless: Tier 3 (Normal) · Veil/Erato Skirmish Rot C",
-  "Arcane Healing": "Duviri/Endless: Tier 1 (Normal) · Duviri/Endless: Tier 3 (Normal) · The Descendia: Infernum 20 Triple Arcane Rewards",
-  "Arcane Momentum": "Duviri/Endless: Tier 1 (Normal) · Duviri/Endless: Tier 3 (Normal) · The Descendia: Infernum 20 Triple Arcane Rewards",
-  "Arcane Nullifier": "Duviri/Endless: Tier 1 (Normal) · Duviri/Endless: Tier 3 (Normal) · The Descendia: Infernum 20 Triple Arcane Rewards",
-  "Arcane Phantom": "Check wiki.warframe.com",
-  "Arcane Pistoleer": "Arbitrations Rot A · Arbitrations Rot C",
-  "Arcane Precision": "Duviri/Endless: Tier 1 (Normal) · Duviri/Endless: Tier 3 (Normal) · Veil/Erato Skirmish Rot C",
-  "Arcane Pulse": "Duviri/Endless: Tier 1 (Normal) · Duviri/Endless: Tier 3 (Normal) · Veil/Erato Skirmish Rot C",
-  "Arcane Rage": "Duviri/Endless: Tier 1 (Normal) · Duviri/Endless: Tier 3 (Normal) · Veil/Erato Skirmish Rot C",
-  "Arcane Rise": "Lua/Circulus (Survival) Rot B",
-  "Arcane Slam": "Check wiki.warframe.com",
-  "Arcane Strike": "Duviri/Endless: Tier 1 (Normal) · Duviri/Endless: Tier 3 (Normal) · The Descendia: Infernum 20 Triple Arcane Rewards",
-  "Arcane Steadfast": "Mars/Tyana Pass (Defense) Rot C",
-  "Arcane Tempo": "Duviri/Endless: Tier 1 (Normal) · Duviri/Endless: Tier 3 (Normal) · The Descendia: Infernum 20 Triple Arcane Rewards",
-  "Arcane Trickery": "Duviri/Endless: Tier 1 (Normal) · Duviri/Endless: Tier 3 (Normal) · The Descendia: Infernum 20 Triple Arcane Rewards",
-  "Arcane Ultimatum": "Duviri/Endless: Tier 1 (Normal) · Duviri/Endless: Tier 3 (Normal) · Veil/Erato Skirmish Rot C",
-  "Arcane Velocity": "Duviri/Endless: Tier 1 (Normal) · Duviri/Endless: Tier 3 (Normal) · The Descendia: Infernum 20 Triple Arcane Rewards",
-  "Arcane Victory": "Duviri/Endless: Tier 1 (Normal) · Duviri/Endless: Tier 3 (Normal) · The Descendia: Infernum 20 Triple Arcane Rewards",
-  "Arcane Warmth": "Duviri/Endless: Tier 1 (Normal) · Duviri/Endless: Tier 3 (Normal) · The Descendia: Infernum 20 Triple Arcane Rewards",
-  "Arcane Acceleration": "Duviri/Endless: Tier 1 (Normal) · Duviri/Endless: Tier 3 (Normal) · The Descendia: Infernum 20 Triple Arcane Rewards",
-  "Arcane Agility": "Duviri/Endless: Tier 1 (Normal) · Duviri/Endless: Tier 3 (Normal) · The Descendia: Infernum 20 Triple Arcane Rewards",
-  "Arcane Bodyguard": "Arbitrations Rot A · Arbitrations Rot B",
-  "Arcane Coil": "Check wiki.warframe.com",
-  "Arcane Eruption": "Duviri/Endless: Tier 1 (Normal) · Duviri/Endless: Tier 3 (Normal) · The Descendia: Infernum 20 Triple Arcane Rewards",
-  "Arcane Expedition": "Check wiki.warframe.com",
-  "Arcane Heroism": "Check wiki.warframe.com",
-  "Arcane Invigoration": "Check wiki.warframe.com",
-  "Arcane Luck": "Check wiki.warframe.com",
-  "Arcane Meridian": "Check wiki.warframe.com",
-  "Arcane Reaper": "Duviri Static Undercroft Portal (Steel Path) · Duviri/Endless: Tier 6 (Hard) · Duviri/Endless: Tier 7 (Hard)",
-  "Arcane Resistance": "Duviri/Endless: Tier 1 (Normal) · Duviri/Endless: Tier 3 (Normal) · The Descendia: Infernum 20 Triple Arcane Rewards",
-  "Arcane Revive": "Check wiki.warframe.com",
-  "Arcane Scholar": "Check wiki.warframe.com",
-  "Arcane Serenity": "Check wiki.warframe.com",
-  "Arcane Tanker": "Arbitrations Rot A · Arbitrations Rot C",
-  "Arcane Visage": "Check wiki.warframe.com",
-  "Arcane Volt": "Check wiki.warframe.com",
-  "Magus Anomaly": "Vox Solaris, Instrument",
-  "Magus Cloud": "The Quills, Instrument",
-  "Magus Destruct": "Vox Solaris, Instrument",
-  "Magus Drive": "Vox Solaris, Instrument",
-  "Magus Elevate": "The Quills, Architect",
-  "Magus Glitch": "Vox Solaris, Shadow",
-  "Magus Husk": "The Quills, Observer",
-  "Magus Lockdown": "Vox Solaris, Instrument",
-  "Magus Melt": "Vox Solaris, Shadow",
-  "Magus Nourish": "The Quills, Architect",
-  "Magus Overload": "Vox Solaris, Shadow",
-  "Magus Replenish": "The Quills, Instrument",
-  "Magus Revert": "Vox Solaris, Shadow",
-  "Magus Vigor": "The Quills, Mote",
-  "Magus Virulence": "Check wiki.warframe.com",
-  "Virtuos Forge": "Vox Solaris, Hand",
-  "Virtuos Ghost": "The Quills, Architect",
-  "Virtuos Null": "The Quills, Mote",
-  "Virtuos Shadow": "The Quills, Architect",
-  "Virtuos Spike": "Vox Solaris, Agent",
-  "Virtuos Strike": "The Quills, Instrument",
-  "Virtuos Tempo": "The Quills, Observer"
+  // Akbolto Prime
+  "Akbolto Prime Barrel":      "Neo A4 / Axi A9 — Hydron, Sedna",
+  "Akbolto Prime Blueprint":   "Lith B8 — Hepit, Void",
+  "Akbolto Prime Link":        "Meso B5 — Io, Jupiter",
+  "Akbolto Prime Receiver":    "Neo A4 — Hydron, Sedna",
+  // Akbronco Prime
+  "Akbronco Prime Blueprint":  "Lith B4 — Hepit, Void",
+  "Akbronco Prime Link":       "Meso B4 — Io, Jupiter",
+  "Akbronco Prime Receiver":   "Neo B5 — Hydron, Sedna",
+  // Akjagara Prime
+  "Akjagara Prime Blueprint":  "Lith B9 — Hepit, Void",
+  "Akjagara Prime Barrel":     "Meso B6 — Io, Jupiter",
+  "Akjagara Prime Receiver":   "Neo A5 — Hydron, Sedna",
+  // Akstiletto Prime
+  "Akstiletto Prime Blueprint":"Lith A5 — Hepit, Void",
+  "Akstiletto Prime Link":     "Meso A5 — Io, Jupiter",
+  "Akstiletto Prime Receiver": "Axi A6 — Xini, Eris",
+  // Alternox Prime
+  "Alternox Prime Blueprint":  "Lith — Hepit, Void",
+  "Alternox Prime Barrel":     "Meso — Io, Jupiter",
+  "Alternox Prime Receiver":   "Neo — Hydron, Sedna",
+  "Alternox Prime Stock":      "Axi — Xini, Eris",
+  // Ash Prime
+  "Ash Prime Blueprint":       "Meso N6 — Io, Jupiter",
+  "Ash Prime Chassis":         "Neo A1 — Hydron, Sedna",
+  "Ash Prime Neuroptics":      "Axi N5 — Xini, Eris",
+  "Ash Prime Systems":         "Lith K2 — Hepit, Void",
+  // Atlas Prime
+  "Atlas Prime Blueprint":             "Axi A9 — Xini, Eris",
+  "Atlas Prime Chassis Blueprint":     "Neo A4 — Hydron, Sedna",
+  "Atlas Prime Neuroptics Blueprint":  "Lith A6 — Hepit, Void",
+  "Atlas Prime Systems Blueprint":     "Meso A5 — Io, Jupiter",
+  // Ballistica Prime
+  "Ballistica Prime Blueprint":    "Lith B6 — Hepit, Void",
+  "Ballistica Prime Lower Limb":   "Meso B4 — Io, Jupiter",
+  "Ballistica Prime Receiver":     "Neo B4 — Hydron, Sedna",
+  "Ballistica Prime String":       "Axi B3 — Xini, Eris",
+  "Ballistica Prime Upper Limb":   "Lith B6 — Hepit, Void",
+  // Banshee Prime
+  "Banshee Prime Blueprint":   "Meso B3 — Io, Jupiter",
+  "Banshee Prime Chassis":     "Lith B4 — Hepit, Void",
+  "Banshee Prime Neuroptics":  "Neo B3 — Hydron, Sedna",
+  "Banshee Prime Systems":     "Axi B1 — Xini, Eris",
+  // Bo Prime
+  "Bo Prime Blueprint":    "Lith B3 — Hepit, Void",
+  "Bo Prime Handle":       "Meso B2 — Io, Jupiter",
+  "Bo Prime Ornament":     "Neo B2 — Hydron, Sedna",
+  "Bo Prime Strike":       "Axi B2 — Xini, Eris",
+  // Boar Prime
+  "Boar Prime Blueprint":  "Lith B1 — Hepit, Void",
+  "Boar Prime Barrel":     "Meso B1 — Io, Jupiter",
+  "Boar Prime Receiver":   "Neo B1 — Hydron, Sedna",
+  "Boar Prime Stock":      "Axi B1 — Xini, Eris",
+  // Boltor Prime
+  "Boltor Prime Blueprint":"Lith B2 — Hepit, Void",
+  "Boltor Prime Barrel":   "Meso B2 — Io, Jupiter",
+  "Boltor Prime Receiver": "Neo B2 — Hydron, Sedna",
+  "Boltor Prime Stock":    "Axi B2 — Xini, Eris",
+  // Braton Prime
+  "Braton Prime Blueprint":"Lith B1 — Hepit, Void",
+  "Braton Prime Barrel":   "Meso B1 — Io, Jupiter",
+  "Braton Prime Receiver": "Neo B1 — Hydron, Sedna",
+  "Braton Prime Stock":    "Axi B1 — Xini, Eris",
+  // Bronco Prime
+  "Bronco Prime Blueprint":"Lith B3 — Hepit, Void",
+  "Bronco Prime Barrel":   "Meso B3 — Io, Jupiter",
+  "Bronco Prime Receiver": "Neo B3 — Hydron, Sedna",
+  // Burston Prime
+  "Burston Prime Blueprint":"Lith B5 — Hepit, Void",
+  "Burston Prime Barrel":   "Meso B5 — Io, Jupiter",
+  "Burston Prime Receiver": "Neo B4 — Hydron, Sedna",
+  "Burston Prime Stock":    "Axi B3 — Xini, Eris",
+  // Caliban Prime
+  "Caliban Prime Blueprint":             "Axi C8 — Xini, Eris",
+  "Caliban Prime Chassis Blueprint":     "Neo C3 — Hydron, Sedna",
+  "Caliban Prime Neuroptics Blueprint":  "Meso C8 — Io, Jupiter",
+  "Caliban Prime Systems Blueprint":     "Lith C10 — Hepit, Void",
+  // Carrier Prime
+  "Carrier Prime Blueprint":   "Meso C2 — Io, Jupiter",
+  "Carrier Prime Carapace":    "Lith C3 — Hepit, Void",
+  "Carrier Prime Cerebrum":    "Neo C1 — Hydron, Sedna",
+  "Carrier Prime Systems":     "Axi C3 — Xini, Eris",
+  // Cernos Prime
+  "Cernos Prime Blueprint":    "Lith C3 — Hepit, Void",
+  "Cernos Prime Grip":         "Meso C3 — Io, Jupiter",
+  "Cernos Prime Lower Limb":   "Neo C2 — Hydron, Sedna",
+  "Cernos Prime String":       "Axi C2 — Xini, Eris",
+  "Cernos Prime Upper Limb":   "Lith C3 — Hepit, Void",
+  // Chroma Prime
+  "Chroma Prime Blueprint":            "Axi C4 — Xini, Eris",
+  "Chroma Prime Chassis Blueprint":    "Neo C2 — Hydron, Sedna",
+  "Chroma Prime Neuroptics Blueprint": "Lith C7 — Hepit, Void",
+  "Chroma Prime Systems Blueprint":    "Meso C4 — Io, Jupiter",
+  // Corinth Prime
+  "Corinth Prime Blueprint":   "Lith C9 — Hepit, Void",
+  "Corinth Prime Barrel":      "Meso C7 — Io, Jupiter",
+  "Corinth Prime Receiver":    "Neo C3 — Hydron, Sedna",
+  "Corinth Prime Stock":       "Axi C7 — Xini, Eris",
+  // Daikyu Prime
+  "Daikyu Prime Blueprint":    "Lith D1 — Hepit, Void",
+  "Daikyu Prime Grip":         "Meso D1 — Io, Jupiter",
+  "Daikyu Prime Lower Limb":   "Neo D1 — Hydron, Sedna",
+  "Daikyu Prime String":       "Axi D1 — Xini, Eris",
+  "Daikyu Prime Upper Limb":   "Lith D1 — Hepit, Void",
+  // Dakra Prime
+  "Dakra Prime Blueprint":     "Lith D2 — Hepit, Void",
+  "Dakra Prime Blade":         "Meso D2 — Io, Jupiter",
+  "Dakra Prime Handle":        "Axi D1 — Xini, Eris",
+  // Destreza Prime
+  "Destreza Prime Blueprint":  "Lith D3 — Hepit, Void",
+  "Destreza Prime Blade":      "Neo D2 — Hydron, Sedna",
+  "Destreza Prime Handle":     "Axi D2 — Xini, Eris",
+  // Dethcube Prime
+  "Dethcube Prime Blueprint":  "Lith D4 — Hepit, Void",
+  "Dethcube Prime Carapace":   "Meso D3 — Io, Jupiter",
+  "Dethcube Prime Cerebrum":   "Neo D3 — Hydron, Sedna",
+  "Dethcube Prime Systems":    "Axi D3 — Xini, Eris",
+  // Ember Prime
+  "Ember Prime Blueprint":     "Axi E1 — Xini, Eris",
+  "Ember Prime Chassis":       "Lith E1 — Hepit, Void",
+  "Ember Prime Neuroptics":    "Neo E1 — Hydron, Sedna",
+  "Ember Prime Systems":       "Meso E1 — Io, Jupiter",
+  // Equinox Prime
+  "Equinox Prime Blueprint":            "Axi E3 — Xini, Eris",
+  "Equinox Prime Chassis Blueprint":    "Neo E2 — Hydron, Sedna",
+  "Equinox Prime Neuroptics Blueprint": "Lith E4 — Hepit, Void",
+  "Equinox Prime Systems Blueprint":    "Meso E3 — Io, Jupiter",
+  // Fang Prime
+  "Fang Prime Blueprint":  "Lith F1 — Hepit, Void",
+  "Fang Prime Blade":      "Meso F1 — Io, Jupiter",
+  "Fang Prime Handle":     "Neo F1 — Hydron, Sedna",
+  // Frost Prime
+  "Frost Prime Blueprint": "Meso F2 — Io, Jupiter",
+  "Frost Prime Chassis":   "Lith F2 — Hepit, Void",
+  "Frost Prime Neuroptics":"Axi F1 — Xini, Eris",
+  "Frost Prime Systems":   "Neo F1 — Hydron, Sedna",
+  // Galatine Prime
+  "Galatine Prime Blueprint":  "Lith G1 — Hepit, Void",
+  "Galatine Prime Blade":      "Meso G1 — Io, Jupiter",
+  "Galatine Prime Handle":     "Neo G1 — Hydron, Sedna",
+  "Galatine Prime Guard":      "Axi G1 — Xini, Eris",
+  // Harrow Prime
+  "Harrow Prime Blueprint":            "Axi H5 — Xini, Eris",
+  "Harrow Prime Chassis Blueprint":    "Neo H2 — Hydron, Sedna",
+  "Harrow Prime Neuroptics Blueprint": "Lith H3 — Hepit, Void",
+  "Harrow Prime Systems Blueprint":    "Meso H2 — Io, Jupiter",
+  // Helios Prime
+  "Helios Prime Blueprint":    "Lith H1 — Hepit, Void",
+  "Helios Prime Carapace":     "Meso H1 — Io, Jupiter",
+  "Helios Prime Cerebrum":     "Neo H1 — Hydron, Sedna",
+  "Helios Prime Systems":      "Axi H1 — Xini, Eris",
+  // Hikou Prime
+  "Hikou Prime Blueprint":     "Lith H2 — Hepit, Void",
+  "Hikou Prime Pouch":         "Meso H2 — Io, Jupiter",
+  "Hikou Prime Stars":         "Neo H2 — Hydron, Sedna",
+  // Hydroid Prime
+  "Hydroid Prime Blueprint":           "Axi H4 — Xini, Eris",
+  "Hydroid Prime Chassis":             "Neo H1 — Hydron, Sedna",
+  "Hydroid Prime Neuroptics Blueprint":"Lith H4 — Hepit, Void",
+  "Hydroid Prime Systems":             "Meso H3 — Io, Jupiter",
+  // Inaros Prime
+  "Inaros Prime Blueprint":            "Axi I1 — Xini, Eris",
+  "Inaros Prime Chassis Blueprint":    "Neo I1 — Hydron, Sedna",
+  "Inaros Prime Neuroptics Blueprint": "Lith I1 — Hepit, Void",
+  "Inaros Prime Systems Blueprint":    "Meso I1 — Io, Jupiter",
+  // Ivara Prime
+  "Ivara Prime Blueprint":             "Axi I2 — Xini, Eris",
+  "Ivara Prime Chassis Blueprint":     "Neo I2 — Hydron, Sedna",
+  "Ivara Prime Neuroptics Blueprint":  "Lith I2 — Hepit, Void",
+  "Ivara Prime Systems Blueprint":     "Meso I2 — Io, Jupiter",
+  // Kavasa Prime
+  "Kavasa Prime Blueprint":    "Lith K1 — Hepit, Void",
+  "Kavasa Prime Buckle":       "Meso K1 — Io, Jupiter",
+  "Kavasa Prime Band":         "Neo K1 — Hydron, Sedna",
+  // Kogake Prime
+  "Kogake Prime Blueprint":    "Lith K2 — Hepit, Void",
+  "Kogake Prime Boot":         "Meso K2 — Io, Jupiter",
+  "Kogake Prime Gauntlet":     "Neo K1 — Hydron, Sedna",
+  // Kronen Prime
+  "Kronen Prime Blueprint":    "Lith K3 — Hepit, Void",
+  "Kronen Prime Blade":        "Meso K3 — Io, Jupiter",
+  "Kronen Prime Handle":       "Neo K2 — Hydron, Sedna",
+  // Latron Prime
+  "Latron Prime Blueprint":    "Lith L1 — Hepit, Void",
+  "Latron Prime Barrel":       "Meso L1 — Io, Jupiter",
+  "Latron Prime Receiver":     "Neo L1 — Hydron, Sedna",
+  "Latron Prime Stock":        "Axi L1 — Xini, Eris",
+  // Limbo Prime
+  "Limbo Prime Blueprint":             "Axi L2 — Xini, Eris",
+  "Limbo Prime Chassis":               "Neo L1 — Hydron, Sedna",
+  "Limbo Prime Neuroptics Blueprint":  "Lith L2 — Hepit, Void",
+  "Limbo Prime Systems":               "Meso L2 — Io, Jupiter",
+  "Limbo Prime Systems Blueprint":     "Meso L2 — Io, Jupiter",
+  // Loki Prime
+  "Loki Prime Blueprint":      "Axi L1 — Xini, Eris",
+  "Loki Prime Chassis":        "Neo L1 — Hydron, Sedna",
+  "Loki Prime Neuroptics":     "Meso L1 — Io, Jupiter",
+  "Loki Prime Systems":        "Lith L1 — Hepit, Void",
+  // Mag Prime
+  "Mag Prime Blueprint":       "Lith M1 — Hepit, Void",
+  "Mag Prime Chassis":         "Meso M1 — Io, Jupiter",
+  "Mag Prime Neuroptics":      "Neo M1 — Hydron, Sedna",
+  "Mag Prime Systems":         "Axi M1 — Xini, Eris",
+  // Magnus Prime
+  "Magnus Prime Blueprint":    "Lith M2 — Hepit, Void",
+  "Magnus Prime Barrel":       "Meso M2 — Io, Jupiter",
+  "Magnus Prime Receiver":     "Neo M2 — Hydron, Sedna",
+  // Mesa Prime
+  "Mesa Prime Blueprint":              "Axi M3 — Xini, Eris",
+  "Mesa Prime Chassis Blueprint":      "Neo M2 — Hydron, Sedna",
+  "Mesa Prime Neuroptics Blueprint":   "Lith M5 — Hepit, Void",
+  "Mesa Prime Systems Blueprint":      "Meso M4 — Io, Jupiter",
+  // Mirage Prime
+  "Mirage Prime Blueprint":    "Axi M2 — Xini, Eris",
+  "Mirage Prime Chassis":      "Neo M1 — Hydron, Sedna",
+  "Mirage Prime Neuroptics":   "Lith M3 — Hepit, Void",
+  "Mirage Prime Systems":      "Meso M3 — Io, Jupiter",
+  // Nami Skyla Prime
+  "Nami Skyla Prime Blueprint":"Lith N1 — Hepit, Void",
+  "Nami Skyla Prime Blade":    "Meso N1 — Io, Jupiter",
+  "Nami Skyla Prime Hilt":     "Neo N1 — Hydron, Sedna",
+  // Nekros Prime
+  "Nekros Prime Blueprint":    "Axi N2 — Xini, Eris",
+  "Nekros Prime Chassis":      "Neo N1 — Hydron, Sedna",
+  "Nekros Prime Neuroptics":   "Lith N2 — Hepit, Void",
+  "Nekros Prime Systems":      "Meso N2 — Io, Jupiter",
+  // Nidus Prime
+  "Nidus Prime Blueprint":             "Axi N8 — Xini, Eris",
+  "Nidus Prime Chassis Blueprint":     "Neo N12 — Hydron, Sedna",
+  "Nidus Prime Neuroptics Blueprint":  "Lith N9 — Hepit, Void",
+  "Nidus Prime Systems Blueprint":     "Meso N11 — Io, Jupiter",
+  // Nikana Prime
+  "Nikana Prime Blueprint":    "Lith N3 — Hepit, Void",
+  "Nikana Prime Blade":        "Neo N2 — Hydron, Sedna",
+  "Nikana Prime Hilt":         "Axi N3 — Xini, Eris",
+  // Ninkondi Prime
+  "Ninkondi Prime Blueprint":  "Lith N4 — Hepit, Void",
+  "Ninkondi Prime Chain":      "Meso N3 — Io, Jupiter",
+  "Ninkondi Prime Handle":     "Neo N3 — Hydron, Sedna",
+  // Nova Prime
+  "Nova Prime Blueprint":      "Axi N4 — Xini, Eris",
+  "Nova Prime Chassis":        "Meso N4 — Io, Jupiter",
+  "Nova Prime Neuroptics":     "Neo N4 — Hydron, Sedna",
+  "Nova Prime Systems":        "Lith N5 — Hepit, Void",
+  // Nyx Prime
+  "Nyx Prime Blueprint":       "Axi N1 — Xini, Eris",
+  "Nyx Prime Chassis":         "Neo N1 — Hydron, Sedna",
+  "Nyx Prime Neuroptics":      "Lith N1 — Hepit, Void",
+  "Nyx Prime Systems":         "Meso N1 — Io, Jupiter",
+  // Oberon Prime
+  "Oberon Prime Blueprint":    "Axi O1 — Xini, Eris",
+  "Oberon Prime Chassis":      "Neo O1 — Hydron, Sedna",
+  "Oberon Prime Neuroptics":   "Lith O1 — Hepit, Void",
+  "Oberon Prime Systems":      "Meso O1 — Io, Jupiter",
+  // Orthos Prime
+  "Orthos Prime Blueprint":    "Lith O1 — Hepit, Void",
+  "Orthos Prime Blade":        "Meso O1 — Io, Jupiter",
+  "Orthos Prime Handle":       "Neo O1 — Hydron, Sedna",
+  // Pangolin Prime
+  "Pangolin Prime Blueprint":  "Lith P3 — Hepit, Void",
+  "Pangolin Prime Blade":      "Neo P3 — Hydron, Sedna",
+  "Pangolin Prime Handle":     "Axi P4 — Xini, Eris",
+  // Paris Prime
+  "Paris Prime Blueprint":     "Lith P1 — Hepit, Void",
+  "Paris Prime Lower Limb":    "Meso P1 — Io, Jupiter",
+  "Paris Prime String":        "Neo P1 — Hydron, Sedna",
+  "Paris Prime Upper Limb":    "Axi P1 — Xini, Eris",
+  // Phantasma Prime
+  "Phantasma Prime Blueprint": "Lith P4 — Hepit, Void",
+  "Phantasma Prime Barrel":    "Meso P3 — Io, Jupiter",
+  "Phantasma Prime Receiver":  "Neo P4 — Hydron, Sedna",
+  "Phantasma Prime Stock":     "Axi P5 — Xini, Eris",
+  // Pyrana Prime
+  "Pyrana Prime Blueprint":    "Lith P2 — Hepit, Void",
+  "Pyrana Prime Barrel":       "Meso P2 — Io, Jupiter",
+  "Pyrana Prime Receiver":     "Neo P2 — Hydron, Sedna",
+  // Redeemer Prime
+  "Redeemer Prime Blueprint":  "Lith R1 — Hepit, Void",
+  "Redeemer Prime Barrel":     "Meso R1 — Io, Jupiter",
+  "Redeemer Prime Blade":      "Neo R1 — Hydron, Sedna",
+  "Redeemer Prime Receiver":   "Axi R1 — Xini, Eris",
+  // Revenant Prime
+  "Revenant Prime Blueprint":            "Axi R4 — Xini, Eris",
+  "Revenant Prime Chassis Blueprint":    "Neo R4 — Hydron, Sedna",
+  "Revenant Prime Neuroptics Blueprint": "Lith R7 — Hepit, Void",
+  "Revenant Prime Systems Blueprint":    "Meso R4 — Io, Jupiter",
+  // Rhino Prime
+  "Rhino Prime Blueprint":     "Axi R1 — Xini, Eris",
+  "Rhino Prime Chassis":       "Neo R1 — Hydron, Sedna",
+  "Rhino Prime Neuroptics":    "Meso R1 — Io, Jupiter",
+  "Rhino Prime Systems":       "Lith R1 — Hepit, Void",
+  "Rhino Prime Systems Blueprint":"Lith R1 — Hepit, Void",
+  // Rubico Prime
+  "Rubico Prime Blueprint":    "Lith R2 — Hepit, Void",
+  "Rubico Prime Barrel":       "Meso R2 — Io, Jupiter",
+  "Rubico Prime Receiver":     "Neo R2 — Hydron, Sedna",
+  "Rubico Prime Stock":        "Axi R2 — Xini, Eris",
+  // Saryn Prime
+  "Saryn Prime Blueprint":     "Axi S3 — Xini, Eris",
+  "Saryn Prime Chassis":       "Neo S1 — Hydron, Sedna",
+  "Saryn Prime Neuroptics":    "Lith S4 — Hepit, Void",
+  "Saryn Prime Systems":       "Meso S3 — Io, Jupiter",
+  // Scindo Prime
+  "Scindo Prime Blueprint":    "Lith S1 — Hepit, Void",
+  "Scindo Prime Blade":        "Meso S1 — Io, Jupiter",
+  "Scindo Prime Handle":       "Neo S1 — Hydron, Sedna",
+  // Scourge Prime
+  "Scourge Prime Blueprint":   "Lith S9 — Hepit, Void",
+  "Scourge Prime Barrel":      "Neo S13 — Hydron, Sedna",
+  "Scourge Prime Handle":      "Meso S13 — Io, Jupiter",
+  "Scourge Prime Receiver":    "Axi S9 — Xini, Eris",
+  // Sevagoth Prime
+  "Sevagoth Prime Blueprint":            "Axi S8 — Xini, Eris",
+  "Sevagoth Prime Chassis Blueprint":    "Neo S12 — Hydron, Sedna",
+  "Sevagoth Prime Neuroptics Blueprint": "Lith S8 — Hepit, Void",
+  "Sevagoth Prime Systems Blueprint":    "Meso S12 — Io, Jupiter",
+  // Shade Prime
+  "Shade Prime Blueprint":     "Lith S2 — Hepit, Void",
+  "Shade Prime Carapace":      "Meso S2 — Io, Jupiter",
+  "Shade Prime Cerebrum":      "Neo S2 — Hydron, Sedna",
+  "Shade Prime Systems":       "Axi S1 — Xini, Eris",
+  // Silva and Aegis Prime
+  "Silva and Aegis Prime Blueprint":"Lith S3 — Hepit, Void",
+  "Silva and Aegis Prime Blade":    "Meso S3 — Io, Jupiter",
+  "Silva and Aegis Prime Hilt":     "Neo S3 — Hydron, Sedna",
+  // Soma Prime
+  "Soma Prime Blueprint":      "Lith S5 — Hepit, Void",
+  "Soma Prime Barrel":         "Meso S4 — Io, Jupiter",
+  "Soma Prime Receiver":       "Neo S4 — Hydron, Sedna",
+  "Soma Prime Stock":          "Axi S2 — Xini, Eris",
+  // Spira Prime
+  "Spira Prime Blueprint":     "Lith S6 — Hepit, Void",
+  "Spira Prime Pouch":         "Meso S5 — Io, Jupiter",
+  "Spira Prime Stars":         "Neo S5 — Hydron, Sedna",
+  // Stradavar Prime
+  "Stradavar Prime Blueprint": "Lith S7 — Hepit, Void",
+  "Stradavar Prime Barrel":    "Meso S6 — Io, Jupiter",
+  "Stradavar Prime Receiver":  "Neo S6 — Hydron, Sedna",
+  "Stradavar Prime Stock":     "Axi S4 — Xini, Eris",
+  // Strun Prime
+  "Strun Prime Blueprint":     "Lith S2 — Hepit, Void",
+  "Strun Prime Barrel":        "Meso S2 — Io, Jupiter",
+  "Strun Prime Receiver":      "Neo S2 — Hydron, Sedna",
+  "Strun Prime Stock":         "Axi S2 — Xini, Eris",
+  // Sybaris Prime
+  "Sybaris Prime Blueprint":   "Lith S4 — Hepit, Void",
+  "Sybaris Prime Barrel":      "Meso S4 — Io, Jupiter",
+  "Sybaris Prime Receiver":    "Neo S4 — Hydron, Sedna",
+  "Sybaris Prime Stock":       "Axi S3 — Xini, Eris",
+  // Tekko Prime
+  "Tekko Prime Blueprint":     "Lith T3 — Hepit, Void",
+  "Tekko Prime Blade":         "Meso T3 — Io, Jupiter",
+  "Tekko Prime Gauntlet":      "Neo T2 — Hydron, Sedna",
+  // Tiberon Prime
+  "Tiberon Prime Blueprint":   "Lith T1 — Hepit, Void",
+  "Tiberon Prime Barrel":      "Meso T1 — Io, Jupiter",
+  "Tiberon Prime Receiver":    "Neo T1 — Hydron, Sedna",
+  "Tiberon Prime Stock":       "Axi T1 — Xini, Eris",
+  // Tigris Prime
+  "Tigris Prime Blueprint":    "Lith T2 — Hepit, Void",
+  "Tigris Prime Barrel":       "Meso T2 — Io, Jupiter",
+  "Tigris Prime Receiver":     "Neo T2 — Hydron, Sedna",
+  "Tigris Prime Stock":        "Axi T2 — Xini, Eris",
+  // Trinity Prime
+  "Trinity Prime Blueprint":   "Axi T1 — Xini, Eris",
+  "Trinity Prime Chassis":     "Neo T1 — Hydron, Sedna",
+  "Trinity Prime Neuroptics":  "Meso T1 — Io, Jupiter",
+  "Trinity Prime Systems":     "Lith T1 — Hepit, Void",
+  // Valkyr Prime
+  "Valkyr Prime Blueprint":    "Axi V4 — Xini, Eris",
+  "Valkyr Prime Chassis":      "Neo V1 — Hydron, Sedna",
+  "Valkyr Prime Neuroptics":   "Lith V1 — Hepit, Void",
+  "Valkyr Prime Systems":      "Meso V2 — Io, Jupiter",
+  // Vauban Prime
+  "Vauban Prime Blueprint":    "Axi V3 — Xini, Eris",
+  "Vauban Prime Chassis":      "Neo V1 — Hydron, Sedna",
+  "Vauban Prime Neuroptics":   "Lith V2 — Hepit, Void",
+  "Vauban Prime Systems":      "Meso V1 — Io, Jupiter",
+  // Vectis Prime
+  "Vectis Prime Blueprint":    "Lith V3 — Hepit, Void",
+  "Vectis Prime Barrel":       "Meso V3 — Io, Jupiter",
+  "Vectis Prime Receiver":     "Neo V2 — Hydron, Sedna",
+  "Vectis Prime Stock":        "Axi V2 — Xini, Eris",
+  // Venka Prime
+  "Venka Prime Blueprint":     "Lith V4 — Hepit, Void",
+  "Venka Prime Blades":        "Meso V4 — Io, Jupiter",
+  "Venka Prime Gauntlet":      "Neo V3 — Hydron, Sedna",
+  // Volt Prime
+  "Volt Prime Blueprint":          "Axi V1 — Xini, Eris",
+  "Volt Prime Chassis":            "Neo V1 — Hydron, Sedna",
+  "Volt Prime Chassis Blueprint":  "Neo V1 — Hydron, Sedna",
+  "Volt Prime Neuroptics":         "Lith V1 — Hepit, Void",
+  "Volt Prime Systems":            "Meso V1 — Io, Jupiter",
+  // Wukong Prime
+  "Wukong Prime Blueprint":            "Axi W2 — Xini, Eris",
+  "Wukong Prime Chassis":              "Neo W1 — Hydron, Sedna",
+  "Wukong Prime Neuroptics":           "Lith W2 — Hepit, Void",
+  "Wukong Prime Neuroptics Blueprint": "Lith W2 — Hepit, Void",
+  "Wukong Prime Systems":              "Meso W2 — Io, Jupiter",
+  // Wyrm Prime
+  "Wyrm Prime Blueprint":      "Lith W1 — Hepit, Void",
+  "Wyrm Prime Carapace":       "Meso W1 — Io, Jupiter",
+  "Wyrm Prime Cerebrum":       "Neo W1 — Hydron, Sedna",
+  "Wyrm Prime Systems":        "Axi W1 — Xini, Eris",
+  // Zephyr Prime
+  "Zephyr Prime Blueprint":    "Axi Z1 — Xini, Eris",
+  "Zephyr Prime Chassis":      "Neo Z1 — Hydron, Sedna",
+  "Zephyr Prime Neuroptics":   "Lith Z1 — Hepit, Void",
+  "Zephyr Prime Systems":      "Meso Z1 — Io, Jupiter",
+  // Zhuge Prime
+  "Zhuge Prime Blueprint":     "Lith Z2 — Hepit, Void",
+  "Zhuge Prime Barrel":        "Meso Z2 — Io, Jupiter",
+  "Zhuge Prime Receiver":      "Neo Z2 — Hydron, Sedna",
+  "Zhuge Prime Stock":         "Axi Z2 — Xini, Eris",
+  // Mods — general farm locations
+  "Condition Overload":        "Corrupted Ancient (Deimos)",
+  "Blood Rush":                "Lua Spy vaults",
+  "Weeping Wounds":            "Amalgam drops / Lua",
+  "Galvanized Aptitude":       "Steel Path Honors (Arbitrations)",
+  "Galvanized Chamber":        "Steel Path Honors (Arbitrations)",
+  "Galvanized Crosshairs":     "Steel Path Honors (Arbitrations)",
+  "Galvanized Diffusion":      "Steel Path Honors (Arbitrations)",
+  "Galvanized Hell":           "Steel Path Honors (Arbitrations)",
+  "Galvanized Savvy":          "Steel Path Honors (Arbitrations)",
+  "Galvanized Scope":          "Steel Path Honors (Arbitrations)",
+  "Galvanized Shot":           "Steel Path Honors (Arbitrations)",
+  "Hunter Munitions":          "Eidolon Teralyst (Plains bounty)",
+  "Primed Flow":               "Baro Ki'Teer (Void Trader)",
+  "Primed Continuity":         "Baro Ki'Teer (Void Trader)",
+  "Primed Fury":               "Baro Ki'Teer (Void Trader)",
+  "Primed Pressure Point":     "Baro Ki'Teer (Void Trader)",
+  "Primed Reach":              "Baro Ki'Teer (Void Trader)",
+  "Primed Sure Footed":        "Baro Ki'Teer (Void Trader)",
+  "Primed Vigor":              "Baro Ki'Teer (Void Trader)",
+  "Primed Cryo Rounds":        "Baro Ki'Teer (Void Trader)",
+  "Primed Heated Charge":      "Baro Ki'Teer (Void Trader)",
+  "Primed Pistol Gambit":      "Baro Ki'Teer (Void Trader)",
+  "Primed Target Cracker":     "Baro Ki'Teer (Void Trader)",
+  "Primed Fast Hands":         "Baro Ki'Teer (Void Trader)",
+  "Primed Shred":              "Baro Ki'Teer (Void Trader)",
+  "Adaptation":                "Arbitrations reward",
+  "Rolling Guard":             "Arbitrations reward",
+  "Gladiator Might":           "Sanctuary Onslaught",
+  "Gladiator Vice":            "Sanctuary Onslaught",
+  "Gladiator Rush":            "Sanctuary Onslaught",
+  "Gladiator Resolve":         "Sanctuary Onslaught",
+  "Gladiator Aegis":           "Sanctuary Onslaught",
+  "Gladiator Finesse":         "Sanctuary Onslaught",
+  "Berserker Fury":            "Grineer/Corpus enemies (general)",
+  "Maiming Strike":            "Corrupted enemies (Void)",
+  "Narrow Minded":             "Corrupted enemies (Void)",
+  "Overextended":              "Corrupted enemies (Void)",
+  "Transient Fortitude":       "Corrupted enemies (Void)",
+  "Blind Rage":                "Corrupted enemies (Void)",
+  "Fleeting Expertise":        "Corrupted enemies (Void)",
+  "Steel Charge":              "Aura — Maroo's Bazaar weekly",
+  "Corrosive Projection":      "Aura — Invasions / Nightwave",
+  "Energy Siphon":             "Aura — Invasions / Nightwave",
+  // Arcanes — Eidolons
+  "Arcane Energize":           "Eidolon Hydrolyst (Plains of Eidolon)",
+  "Arcane Guardian":           "Eidolon Teralyst (Plains of Eidolon)",
+  "Arcane Grace":              "Eidolon Gantulyst (Plains of Eidolon)",
+  "Arcane Avenger":            "Eidolon Hydrolyst (Plains of Eidolon)",
+  "Arcane Velocity":           "Eidolon Gantulyst (Plains of Eidolon)",
+  "Arcane Fury":               "Eidolon Teralyst (Plains of Eidolon)",
+  "Arcane Barrier":            "Eidolon Teralyst (Plains of Eidolon)",
+  "Arcane Aegis":              "Eidolon Teralyst (Plains of Eidolon)",
+  "Arcane Momentum":           "Eidolon Gantulyst (Plains of Eidolon)",
+  "Arcane Trickery":           "Eidolon Gantulyst (Plains of Eidolon)",
+  "Arcane Ultimatum":          "Eidolon Hydrolyst (Plains of Eidolon)",
+  "Arcane Strike":             "Eidolon Teralyst (Plains of Eidolon)",
+  "Arcane Rage":               "Eidolon Hydrolyst (Plains of Eidolon)",
+  "Arcane Pistoleer":          "Eidolon Hydrolyst (Plains of Eidolon)",
+  "Arcane Precision":          "Eidolon Gantulyst (Plains of Eidolon)",
+  "Magus Anomaly":             "Ropalolyst (Disruption, Jupiter)",
+  "Magus Elevate":             "Vox Solaris (Fortuna standing)",
+  "Magus Nourish":             "Vox Solaris (Fortuna standing)",
+  "Magus Vigor":               "Vox Solaris (Fortuna standing)",
+  "Virtuos Forge":             "Vox Solaris (Fortuna standing)",
+  "Virtuos Strike":            "Vox Solaris (Fortuna standing)",
+  "Virtuos Shadow":            "Vox Solaris (Fortuna standing)",
 };
 
 function getDropLocation(name) {
@@ -1812,7 +1914,7 @@ function getVisible() {
 
 function refresh() {
   const has = items.length>0;
-  ['stats-bar','controls','table-wrap','legend-bar'].forEach(id=>document.getElementById(id).style.display=has?(id==='stats-bar'||id==='legend-bar'?'flex':'block'):'none');
+  ['stats-bar','controls','table-wrap'].forEach(id=>document.getElementById(id).style.display=has?(id==='stats-bar'?'flex':'block'):'none');
   document.getElementById('export-btn').style.display = has?'inline-block':'none';
   document.getElementById('clear-btn').style.display  = has?'inline-block':'none';
   renderStats(); renderTable(); updateSide();
@@ -1822,51 +1924,24 @@ function renderStats() {
   const tq=items.reduce((s,i)=>s+i.qty,0);
   const es=items.filter(i=>!sold.has(i.id)).reduce((s,i)=>s+(i.price?.sell||0)*i.qty,0);
   const sv=items.filter(i=>sold.has(i.id)).reduce((s,i)=>s+(i.price?.sell||0)*i.qty,0);
-  const hvCount = items.filter(i=>HIGH_VALUE.has(i.name)&&!sold.has(i.id)).length;
-  const vaultedCount = items.filter(i=>(DROP_LOCATIONS[i.name]||'').includes('[VAULTED]')&&!sold.has(i.id)).length;
-  const goldCount = items.filter(i=>(DROP_LOCATIONS[i.name]||'').includes('🟡')&&!sold.has(i.id)).length;
   document.getElementById('stats-bar').innerHTML=[
-    {l:'Unique Items',v:items.length,c:'var(--text)'},
-    {l:'Total Qty',v:tq,c:'var(--text)'},
-    {l:'Est. Value',v:'◈ '+es.toLocaleString()+'p',c:'var(--green)'},
-    {l:'Sold Value',v:'◈ '+sv.toLocaleString()+'p',c:'var(--gold)'},
-    {l:'⭐ Hot Items',v:hvCount,c:'#f0c040'},
-    {l:'🟡 Gold Drops',v:goldCount,c:'#e8a000'},
-    {l:'🔒 Vaulted',v:vaultedCount,c:'#ff6b35'},
+    {l:'Total Qty',v:tq,c:'var(--text)'},{l:'Unique Items',v:items.length,c:'var(--text)'},
+    {l:'Est. Value',v:'◈ '+es.toLocaleString()+'p',c:'var(--green)'},{l:'Sold Value',v:'◈ '+sv.toLocaleString()+'p',c:'var(--gold)'},
+    {l:'Checked Off',v:checked.size,c:'#5ec090'},
   ].map(s=>`<div class="stat-card"><div class="stat-label">${s.l}</div><div class="stat-value" style="color:${s.c};font-size:${s.l.includes('Value')?12:15}px">${s.v}</div></div>`).join('');
 }
 
 function dropHtml(name) {
-  // For mods/arcanes: use DROPS array
-  const modLocs = DROPS[name];
-  if (modLocs && modLocs.length) {
-    const allLocs = modLocs.join(' · ');
-    return '<div class="drop-loc" title="' + allLocs.replace(/"/g,"'") + '">' + modLocs.slice(0,3).map(l => {
-      return `<span class="drop-src">${l}</span>`;
-    }).join('') + (modLocs.length>3?`<span style="opacity:.4;font-size:8px">+${modLocs.length-3} more</span>`:'') + '</div>';
-  }
-  // For prime parts/arcanes: use DROP_LOCATIONS string
-  const locStr = DROP_LOCATIONS[name];
-  if (!locStr) return '<span style="opacity:.2;font-size:10px">—</span>';
-  
-  const isVaulted = locStr.includes('[VAULTED]');
-  const clean = locStr.replace(' [VAULTED]', '');
-  const parts = clean.split(' / ');
-  
-  let html2 = '<div class="drop-loc">';
-  parts.forEach(part => {
-    // Detect relic with emoji rarity icon: "Axi A3 🟡" or "Lith B2 🔵" or "Neo C1 🟫"
-    const rm = part.match(/^(\w+ \w+)\s*(🟡|🔵|🟫)$/);
-    if (rm) {
-      const tier = rm[2] === '🟡' ? 'R' : rm[2] === '🔵' ? 'U' : 'C';
-      html2 += `<span class="drop-relic drop-${tier}">${rm[1]}</span>`;
-    } else if (part.trim()) {
-      html2 += `<span class="drop-src">${part}</span>`;
+  const locs = DROPS[name];
+  if (!locs || !locs.length) return '<span style="opacity:.2;font-size:10px">—</span>';
+  return '<div class="drop-loc">' + locs.map(l => {
+    // Detect relic entries like "Axi A2 (C)" vs plain sources like "Baro Ki'Teer"
+    const relicMatch = l.match(/^(\w+ \w+) \((C|U|R)\)$/);
+    if (relicMatch) {
+      return `<span class="drop-relic drop-${relicMatch[2]}">${relicMatch[1]} <span style="opacity:.5">${relicMatch[2]}</span></span>`;
     }
-  });
-  if (isVaulted) html2 += '<span class="drop-vaulted">VAULTED</span>';
-  html2 += '</div>';
-  return html2;
+    return `<span class="drop-src">${l}</span>`;
+  }).join('') + '</div>';
 }
 
 function badgeHtml(t) {
@@ -1933,12 +2008,9 @@ function renderTable() {
       :p?.err?`<span style="color:#604040;font-size:9px">N/A</span>`
       :p?.buy!=null?`<span style="color:var(--blue)">◈ ${(p.buy*item.qty).toLocaleString()}</span>`
       :`<span style="opacity:.25">—</span>`;
-    const isVaultedRow = (DROP_LOCATIONS[item.name]||'').includes('[VAULTED]');
-    const isGoldRow = (DROP_LOCATIONS[item.name]||'').includes('🟡');
-    const rowClass = [isSold?'sold':'', isChk&&!isSold?'ischecked':'', isVaultedRow&&!isSold?'row-vaulted':'', isGoldRow&&!isSold&&!isVaultedRow?'row-gold':'', 'fade-up'].filter(Boolean).join(' ');
-    return `<tr class="${rowClass}" style="animation-delay:${Math.min(idx,20)*15}ms">
+    return `<tr class="${isSold?'sold':''} ${isChk&&!isSold?'ischecked':''} fade-up" style="animation-delay:${Math.min(idx,20)*15}ms">
       <td class="td-sel"><input type="checkbox" class="row-checkbox" data-id="${item.id}" ${selItems.has(item.id)?'checked':''} onchange="toggleSel('${item.id}',this.checked)"></td>
-      <td class="td-name"><a href="${wfmLink(item.name)}" target="_blank" rel="noopener">${HIGH_VALUE.has(item.name)?'<span class="hv-star" title="High value">⭐</span> ':''}${item.name}</a></td>
+      <td class="td-name"><a href="${wfmLink(item.name)}" target="_blank" rel="noopener">${item.name}</a></td>
       <td>${dropHtml(item.name)}</td>
       <td style="text-align:center">${badgeHtml(item.type)}</td>
       <td style="text-align:center;font-family:'Orbitron',monospace;font-size:11px;color:${item.qty>1?'var(--gold)':'var(--text-dim)'}">${item.qty>1?'×'+item.qty:'1'}</td>
@@ -1984,382 +2056,6 @@ function exportCSV() {
 }
 
 function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
-</script>
-
-<div id="checklist-panel">
-  <div class="cl-reset-bar">
-    <button class="btn-icon" onclick="resetChecklist('daily')" title="Reset daily tasks">↺ Reset Daily</button>
-    <button class="btn-icon" onclick="resetChecklist('weekly')" title="Reset weekly tasks">↺ Reset Weekly</button>
-    <button class="btn-icon" onclick="resetChecklist('all')" title="Reset all">↺ Reset All</button>
-    <span class="cl-total-badge" id="cl-total-badge">0 / 0 done</span>
-  </div>
-  <div class="cl-progress-bar"><div class="cl-progress-fill" id="cl-progress-fill" style="width:0%"></div></div>
-  <div id="cl-sections"></div>
-</div>
-
-<script>
-// ── WARFRAME 2026 CHECKLIST DATA ─────────────────────────────────────────────
-const CL_DATA = [
-  {
-    id: 'daily', label: 'Daily Tasks', icon: '☀️', freq: 'daily',
-    note: 'Resets at 0:00 UTC every day',
-    tasks: [
-      {
-        id: 'd1', name: 'Sortie',
-        desc: 'Complete the 3-mission Sortie chain. Rewards: Anasa Ayatan Sculpture, Riven Mod, Endo (4000 or 2000), Exilus Adapter, Forma, Legendary Core (rare). Run daily without fail.',
-        tags: ['plat','endo'], tier: 'all'
-      },
-      {
-        id: 'd2', name: 'Syndicate Daily Missions',
-        desc: 'Run the 7 daily syndicate missions for your chosen faction (Steel Meridian, Arbiters of Hexis, Cephalon Suda, New Loka, Red Veil, Perrin Sequence). Cap your standing each day. Medallions are bonus — always grab them mid-mission.',
-        tags: ['stand','plat'], tier: 'all'
-      },
-      {
-        id: 'd3', name: 'Cap Syndicate Standing',
-        desc: 'Daily cap = 16,000 + (MR × 500). E.g. MR30 = 31,000/day. Use Suda or Red Veil for augment mods to sell. Equip your syndicate sigil before running any mission to earn standing passively.',
-        tags: ['stand'], tier: 'all'
-      },
-      {
-        id: 'd4', name: 'Steel Path Daily Incursion',
-        desc: '1 featured Steel Path node per day for 25 Steel Essence bonus. Do this religiously — Steel Essence buys Arcane Adapters, Kuva (25 Steel Essence = 30,000 Kuva from Teshin), and Riven Ciphers.',
-        tags: ['endgame','plat'], tier: 'mid'
-      },
-      {
-        id: 'd5', name: 'Cephalon Simaris Daily Synthesis Target',
-        desc: 'Pick up a new synthesis target from Simaris at any Relay. Complete it for a large standing bonus + community progress. Buy the Sol-Battery Widget first so scans are infinite and free.',
-        tags: ['stand'], tier: 'all'
-      },
-      {
-        id: 'd6', name: 'Daily Tribute (Login Reward)',
-        desc: 'Log in daily! The tribute system gives Platinum, Forma, Orokin Catalysts, Orokin Reactors, and cosmetics. On your 200-day milestone rewards you can pick specific items.',
-        tags: ['plat'], tier: 'all'
-      },
-      {
-        id: 'd7', name: 'Craft Items in Foundry',
-        desc: 'Queue up Forma (24hr craft), Catalyst/Reactor (12hr), Nitain Extract, and any pending warframe/weapon parts. Keeping the Foundry busy 24/7 is free progression. Never let it sit empty.',
-        tags: [], tier: 'all'
-      },
-      {
-        id: 'd8', name: 'Open World Standing — Cetus / Fortuna / Necralisk / 1999',
-        desc: 'Cap standing in your active open world. Each has its own daily cap separate from main syndicates. Quills + Vox Solaris standing unlocks powerful Arcanes. The Hex standing unlocks Hexanon.',
-        tags: ['stand','plat'], tier: 'mid'
-      },
-      {
-        id: 'd9', name: 'Check Warframe.Market Trades',
-        desc: 'Reply to any trade whispers, update stale listings, relist expired offers. Consistent market presence = consistent platinum income. Sort your listings by "Last Online" and bump active ones.',
-        tags: ['plat'], tier: 'all'
-      },
-      {
-        id: 'd10', name: 'Nightwave Daily Acts (if active)',
-        desc: 'Complete 1–3 daily Nightwave acts for 1,000 Standing each (Elite acts give more). Nightwave Creds buy Nitain Extract (5 for 15 Cred), Aura Forma (1 for 50 Cred), and Armor Sets.',
-        tags: ['stand'], tier: 'all'
-      },
-    ]
-  },
-  {
-    id: 'weekly', label: 'Weekly Tasks', icon: '📅', freq: 'weekly',
-    note: 'Resets Monday 0:00 UTC',
-    tasks: [
-      {
-        id: 'w1', name: 'Archon Hunt',
-        desc: 'Defeat the weekly Archon (Nira/Amar/Boreal) across 3 missions. Reward: 1 Archon Shard (guaranteed) + bonus pool (Arcanes, Kuva, Endo, Forma). Archon Shards are the #1 long-term build upgrade — cap all 5 slots on your best frames first.',
-        tags: ['shard','endgame'], tier: 'endgame'
-      },
-      {
-        id: 'w2', name: 'Netracells (5 Search Pulses)',
-        desc: 'Up to 5 Netracell runs per week (1 Pulse each). Rewards: Arcane Adapters (Legendary tier), Cavia standing (5,000/run), Archon Shards. Search Pulses are shared with Deep & Temporal Archimedea — spend them wisely. Requires: Whispers in the Walls quest.',
-        tags: ['plat','endgame'], tier: 'endgame'
-      },
-      {
-        id: 'w3', name: 'Deep Archimedea (2 Search Pulses)',
-        desc: 'Costs 2 Pulses. Rewards: Tauforged Archon Shards, Legendary Arcanes, Omni Forma. 3 consecutive missions with randomized frames/weapons and harsh modifiers. Requires: Rank 5 Cavia (Illuminate) + completed 1 Netracell. One of the best weekly rewards in the game.',
-        tags: ['shard','endgame'], tier: 'endgame'
-      },
-      {
-        id: 'w4', name: 'Temporal Archimedea (2 Search Pulses)',
-        desc: 'Kaya\'s version of Deep Archimedea set in 1999/Höllvania. Costs 2 Pulses. Rewards: Tauforged Archon Shards, Arcanes (Escapist, Hot Shot, Universal Fallout), Omni Forma, Peely Pix. Requires: Rank 5 The Hex (Pizza Party) + completed The Hex quest.',
-        tags: ['shard','endgame'], tier: 'endgame'
-      },
-      {
-        id: 'w5', name: 'The Descendia',
-        desc: 'Weekly descending tower of hell mode. Resets Monday 0:00 UTC. Rewards Arcanes (including triple Arcane rewards at Infernum 20), Archon Shards, Descendants cosmetics. Checkpoint floors at 7, 14, 21 — you can exit and return. Requires: The Old Peace quest.',
-        tags: ['plat','endgame'], tier: 'endgame'
-      },
-      {
-        id: 'w6', name: 'Duviri Circuit (Steel Path)',
-        desc: 'Steel Path Circuit unlocks Incarnon Geneses on a weekly rotation cycle (36 total weapons over ~9 weeks). Check which weapon is up this week — Incarnon Geneses dramatically increase weapon viability and trade value. Also drops Arcanes and Circuit-exclusive cosmetics.',
-        tags: ['plat','endo'], tier: 'mid'
-      },
-      {
-        id: 'w7', name: 'Cavalero\'s Incarnon Market (Zariman)',
-        desc: 'Weekly rotating shop run by Cavalero in the Chrysalith (Zariman). Spend Voidplume items and Holdfast Standing for Incarnon Geneses for Zariman weapons (Laetum, Phenmor, Kuva Zarr, etc). Check each week — stock rotates. Requires The New War + Zariman missions.',
-        tags: ['plat'], tier: 'mid'
-      },
-      {
-        id: 'w8', name: 'Maroo\'s Weekly Ayatan Treasure Hunt',
-        desc: 'Talk to Maroo in her Bazaar (Maroo\'s Bazaar, Mars) each week for a free Ayatan Sculpture mission. Sculptures sell to Teshin for Endo or to players on WFM. Amber Stars (inside sculptures) alone sell for 3–8p each.',
-        tags: ['endo','plat'], tier: 'all'
-      },
-      {
-        id: 'w9', name: 'Help Clem Alert',
-        desc: 'Weekly alert mission with Clem to collect Grakata parts. Rewards: 3× Mutagen Mass (crafting material worth ~15–20p per stack). Never skip this — Mutagen Mass is always in demand.',
-        tags: ['plat'], tier: 'all'
-      },
-      {
-        id: 'w10', name: 'Palladino\'s Weekly Offerings (Iron Wake, Earth)',
-        desc: 'Palladino resets her inventory weekly. She sells: Riven Mods (7,500 Credits each), Kuva (2,500 Kuva for 35,000 Credits), and rare cosmetics. Credits for Kuva is an excellent deal. Requires: Steel Meridian standing.',
-        tags: ['plat'], tier: 'mid'
-      },
-      {
-        id: 'w11', name: 'Archimedean Yonta\'s Kuva Offering (Chrysalith, Zariman)',
-        desc: 'Yonta offers 35,000 Kuva per week purchasable for Holdfast Standing. Always buy this — Kuva fuels Lich/Sister farming and Riven rolling. Requires Holdfast rank.',
-        tags: [], tier: 'mid'
-      },
-      {
-        id: 'w12', name: 'Teshin — Steel Path Honors (Any Steel Path Relay)',
-        desc: 'Weekly Steel Path Honors feature a rotating item (cosmetics, Rivens, etc.) plus a Veiled Riven Cipher. Buy the featured item if you want it; Riven Ciphers reveal veiled Rivens. Also purchase Umbra Forma every 8 weeks when it rotates in.',
-        tags: ['plat'], tier: 'mid'
-      },
-      {
-        id: 'w13', name: 'Nightwave Weekly + Elite Weekly Acts',
-        desc: '3 weekly acts (5,000 Standing each) and 3 Elite Weekly acts (10,000 Standing each). Completing all Elites unlocks missed past Elite rewards from Nora\'s Mix. 45,000+ weekly Standing possible.',
-        tags: ['stand'], tier: 'all'
-      },
-      {
-        id: 'w14', name: 'Acrithis\'s Weekly Offerings (Drifter\'s Camp, Duviri)',
-        desc: 'Acrithis resets her wares weekly in Duviri\'s Drifter\'s Camp. She sells decorations and unique items exchangeable for Duviri-specific resources (Enigma Gyrum, Pathos Clamps). Worth checking each week.',
-        tags: [], tier: 'mid'
-      },
-      {
-        id: 'w15', name: 'Break Narmer Weekly Missions (Kahl\'s Garrison)',
-        desc: 'Complete the weekly Break Narmer mission to rank up Kahl\'s Garrison. Garrison rank unlocks Archon Mod slots and cosmetics. Each completed weekly mission is a permanent rank-up — 10 missions total to max rank.',
-        tags: [], tier: 'mid'
-      },
-      {
-        id: 'w16', name: 'Bird 3\'s Archon Shard Offering (Cavia Syndicate)',
-        desc: 'Bird 3 in the Cavia Syndicate (Deimos) offers a weekly Archon Shard for Cavia standing. This is a guaranteed shard beyond the Archon Hunt. Requires Cavia rank.',
-        tags: ['shard'], tier: 'endgame'
-      },
-      {
-        id: 'w17', name: 'Kaya\'s Weekly Arcane Enhancement (Höllvania, 1999)',
-        desc: 'Kaya offers a weekly Arcane Enhancement purchasable with The Hex standing. Rotates through high-value arcanes. Requires The Hex quest completion + standing rank.',
-        tags: ['plat'], tier: 'endgame'
-      },
-      {
-        id: 'w18', name: 'Helminth Invigoration Reset',
-        desc: 'If you have the Helminth Invigoration Segment (requires max Rank 10 Helminth), claim a new randomly selected buff for 3 Warframes each week. Powerful temporary buffs can make otherwise weak frames incredibly effective for weekly content.',
-        tags: [], tier: 'endgame'
-      },
-      {
-        id: 'w19', name: '1999 Calendar Season Advancement',
-        desc: 'Progress through the 1999 Calendar weekly for Höllvania rewards and standing with The Hex. Activities include treasure hunting, bounties, and collecting Hex Treasures scattered around Höllvania.',
-        tags: [], tier: 'mid'
-      },
-    ]
-  },
-  {
-    id: 'biweekly', label: 'Bi-Weekly / Special', icon: '🌀', freq: 'biweekly',
-    note: 'Baro: every 2 weeks (Fri–Sun) · Eidolons: nightly on Plains · Liches: ongoing',
-    tasks: [
-      {
-        id: 'b1', name: 'Baro Ki\'Teer Visit (Every 2 Weeks, Fri–Sun)',
-        desc: 'The Void Trader arrives every other Friday at 0:00 UTC and leaves Sunday 0:00 UTC. Spend Ducats + Credits for exclusive Primed mods, weapons, cosmetics, and unique items. Always buy Primed mods you\'re missing — they can\'t be traded easily and are worth 50–200p+ each.',
-        tags: ['plat'], tier: 'all'
-      },
-      {
-        id: 'b2', name: 'Eidolon Hunts (Nightly on Plains of Eidolon)',
-        desc: 'Teralyst (1-cap), Gantulyst (2-cap), Hydrolyst (3-cap) during night cycle on Plains. Capture (not kill) for maximum Arcane rewards. Arcane Energize and Arcane Grace are endgame gold — sell extras on WFM for high plat. Requires: Void Strike amp + Trinity or Harrow.',
-        tags: ['plat','endgame'], tier: 'endgame'
-      },
-      {
-        id: 'b3', name: 'Kuva Lich / Sister of Parvos Farming',
-        desc: 'Spawn and convert/vanquish Liches/Sisters for Kuva & Tenet weapons with 25–60% element bonuses. High-bonus weapons (55%+) sell for 100–400p on WFM. Requires: The War Within (Lich) or Call of the Tempestarii (Sister). Bonus tip: always convert rather than vanquish if you want 3× ephemera.',
-        tags: ['plat','endgame'], tier: 'endgame'
-      },
-      {
-        id: 'b4', name: 'Tenet Weapon Bonus Rotation (Ergo Glast — Every 4 Days)',
-        desc: 'Ergo Glast in any Relay resets Tenet weapon bonus elements every 4 days. Buy Tenet weapons with your desired element at max bonus (25–60%) when their rotation is up. Requires: Perrin Sequence standing.',
-        tags: ['plat'], tier: 'endgame'
-      },
-      {
-        id: 'b5', name: 'Teshin Umbra Forma (Every 8 Weeks)',
-        desc: 'Teshin\'s Steel Path Honors includes Umbra Forma on a ~8-week rotation. Umbra Forma is among the rarest resources in the game — always buy it. Used for Universal Umbral build slots.',
-        tags: ['plat'], tier: 'endgame'
-      },
-      {
-        id: 'b6', name: 'Void Relic Farming & Radsharing',
-        desc: 'Farm void relics from Fissure missions and radshare with squads (all 4 players use Radiant relics for better drop odds). This is the primary platinum farming loop. Keep stocked on relics for whatever prime is currently unvaulted.',
-        tags: ['plat'], tier: 'all'
-      },
-    ]
-  },
-  {
-    id: 'ongoing', label: 'Ongoing / Always Do', icon: '⚙️', freq: 'ongoing',
-    note: 'Habit-building: do these whenever you play',
-    tasks: [
-      {
-        id: 'o1', name: 'Sell Primed Mod Duplicates',
-        desc: 'Every time Baro brings a Primed mod you already own, the extra copy is worth 50–200p on WFM. Primed Continuity, Primed Flow, and Primed Pressure Point are perennial sellers. List them immediately after Baro leaves.',
-        tags: ['plat'], tier: 'all'
-      },
-      {
-        id: 'o2', name: 'Convert Ayatan Sculptures to Endo',
-        desc: 'Fill sculptures with Amber and Cyan Stars, then trade to Teshin for Endo (or sell filled sculptures on WFM for plat). Endo mods your builds; never throw sculptures away unfilled.',
-        tags: ['endo'], tier: 'all'
-      },
-      {
-        id: 'o3', name: 'Check WFM for Riven Deals & Arbitrage',
-        desc: 'Filter WFM for underpriced Rivens and popular items listed below market value. Buy low, relist at fair price. 15–30 min/week of market work can yield consistent passive platinum.',
-        tags: ['plat'], tier: 'mid'
-      },
-      {
-        id: 'o4', name: 'Arbitrations — Vitus Essence Grind',
-        desc: 'Endless Arbitration missions drop Vitus Essence for the Arbitrations vendor (Acrithis). Spend Vitus on Galvanized mods, Arcane Adapters, and Exilus Adapters — all valuable for trading or building. Drone keeps you permanently dead if you drop — bring Adaptation + Rolling Guard.',
-        tags: ['plat','endgame'], tier: 'endgame'
-      },
-      {
-        id: 'o5', name: 'Simaris Scanning — Stealth Farm',
-        desc: 'Stealth scanning enemies with the Synthesis Scanner gives 3× standing. Run spy or infiltration missions with Ivara/Loki and scan everything. This passively fills Simaris standing for Energy Conversion, Rolling Guard, and other exclusive mods.',
-        tags: ['stand','plat'], tier: 'all'
-      },
-      {
-        id: 'o6', name: 'Steel Path Clearing',
-        desc: 'Clear Steel Path nodes for the permanent 25 Steel Essence per node reward. Also unlocks Steel Path Incursions. Steelth Path enemies drop 10× more resources. Great for resource farming while also earning Steel Essence.',
-        tags: ['endgame'], tier: 'mid'
-      },
-      {
-        id: 'o7', name: 'Mastery Rank Progression',
-        desc: 'Level every weapon, warframe, and companion at least once. MR gives higher daily standing cap, unlocks more trade slots, and gates certain weapons/mods. Level things in Steel Path for 2× affinity. MR30+ gives permanent standing bonuses.',
-        tags: [], tier: 'all'
-      },
-      {
-        id: 'o8', name: 'Duviri Farming — Pathos Clamps & Resources',
-        desc: 'Patrol around Duviri and Saraband collecting Pathos Clamps (needed for Duviri weapons and upgrades). Enigma puzzles give extra resources. The Drifter\'s Camp vendors reset weekly — staying stocked on Duviri resources ensures you never bottleneck.',
-        tags: [], tier: 'mid'
-      },
-      {
-        id: 'o9', name: 'Hunt & Capture Rare Animals (Plains / Orb Vallis / Cambion)',
-        desc: 'Conservation/hunting gives substantial open-world standing. Rare Velocipods, Vulpaphyla, and Predasite captures also yield set-bonus mods. Tranq Rifle + Echo-Lure loadout makes this fast and relaxing.',
-        tags: ['stand'], tier: 'mid'
-      },
-      {
-        id: 'o10', name: 'Forma & Reactor/Catalyst Queue Management',
-        desc: 'Keep 3–5 Forma always queued in the Foundry. Never let it sit idle. Blueprint Forma costs only 35,000 credits + resources and takes 24hr. If you\'re short on blueprints, Nightwave or Baro sell them.',
-        tags: [], tier: 'all'
-      },
-    ]
-  }
-];
-
-// ── CHECKLIST ENGINE ─────────────────────────────────────────────────────────
-const CL_KEY = 'wfcl_v1';
-let clState = {};
-
-function clLoad() {
-  try { clState = JSON.parse(localStorage.getItem(CL_KEY)||'{}'); } catch(e) { clState = {}; }
-}
-function clSave() {
-  localStorage.setItem(CL_KEY, JSON.stringify(clState));
-}
-
-function clToggle(id) {
-  clState[id] = !clState[id];
-  clSave();
-  renderChecklist();
-}
-
-function resetChecklist(which) {
-  if (which === 'daily') {
-    CL_DATA.find(s=>s.id==='daily').tasks.forEach(t=>delete clState[t.id]);
-  } else if (which === 'weekly') {
-    CL_DATA.find(s=>s.id==='weekly').tasks.forEach(t=>delete clState[t.id]);
-    CL_DATA.find(s=>s.id==='biweekly').tasks.forEach(t=>delete clState[t.id]);
-  } else {
-    clState = {};
-  }
-  clSave();
-  renderChecklist();
-}
-
-function toggleSection(secId) {
-  const el = document.getElementById('cl-sec-'+secId);
-  if (el) el.classList.toggle('section-collapsed');
-}
-
-const TIER_TAG = { all: 'Any MR', mid: 'Mid Game', endgame: 'Endgame' };
-
-function renderChecklist() {
-  clLoad();
-  const container = document.getElementById('cl-sections');
-  if (!container) return;
-
-  let totalDone = 0, totalAll = 0;
-
-  let sectionsHtml = '';
-  CL_DATA.forEach(sec => {
-    const secDone = sec.tasks.filter(t=>clState[t.id]).length;
-    const secAll  = sec.tasks.length;
-    totalDone += secDone;
-    totalAll  += secAll;
-
-    const pct = secAll ? Math.round(secDone/secAll*100) : 0;
-    const tasksHtml = sec.tasks.map(t => {
-      const done = !!clState[t.id];
-      const tags = t.tags.map(tag => `<span class="cl-tag cl-tag-${tag}">${tag}</span>`).join('');
-      const tierTag = `<span class="cl-tag cl-tag-${t.tier}">${TIER_TAG[t.tier]||''}</span>`;
-      return `<div class="cl-task ${done?'done':''}" onclick="clToggle('${t.id}')">
-        <div class="cl-checkbox">${done?'✓':''}</div>
-        <div class="cl-task-content">
-          <div class="cl-task-name">${t.name}</div>
-          <div class="cl-task-desc">${t.desc}</div>
-          <div class="cl-task-tags">${tierTag}${tags}</div>
-        </div>
-      </div>`;
-    }).join('');
-
-    sectionsHtml += `
-    <div class="cl-section" id="cl-sec-${sec.id}">
-      <div class="cl-section-header" onclick="toggleSection('${sec.id}')">
-        <span class="cl-section-icon">${sec.icon}</span>
-        <span class="cl-section-title">${sec.label}</span>
-        <span class="cl-section-prog">${secDone}/${secAll} — ${pct}%</span>
-        <span class="cl-biweekly-note">${sec.note}</span>
-        <span class="cl-section-arrow">▼</span>
-      </div>
-      <div class="cl-section-body">${tasksHtml}</div>
-    </div>`;
-  });
-
-  container.innerHTML = sectionsHtml;
-
-  const overallPct = totalAll ? Math.round(totalDone/totalAll*100) : 0;
-  const badge = document.getElementById('cl-total-badge');
-  const fill = document.getElementById('cl-progress-fill');
-  if (badge) badge.textContent = `${totalDone} / ${totalAll} done (${overallPct}%)`;
-  if (fill) fill.style.width = overallPct + '%';
-}
-
-// ── PAGE SWITCH ───────────────────────────────────────────────────────────────
-function switchPage(page) {
-  const inv = document.getElementById('main');
-  const cl  = document.getElementById('checklist-panel');
-  const tabInv = document.getElementById('tab-inventory');
-  const tabCl  = document.getElementById('tab-checklist');
-  if (page === 'checklist') {
-    inv.style.display = 'none';
-    cl.style.display  = 'block';
-    tabInv.classList.remove('active');
-    tabCl.classList.add('active');
-    renderChecklist();
-  } else {
-    inv.style.display = '';
-    cl.style.display  = 'none';
-    tabCl.classList.remove('active');
-    tabInv.classList.add('active');
-  }
-}
-
-clLoad();
 </script>
 </body>
 </html>
